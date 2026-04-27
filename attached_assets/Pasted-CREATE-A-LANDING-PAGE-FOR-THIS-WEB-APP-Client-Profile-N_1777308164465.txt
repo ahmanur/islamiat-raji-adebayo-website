@@ -1,0 +1,185 @@
+CREATE A LANDING PAGE FOR THIS WEB APP:
+
+
+Client Profile
+
+Name: Dr. Islamiat Raji-Adebayo
+Current Role: Rose Postdoctoral Fellow at the K. Lisa Yang Center for Conservation Bioacoustics, Cornell Lab of Ornithology.
+Expertise: Landscape and urban ecology, plant–animal interactions, ecological and social impacts of urbanization and land-use change on bird communities, human well-being in relation to nature, bioacoustics, and community engagement for biodiversity monitoring.
+Key Achievements: Led a multi-country urban bird monitoring project at Queen’s University; doctoral research on frugivory and seed dispersal in urban mosaic landscapes.
+Education: PhD in Ecological Sciences (University of KwaZulu-Natal, 2021), MSc in Conservation Biology (A.P Leventis Ornithological Research Institute, University of Jos, 2018), BSc in Forestry and Wildlife Management (University of Ilorin, 2015).
+Affiliations: American Scientific Affiliation, Society for Conservation Biology (Global and Nigeria chapter), British Ecological Society, Stable Planet Alliance.
+Contact: iar32@cornell.edu, LinkedIn Profile
+
+Website Goal
+
+To create a personal professional website that effectively showcases Dr. Islamiat Raji-Adebayo's academic and research profile, publications, projects, and expertise. The site should serve as a central hub for her professional identity, facilitating collaboration, mentorship, and public engagement.
+
+Target Audience
+
+•
+Academic peers and potential collaborators
+
+•
+Prospective graduate students and mentees
+
+•
+Conservation organizations and policymakers
+
+•
+General public interested in ecology, conservation, and bioacoustics
+
+Core Website Sections and Content Requirements
+
+1. Home/About
+
+•
+Headline: A concise and impactful statement such as "Advancing Conservation through Bioacoustics and Urban Ecology" or "Exploring the Intersections of Urban Ecology, Bioacoustics, and Human Well-being."
+
+•
+Introduction: A welcoming paragraph outlining her current role, research philosophy, and passion for conservation.
+
+•
+Biography: A detailed professional narrative highlighting her journey, key research interests, interdisciplinary approach, and significant contributions. This should be a well-written narrative, not just a list of bullet points.
+
+•
+Professional Photo: A high-resolution, professional headshot.
+
+2. Research
+
+•
+Overview: A summary of her primary research themes: landscape and urban ecology, plant-animal interactions, ecological and social impacts of urbanization, bird communities, human well-being, bioacoustics, and community engagement.
+
+•
+Current Projects: Detailed descriptions of ongoing research, including the urban campus soundscape project. Emphasize methodology (bioacoustics, community engagement) and expected impacts. Include visuals (e.g., maps, spectrograms, field photos) if available.
+
+•
+Past Projects: Concise descriptions of significant past research, such as the multi-country urban bird monitoring project at Queen’s University and her doctoral research on frugivory and seed dispersal. Highlight key findings and contributions.
+
+•
+Research Keywords: A list of relevant keywords to aid search engine optimization and content discoverability.
+
+3. Publications
+
+•
+A comprehensive, categorized list of her academic publications. This section should be dynamic, ideally pulling from a source like Google Scholar or ResearchGate if possible, or allowing for easy manual updates.
+
+•
+Each publication entry should include: Title, Authors, Journal/Conference, Year, and a link to the full paper or abstract (e.g., DOI, PubMed, institutional repository).
+
+4. People/Mentorship
+
+•
+Opportunities: Information for prospective students (undergraduate, graduate) and collaborators interested in joining her lab or projects. Clearly state the type of opportunities available.
+
+•
+Mentorship Philosophy: A statement reflecting her passion for mentorship and fostering interdisciplinary collaboration.
+
+•
+Contact for Opportunities: Clear instructions on how interested individuals can reach out.
+
+5. News & Updates
+
+•
+A chronological feed of recent
+professi
+onal activities, including: conference presentations, new publications, awards, grants, media features, and project milestones. This section should be easily updatable.
+
+6. Contact
+
+•
+Email: iar32@cornell.edu
+
+•
+Social Media: Link to her LinkedIn profile. Consider adding links to other professional platforms (e.g., ResearchGate, Google Scholar) if applicable.
+
+•
+Contact Form: An optional, but recommended, secure contact form for general inquiries.
+
+7. Affiliations & Memberships
+
+•
+A clear list of her professional organizational affiliations and memberships.
+
+Design and User Experience (UX) Requirements
+
+1. Visual Style
+
+•
+Imagery: Utilize high-quality, impactful, and relevant images. This includes professional photos of Dr. Raji-Adebayo, nature scenes (birds, landscapes), and field research activities. (Inspired by BiodivCampus, Sky Island, Carly Ziter, Jessie Williamson).
+
+•
+Color Palette: Professional, clean, and nature-inspired. Emphasize greens, blues, and earthy tones to reflect her field of study. The palette should be cohesive and visually appealing.
+
+•
+Typography: Select clean, modern, and highly readable fonts for both headings and body text. Prioritize legibility across all devices.
+
+2. Layout & Structure
+
+•
+Homepage: A prominent hero section featuring a strong headline and a compelling image or video background. Key sections (Research, Publications, About) should be easily accessible from the homepage.
+
+•
+Navigation: Implement an intuitive, persistent navigation bar that allows users to easily move between main sections. (Inspired by all reference sites).
+
+•
+Content Organization: Use clear headings, subheadings, and visual elements (e.g., cards, tiles, image galleries) to break up text and enhance readability, especially for projects and publications. (Inspired by Sky Island).
+
+•
+Responsiveness: The website must be fully responsive, ensuring optimal viewing and functionality on desktops, tablets, and mobile devices.
+
+3. Key UX Features
+
+•
+Search Functionality: Implement a site-wide search bar to help users quickly find specific content.
+
+•
+Social Media Integration: Clearly display links to Dr. Raji-Adebayo's professional social media profiles (e.g., LinkedIn).
+
+•
+Downloadable CV/Resume: Provide a prominent and easily accessible link for downloading her up-to-date Curriculum Vitae in PDF format.
+
+Technical Considerations
+
+•
+Platform/Framework: Recommend a modern, flexible, and maintainable web development stack. Options include:
+
+•
+Static Site Generator (e.g., Next.js, Gatsby, Hugo): For performance, security, and ease of deployment, especially if content updates are managed through Markdown files or a headless CMS.
+
+•
+Content Management System (CMS) (e.g., WordPress, Webflow): If Dr. Raji-Adebayo prefers a more user-friendly interface for content updates without technical assistance.
+
+
+
+•
+SEO (Search Engine Optimization): Implement best practices for SEO, including semantic HTML, meta descriptions, alt tags for images, and a sitemap, to ensure high discoverability by search engines.
+
+•
+Accessibility: Adhere to WCAG (Web Content Accessibility Guidelines) standards to ensure the website is usable by individuals with disabilities.
+
+•
+Performance: Optimize for fast loading times and smooth user interactions.
+
+
+
+Implementation Guide
+
+1.
+Initial Setup: Create a new web project using a modern framework (e.g., React with Next.js or a similar static site generator). Ensure a robust development environment is configured.
+
+2.
+Content Integration: Populate the website with the detailed content provided in the "Core Website Sections and Content Requirements" section. Prioritize clear, concise, and engaging language.
+
+3.
+Design Implementation: Apply the visual and layout guidelines from the "Design and User Experience (UX) Requirements" section. Pay close attention to imagery, color palette, and typography to create a cohesive and professional aesthetic.
+
+4.
+Feature Development: Implement key UX features such as search functionality, social media integration, and a downloadable CV link.
+
+5.
+Technical Optimization: Ensure th
+e website is responsive, SEO-friendly, accessible, and performs optimally across all devices and browsers.
+
+6.
+Review and Iteration: Conduct thorough testing and gather feedback to refine the website before launch. Ensure all links are functional and content is accurate.

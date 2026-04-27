@@ -1,0 +1,26 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "vDh1drzQ9kmHzjqC9sM9m"
+uri = "file://artifacts/iar-site/public/images/portrait.png"
+type = "image"
+title = "African woman scientist portrait"
+
+[[generated]]
+id = "ERInZuY3JiGeeFoeB2dSK"
+uri = "file://artifacts/iar-site/public/images/hero-bird.png"
+type = "image"
+title = "Bird at dawn city park"
+
+[[generated]]
+id = "OFzrjkC_JZOJW6mKsHHpt"
+uri = "file://artifacts/iar-site/public/images/spectrogram-art.png"
+type = "image"
+title = "Spectrogram art abstraction"
+
+[[generated]]
+id = "Gn5JDdL9TsOuL9yGkQTrr"
+uri = "file://artifacts/iar-site/public/images/field-fruit.png"
+type = "image"
+title = "Hands holding tropical fruit"
