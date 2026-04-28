@@ -55,6 +55,11 @@ export function Navbar() {
           aria-label="Dr. Islamiat Raji-Adebayo — home"
         >
           <SpectrogramWave />
+          <img
+            src="/images/portrait.jpg"
+            alt="Dr. Islamiat Raji-Adebayo"
+            className="hidden sm:block w-8 h-8 rounded-full object-cover object-top border-2 border-primary/20 group-hover:border-primary/50 transition-colors"
+          />
           <span className="hidden sm:block font-serif font-semibold text-base tracking-tight text-foreground group-hover:text-primary transition-colors whitespace-nowrap">
             Dr. I. Raji-Adebayo
           </span>
