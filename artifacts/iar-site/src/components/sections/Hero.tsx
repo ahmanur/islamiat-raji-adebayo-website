@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'wouter';
 
 export function Hero() {
   return (
@@ -41,10 +42,10 @@ export function Hero() {
               
               <div className="flex flex-wrap items-center gap-4">
                 <Button size="lg" className="rounded-full px-8" asChild>
-                  <a href="#research">Explore Research</a>
+                  <Link href="/research">Explore Research</Link>
                 </Button>
                 <Button variant="outline" size="lg" className="rounded-full px-8 bg-transparent" asChild>
-                  <a href="#contact">Get in Touch</a>
+                  <Link href="/outreach">Get in Touch</Link>
                 </Button>
               </div>
 
@@ -90,10 +91,10 @@ export function Hero() {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 1 }}
       >
-        <a href="#about" className="flex flex-col items-center gap-2 text-foreground/50 hover:text-primary transition-colors" aria-label="Scroll down">
+        <Link href="/about" className="flex flex-col items-center gap-2 text-foreground/50 hover:text-primary transition-colors" aria-label="Go to About page">
           <span className="text-xs uppercase tracking-widest font-medium">Scroll</span>
           <ChevronDown className="w-4 h-4 animate-bounce" />
-        </a>
+        </Link>
       </motion.div>
     </section>
   );

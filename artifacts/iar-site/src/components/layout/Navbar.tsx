@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X, Download } from 'lucide-react';
+import { Link, useLocation } from 'wouter';
 import { SpectrogramWave } from '@/components/ui/SpectrogramWave';
 
 const navLinks = [
-  { name: 'Home',         href: '#hero' },
-  { name: 'About',        href: '#about' },
-  { name: 'Research',     href: '#research' },
-  { name: 'Publications', href: '#publications' },
-  { name: 'Mentorship',   href: '#mentorship' },
-  { name: 'Outreach',     href: '#contact' },
-  { name: 'Field Work',   href: '#fieldwork' },
-  { name: 'Opportunities',href: '#mentorship', accent: true },
+  { name: 'Home',         href: '/' },
+  { name: 'About',        href: '/about' },
+  { name: 'Research',     href: '/research' },
+  { name: 'Publications', href: '/publications' },
+  { name: 'Mentorship',   href: '/mentorship' },
+  { name: 'Outreach',     href: '/outreach' },
+  { name: 'Field Work',   href: '/field-work' },
+  { name: 'Opportunities',href: '/opportunities', accent: true },
 ];
+
+function isActive(href: string, location: string): boolean {
+  if (href === '/') return location === '/';
+  return location.startsWith(href);
+}
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [location] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -24,19 +31,10 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
+  // Close mobile menu on route change
+  useEffect(() => {
     setMenuOpen(false);
-    if (href === '#hero') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    const id = href.replace('#', '');
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  }, [location]);
 
   return (
     <motion.header
@@ -51,9 +49,8 @@ export function Navbar() {
     >
       <div className="container mx-auto px-6 md:px-10 flex items-center justify-between gap-6">
         {/* Logo */}
-        <a
-          href="#hero"
-          onClick={(e) => handleNavClick(e, '#hero')}
+        <Link
+          href="/"
           className="flex items-center gap-2.5 group shrink-0"
           aria-label="Dr. Islamiat Raji-Adebayo — home"
         >
@@ -61,29 +58,38 @@ export function Navbar() {
           <span className="hidden sm:block font-serif font-semibold text-base tracking-tight text-foreground group-hover:text-primary transition-colors whitespace-nowrap">
             Dr. I. Raji-Adebayo
           </span>
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center" aria-label="Site navigation">
           <ul className="flex items-center gap-0.5">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`
-                    relative px-3.5 py-1.5 text-sm font-medium rounded-sm
-                    transition-colors duration-200
-                    ${link.accent
-                      ? 'text-[hsl(var(--primary))] hover:text-[hsl(var(--primary))] hover:bg-primary/8'
-                      : 'text-foreground/75 hover:text-foreground hover:bg-foreground/6'
-                    }
-                  `}
-                >
-                  {link.name}
-                </a>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const active = isActive(link.href, location);
+              return (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className={`
+                      relative px-3.5 py-1.5 text-sm font-medium rounded-sm
+                      transition-colors duration-200
+                      ${link.accent
+                        ? active
+                          ? 'text-[hsl(var(--primary))] bg-primary/10'
+                          : 'text-[hsl(var(--primary))] hover:text-[hsl(var(--primary))] hover:bg-primary/8'
+                        : active
+                          ? 'text-foreground bg-foreground/8'
+                          : 'text-foreground/75 hover:text-foreground hover:bg-foreground/6'
+                      }
+                    `}
+                  >
+                    {link.name}
+                    {active && !link.accent && (
+                      <span className="absolute bottom-0 left-3.5 right-3.5 h-[2px] rounded-full bg-primary" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -119,21 +125,27 @@ export function Navbar() {
           transition={{ duration: 0.2 }}
         >
           <ul className="flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`block px-2 py-2.5 text-sm font-medium rounded-sm transition-colors duration-150 ${
-                    link.accent
-                      ? 'text-[hsl(var(--primary))] hover:bg-primary/8'
-                      : 'text-foreground/75 hover:text-foreground hover:bg-foreground/6'
-                  }`}
-                >
-                  {link.name}
-                </a>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const active = isActive(link.href, location);
+              return (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className={`block px-2 py-2.5 text-sm font-medium rounded-sm transition-colors duration-150 ${
+                      link.accent
+                        ? active
+                          ? 'text-[hsl(var(--primary))] bg-primary/10'
+                          : 'text-[hsl(var(--primary))] hover:bg-primary/8'
+                        : active
+                          ? 'text-foreground bg-foreground/8'
+                          : 'text-foreground/75 hover:text-foreground hover:bg-foreground/6'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              );
+            })}
             <li className="mt-3 pt-3 border-t border-border/40">
               <a
                 href="#"
