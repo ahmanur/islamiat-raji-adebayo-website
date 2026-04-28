@@ -65,9 +65,9 @@ export function Hero() {
             >
               <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative z-10">
                 <img 
-                  src="/images/portrait.png" 
+                  src="/images/portrait.jpg" 
                   alt="Portrait of Dr. Islamiat Raji-Adebayo" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                 />
                 <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl pointer-events-none"></div>
               </div>
