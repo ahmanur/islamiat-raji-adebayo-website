@@ -73,7 +73,7 @@ export function Hero() {
               </div>
               
               {/* Offset decorative image */}
-              <div className="absolute -bottom-10 -left-10 w-2/3 aspect-square rounded-2xl overflow-hidden shadow-xl z-20 border-4 border-background hidden md:block">
+              <div className="absolute -bottom-10 -left-10 w-2/5 aspect-square rounded-2xl overflow-hidden shadow-xl z-20 border-4 border-background hidden md:block">
                 <img 
                   src="/images/hero-bird.png" 
                   alt="Small bird in urban park at dawn" 
