@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 export function Hero() {
   return (
-    <section className="relative min-h-[100dvh] flex items-center pt-20 overflow-hidden bg-background">
+    <section id="hero" className="relative min-h-[100dvh] flex items-center pt-20 overflow-hidden bg-background">
       {/* Decorative background element */}
       <div className="absolute top-0 right-0 w-2/3 h-full opacity-40 mix-blend-multiply pointer-events-none">
         <img 

@@ -84,6 +84,7 @@ export function Research() {
           ))}
         </div>
 
+        <span id="fieldwork" className="sr-only" aria-hidden="true" />
         <div className="space-y-24">
           {projects.map((project, i) => (
             <motion.div 
