@@ -17,13 +17,14 @@ export function Hero() {
         <img
           src="/images/forest-bg.png"
           alt=""
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-center brightness-125 saturate-150 hue-rotate-[15deg]"
+          style={{ filter: 'brightness(1.35) saturate(1.6) hue-rotate(15deg)' }}
         />
       </motion.div>
-      {/* Dark overlay — similar to reference site */}
-      <div className="absolute inset-0 z-0 pointer-events-none bg-black/55" />
-      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-r from-black/40 via-black/10 to-transparent" />
-      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/30 via-transparent to-black/50" />
+      {/* Lighter overlay so the green forest breathes through */}
+      <div className="absolute inset-0 z-0 pointer-events-none bg-black/35" />
+      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-r from-black/30 via-black/5 to-transparent" />
+      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/20 via-transparent to-black/40" />
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
