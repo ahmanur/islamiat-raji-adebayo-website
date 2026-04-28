@@ -7,16 +7,22 @@ import { Link } from 'wouter';
 export function Hero() {
   return (
     <section id="hero" className="relative min-h-[100dvh] flex items-center pt-20 overflow-hidden bg-background">
-      {/* Decorative background element */}
-      <div className="absolute top-0 right-0 w-2/3 h-full opacity-40 mix-blend-multiply pointer-events-none">
-        <img 
-          src="/images/spectrogram-art.png" 
-          alt="" 
-          className="w-full h-full object-cover object-right"
+      {/* Full-bleed background image with Ken Burns motion */}
+      <motion.div
+        className="absolute inset-0 z-0 pointer-events-none"
+        initial={{ scale: 1.08 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 12, ease: 'easeOut' }}
+      >
+        <img
+          src="/images/hero-bird.png"
+          alt=""
+          className="w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-background"></div>
-      </div>
+      </motion.div>
+      {/* Overlay gradients to keep text legible */}
+      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-r from-background/95 via-background/80 to-background/30" />
+      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-background/60 via-transparent to-background/80" />
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
