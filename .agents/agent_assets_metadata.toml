@@ -24,3 +24,9 @@ id = "Gn5JDdL9TsOuL9yGkQTrr"
 uri = "file://artifacts/iar-site/public/images/field-fruit.png"
 type = "image"
 title = "Hands holding tropical fruit"
+
+[[generated]]
+id = "EmZJof3Dz38GJDs_5wzaj"
+uri = "file://artifacts/iar-site/public/images/forest-bg.png"
+type = "image"
+title = "misty forest golden light background"
