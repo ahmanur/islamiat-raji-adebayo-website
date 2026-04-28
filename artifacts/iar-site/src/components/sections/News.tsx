@@ -11,7 +11,7 @@ export function News() {
     {
       date: "2024",
       title: "Multi-country urban bird monitoring project complete",
-      description: "Wrapped up the large-scale passive acoustic recorder survey across five cities at Queen's University, with data analysis and manuscript preparation now underway."
+      description: "Wrapped up the global urban bird survey project across five countries — Brazil, Canada, France, Kenya, and Senegal — at Queen's University, with data analysis and manuscript preparation now underway."
     },
     {
       date: "2024",

@@ -17,7 +17,7 @@ export function About() {
               <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">About</h2>
               <div className="w-12 h-[2px] bg-primary mb-8"></div>
               
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
                   <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-2">Education</h3>
                   <ul className="space-y-3 text-sm text-foreground/80">
@@ -32,6 +32,22 @@ export function About() {
                     <li className="pl-3 border-l-2 border-primary/30">
                       <strong>BSc Forestry and Wildlife Management</strong><br/>
                       <span className="text-foreground/60">University of Ilorin, 2015</span>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-2">Awards & Honours</h3>
+                  <ul className="space-y-3 text-sm text-foreground/80">
+                    <li className="pl-3 border-l-2 border-primary/30">
+                      <strong>Falling Walls Female Science Talent</strong><br/>
+                      <span className="text-foreground/60">2024</span>
+                    </li>
+                    <li className="pl-3 border-l-2 border-primary/30">
+                      <strong>National Postdoctoral Association IMPACT Fellow</strong><br/>
+                      <span className="text-foreground/60">2024</span>
+                    </li>
+                    <li className="pl-3 border-l-2 border-primary/30">
+                      <strong>NRF-TWAS Scholar</strong>
                     </li>
                   </ul>
                 </div>
@@ -60,7 +76,7 @@ export function About() {
               </p>
               
               <p>
-                One of the most rewarding aspects of my work is the connection between nature and human well-being. I aim to develop conservation frameworks that support both ecological resilience and social well-being in urban settings. Before joining Cornell, I was a Postdoctoral Research Associate in the Department of Biology at Queen's University in Canada, where I led a multi-country urban bird monitoring project across five cities using passive acoustic recorders and community science methods. My doctoral research at the University of KwaZulu-Natal in South Africa focused on frugivory and seed dispersal by birds, bats, and monkeys in urban mosaic landscapes, with particular attention to the ecological role of <em>Ficus</em> species.
+                One of the most rewarding aspects of my work is the connection between nature and human well-being. I aim to develop conservation frameworks that support both ecological resilience and social well-being in urban settings. Before joining Cornell, I was a Postdoctoral Research Fellow in the Department of Biology at Queen's University in Canada, where I led a global urban bird survey project spanning five countries — Brazil, Canada, France, Kenya, and Senegal — using passive acoustic recorders and an innovative Community Science approach that actively involved local experts and the public in data collection. My doctoral research at the University of KwaZulu-Natal in South Africa focused on frugivory and seed dispersal by birds, bats, and monkeys in urban mosaic landscapes, with particular attention to the ecological role of <em>Ficus</em> species.
               </p>
               
               <p>

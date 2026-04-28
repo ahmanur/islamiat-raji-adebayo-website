@@ -17,8 +17,8 @@ const projects = [
     location: "Queen's University, Canada",
     image: '/images/hero-bird.png',
     description:
-      'As a Postdoctoral Research Associate in the Department of Biology at Queen\'s University, I led a multi-country urban bird monitoring project across five cities, using passive acoustic recorders and community science methods to survey avian biodiversity. The project revealed which species thrive under urbanization and which are excluded, providing critical data for conservation planning.',
-    methods: ['Passive acoustic recorders', 'Community science', 'Five-city comparison', 'GIS land-use analysis'],
+      'As a Postdoctoral Research Fellow at Queen\'s University, I coordinated a global urban bird survey project spanning five countries — Brazil, Canada, France, Kenya, and Senegal. The project used passive acoustic recorders and an innovative Community Science approach, actively involving local experts and the public in data collection to promote human–wildlife coexistence and address geographic bias in urban ecology research.',
+    methods: ['Passive acoustic recorders', 'Community Science', 'Five-country comparison', 'GIS land-use analysis'],
   },
   {
     status: 'Doctoral Research',
