@@ -26,22 +26,22 @@ export function Research() {
     {
       status: "Current Project",
       title: "Urban Campus Soundscape Project",
-      location: "Cornell University",
-      description: "A comprehensive acoustic monitoring study across the Cornell campus, integrating bioacoustics with community engagement to understand how the soundscape influences both local biodiversity and student well-being. This project involves deploying acoustic sensors in varying urban gradients and collaborating with students to annotate and analyze the acoustic data.",
+      location: "Cornell University, Ithaca NY",
+      description: "Using autonomous acoustic recorders deployed across university campuses and cities in multiple countries, this project investigates bird diversity in rapidly changing urban landscapes. I collaborate with local experts and students to record bird songs—identifying which species persist, which do not, and why—to understand the factors that shape urban bird populations and guide conservation planning.",
       image: "/images/spectrogram-art.png"
     },
     {
       status: "Past Project",
       title: "Multi-country Urban Bird Monitoring",
-      location: "Queen's University",
-      description: "A large-scale collaborative effort monitoring avian responses to urbanization across several countries. We analyzed acoustic data and point counts to identify which species thrive in urban environments and which are excluded, providing critical insights for urban planners and conservationists.",
+      location: "Queen's University, Canada",
+      description: "As a Postdoctoral Research Associate at Queen's University, I led a multi-country urban bird monitoring project across five cities, using passive acoustic recorders and community science methods to survey avian biodiversity. The project revealed which species thrive under urbanization and which are excluded, providing critical data for conservation planning.",
       image: "/images/hero-bird.png"
     },
     {
       status: "Doctoral Research",
-      title: "Frugivory in Urban Mosaics",
-      location: "University of KwaZulu-Natal",
-      description: "Investigated frugivory and seed dispersal within complex urban mosaic landscapes in South Africa. The research highlighted how habitat fragmentation disrupts mutualistic interactions, with significant implications for the regeneration of native flora in heavily modified environments.",
+      title: "Frugivory & Seed Dispersal in Urban Mosaics",
+      location: "University of KwaZulu-Natal, South Africa",
+      description: "My doctoral research focused on frugivory and seed dispersal by birds, bats, and monkeys in urban mosaic landscapes, with particular attention to the ecological role of Ficus species. The work demonstrated how habitat fragmentation disrupts mutualistic plant–animal interactions, with significant implications for forest regeneration in heavily modified environments.",
       image: "/images/field-fruit.png"
     }
   ];

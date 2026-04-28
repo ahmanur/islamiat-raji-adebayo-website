@@ -8,8 +8,8 @@ const projects = [
     location: 'Cornell University, Ithaca NY',
     image: '/images/spectrogram-art.png',
     description:
-      'A comprehensive acoustic monitoring study deployed across the Cornell campus, integrating passive bioacoustic sensors with structured community engagement. Students annotate and classify species vocalizations, generating a living dataset that reveals how campus soundscapes shift across seasonal, temporal, and spatial gradients.',
-    methods: ['Passive acoustic recorders', 'Community annotation', 'Acoustic indices', 'Bird point counts'],
+      'Using autonomous acoustic recorders deployed across university campuses and cities in multiple countries, this project investigates bird diversity in rapidly changing urban landscapes. I collaborate with local experts and students to record bird songs—identifying which species persist, which do not, and why—helping us understand the factors that shape urban bird populations and guide conservation planning.',
+    methods: ['Autonomous acoustic recorders', 'Community science', 'Bird song identification', 'Multi-country comparison'],
   },
   {
     status: 'Past Project',
@@ -17,8 +17,8 @@ const projects = [
     location: "Queen's University, Canada",
     image: '/images/hero-bird.png',
     description:
-      'A large-scale comparative field campaign monitoring avian communities across urbanization gradients in multiple countries. Field teams conducted standardized point counts and acoustic recordings, building one of the most geographically diverse datasets on urban bird responses to land-use change.',
-    methods: ['Point count surveys', 'Acoustic recording', 'Multi-country collaboration', 'GIS land-use analysis'],
+      'As a Postdoctoral Research Associate in the Department of Biology at Queen\'s University, I led a multi-country urban bird monitoring project across five cities, using passive acoustic recorders and community science methods to survey avian biodiversity. The project revealed which species thrive under urbanization and which are excluded, providing critical data for conservation planning.',
+    methods: ['Passive acoustic recorders', 'Community science', 'Five-city comparison', 'GIS land-use analysis'],
   },
   {
     status: 'Doctoral Research',
@@ -26,8 +26,8 @@ const projects = [
     location: 'University of KwaZulu-Natal, South Africa',
     image: '/images/field-fruit.png',
     description:
-      'Field-intensive doctoral work investigating how urban matrix composition affects frugivory networks and seed dispersal in fragmented landscapes in and around Durban. Observations of fruit-eating birds and primates across gradient sites quantified disruption to plant–animal mutualisms critical for forest regeneration.',
-    methods: ['Focal plant observations', 'Camera trap monitoring', 'Seed germination trials', 'Landscape fragmentation metrics'],
+      'My doctoral research focused on frugivory and seed dispersal by birds, bats, and monkeys in urban mosaic landscapes, with particular attention to the ecological role of Ficus species. The work demonstrated how habitat fragmentation disrupts mutualistic plant–animal interactions, with significant implications for forest regeneration in heavily modified environments.',
+    methods: ['Focal plant observations', 'Bat and bird surveys', 'Seed germination trials', 'Landscape fragmentation metrics'],
   },
 ];
 

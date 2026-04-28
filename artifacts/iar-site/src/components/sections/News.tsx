@@ -4,24 +4,24 @@ import { motion } from 'framer-motion';
 export function News() {
   const news = [
     {
-      date: "May 2025",
-      title: "Upcoming presentation at the Society for Conservation Biology",
-      description: "I'll be presenting early results from the Urban Campus Soundscape Project at the annual meeting."
+      date: "2025",
+      title: "Joined Cornell Lab as Rose Postdoctoral Fellow",
+      description: "Excited to begin my fellowship at the K. Lisa Yang Center for Conservation Bioacoustics, Cornell Lab of Ornithology, advancing interdisciplinary research on urban bird diversity and soundscapes."
     },
     {
-      date: "January 2025",
-      title: "Started as Rose Postdoctoral Fellow at Cornell",
-      description: "Thrilled to join the K. Lisa Yang Center for Conservation Bioacoustics to advance my research in urban ecology."
+      date: "2024",
+      title: "Multi-country urban bird monitoring project complete",
+      description: "Wrapped up the large-scale passive acoustic recorder survey across five cities at Queen's University, with data analysis and manuscript preparation now underway."
     },
     {
-      date: "November 2024",
-      title: "New publication in Landscape and Urban Planning",
-      description: "Our collaborative paper on urban soundscapes and avian communities across socioeconomic gradients is now published."
+      date: "2024",
+      title: "Fieldwork season completed in South Africa",
+      description: "Concluded field data collection on frugivory and seed dispersal networks by birds, bats, and monkeys in urban mosaic landscapes, focusing on the ecological role of Ficus species."
     },
     {
-      date: "August 2024",
-      title: "Fieldwork wrapped up in South Africa",
-      description: "Successfully completed another season of data collection on frugivory networks in fragmented landscapes."
+      date: "2021",
+      title: "PhD conferred — University of KwaZulu-Natal",
+      description: "Completed doctoral research in Ecological Sciences, focusing on plant–animal interactions and seed dispersal in fragmented urban landscapes in South Africa."
     }
   ];
 

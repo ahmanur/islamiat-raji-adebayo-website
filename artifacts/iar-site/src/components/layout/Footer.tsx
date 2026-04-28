@@ -17,7 +17,7 @@ export function Footer() {
               Advancing conservation through bioacoustics, urban ecology, and community engagement. Exploring the intersections of sound, biodiversity, and human well-being.
             </p>
             <div className="flex gap-4">
-              <a href="https://www.linkedin.com/in/islamiat-raji-adebayo/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-background/10 hover:bg-primary hover:text-primary-foreground transition-all duration-300" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/islamiat-raji-adebayo-ph-d-21931387/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-background/10 hover:bg-primary hover:text-primary-foreground transition-all duration-300" aria-label="LinkedIn">
                 <FaLinkedin className="w-5 h-5" />
               </a>
               <a href="#" className="p-2 rounded-full bg-background/10 hover:bg-primary hover:text-primary-foreground transition-all duration-300" aria-label="ResearchGate">

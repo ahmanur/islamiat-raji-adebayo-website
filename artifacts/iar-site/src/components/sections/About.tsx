@@ -48,19 +48,23 @@ export function About() {
               className="prose prose-lg prose-headings:font-serif prose-p:text-foreground/80 prose-p:leading-relaxed max-w-none"
             >
               <p className="text-xl md:text-2xl text-foreground font-serif leading-relaxed mb-8">
-                My work exists at the intersection of wild nature and human environments, exploring how we can design cities that support both thriving biodiversity and human well-being.
+                My research spans landscape and urban ecology, with broad interests in plant–animal interactions and the ecological and social impacts of urbanization and land-use change on bird communities in relation to human well-being.
               </p>
               
               <p>
-                My trajectory from Nigeria to South Africa, to Canada, and now to Cornell has been driven by a profound curiosity about how species adapt—or fail to adapt—to rapid environmental changes. As an ecologist, I am fascinated by the complex web of interactions that sustain ecosystems, particularly in spaces heavily modified by human activity.
+                My trajectory from Nigeria to South Africa, to Canada, and now to Cornell has been shaped by a deep curiosity about how species adapt—or fail to adapt—to rapid environmental change. I use an interdisciplinary approach that integrates bioacoustics and community engagement to monitor biodiversity in rapidly changing urban landscapes.
               </p>
               
               <p>
-                Currently serving as a Rose Postdoctoral Fellow at the K. Lisa Yang Center for Conservation Bioacoustics at the Cornell Lab of Ornithology, my research braids together landscape ecology, bioacoustics, and community engagement. I use sound as a powerful, non-invasive lens to monitor biodiversity, understanding that the acoustic environment of a city tells us vital stories about its ecological health.
+                As a Rose Postdoctoral Fellow at the K. Lisa Yang Center for Conservation Bioacoustics at the Cornell Lab of Ornithology, my current research investigates bird diversity on university campuses and in cities across multiple countries using autonomous acoustic recorders. I collaborate with local experts and students to record bird songs, identifying which species persist, which do not, and why—helping us understand the factors that shape urban bird populations and guiding conservation planning.
               </p>
               
               <p>
-                My doctoral research focused on plant-animal interactions, specifically frugivory and seed dispersal in urban mosaic landscapes. I observed how urbanization disrupts these critical ecological functions and what that means for forest regeneration. Now, I extend this systemic thinking to soundscapes, investigating how the acoustic characteristics of urban environments shape bird communities.
+                One of the most rewarding aspects of my work is the connection between nature and human well-being. I aim to develop conservation frameworks that support both ecological resilience and social well-being in urban settings. Before joining Cornell, I was a Postdoctoral Research Associate in the Department of Biology at Queen's University in Canada, where I led a multi-country urban bird monitoring project across five cities using passive acoustic recorders and community science methods. My doctoral research at the University of KwaZulu-Natal in South Africa focused on frugivory and seed dispersal by birds, bats, and monkeys in urban mosaic landscapes, with particular attention to the ecological role of <em>Ficus</em> species.
+              </p>
+              
+              <p>
+                I enjoy working with students and community and local scientists to co-design participatory monitoring methods that are scalable, community-driven, and relevant to both science and society. I am passionate about mentorship, outreach, and interdisciplinary collaboration.
               </p>
               
               <div className="my-12 p-8 bg-background border border-primary/10 rounded-2xl shadow-sm relative overflow-hidden">
