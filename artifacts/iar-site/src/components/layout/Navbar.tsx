@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, X, Download } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import { SpectrogramWave } from '@/components/ui/SpectrogramWave';
 
@@ -97,17 +97,6 @@ export function Navbar() {
             })}
           </ul>
         </nav>
-
-        {/* CV button — desktop */}
-        <a
-          href="#"
-          aria-label="Download CV (placeholder)"
-          download
-          className="hidden lg:flex items-center gap-1.5 shrink-0 text-sm font-medium text-foreground/70 hover:text-foreground border border-border/60 hover:border-border rounded-sm px-3 py-1.5 transition-colors duration-200"
-        >
-          <Download className="w-3.5 h-3.5" />
-          CV
-        </a>
 
         {/* Mobile hamburger */}
         <button
