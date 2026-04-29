@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
+import { getContent } from '@/lib/cms';
+import { CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
+
+const D = CONTENT_DEFAULTS.hero;
 
 export function Hero() {
+  const [c, setC] = useState(D);
+
+  useEffect(() => {
+    getContent('hero').then(data => {
+      if (Object.keys(data).length > 0) setC({ ...D, ...data });
+    });
+  }, []);
+
   return (
     <section id="hero" className="relative min-h-[100dvh] flex items-center pt-20 overflow-hidden bg-background">
-      {/* Full-bleed background image with Ken Burns motion */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
         initial={{ scale: 1.08 }}
@@ -21,7 +32,6 @@ export function Hero() {
           style={{ filter: 'brightness(1.35) saturate(1.6) hue-rotate(15deg)' }}
         />
       </motion.div>
-      {/* Lighter overlay so the green forest breathes through */}
       <div className="absolute inset-0 z-0 pointer-events-none bg-black/35" />
       <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-r from-black/30 via-black/5 to-transparent" />
       <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/20 via-transparent to-black/40" />
@@ -36,34 +46,34 @@ export function Hero() {
             >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs font-medium tracking-widest mb-6 uppercase border border-white/20">
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                Cornell Lab of Ornithology · Rose Postdoctoral Fellow
+                {c.badge}
               </div>
-              
+
               <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl leading-[1.1] text-white mb-6">
-                Listening to the<br />
-                <span className="text-primary italic">urban forest.</span>
+                {c.headline}<br />
+                <span className="text-primary italic">{c.headline_accent}</span>
               </h1>
-              
+
               <p className="text-lg md:text-xl text-white/75 max-w-2xl leading-relaxed mb-10 font-light">
-                Advancing conservation through bioacoustics and urban ecology. Studying how urbanization shapes bird communities and the relationship between people and nature.
+                {c.tagline}
               </p>
-              
+
               <div className="flex flex-wrap items-center gap-4">
                 <Button size="lg" className="rounded-full px-8" asChild>
-                  <Link href="/research">Explore Research</Link>
+                  <Link href="/research">{c.btn_primary}</Link>
                 </Button>
                 <Button variant="outline" size="lg" className="rounded-full px-8 bg-transparent border-white/40 text-white hover:bg-white/10 hover:border-white/70" asChild>
-                  <Link href="/outreach">Get in Touch</Link>
+                  <Link href="/outreach">{c.btn_secondary}</Link>
                 </Button>
               </div>
 
               <div className="mt-16 flex items-center gap-4 text-sm text-white/50">
                 <MapPin className="w-4 h-4 text-primary" />
-                <span>K. Lisa Yang Center for Conservation Bioacoustics, Cornell Lab of Ornithology</span>
+                <span>{c.institution}</span>
               </div>
             </motion.div>
           </div>
-          
+
           <div className="lg:col-span-5 order-1 lg:order-2">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -72,19 +82,17 @@ export function Hero() {
               className="relative"
             >
               <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative z-10">
-                <img 
-                  src="/images/portrait.jpg" 
-                  alt="Portrait of Dr. Islamiat Raji-Adebayo" 
+                <img
+                  src="/images/portrait.jpg"
+                  alt="Portrait of Dr. Islamiat Raji-Adebayo"
                   className="w-full h-full object-cover object-top"
                 />
                 <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl pointer-events-none"></div>
               </div>
-              
-              {/* Offset decorative image */}
               <div className="absolute -bottom-10 -left-10 w-2/5 aspect-square rounded-2xl overflow-hidden shadow-xl z-20 border-4 border-background hidden md:block">
-                <img 
-                  src="/images/hero-bird.png" 
-                  alt="Small bird in urban park at dawn" 
+                <img
+                  src="/images/hero-bird.png"
+                  alt="Small bird in urban park at dawn"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -92,8 +100,8 @@ export function Hero() {
           </div>
         </div>
       </div>
-      
-      <motion.div 
+
+      <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

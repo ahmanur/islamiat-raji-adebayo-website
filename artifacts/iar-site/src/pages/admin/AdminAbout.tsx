@@ -2,6 +2,7 @@ import React from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ContentEditor } from '@/components/admin/ContentEditor';
 import { ListEditor } from '@/components/admin/ListEditor';
+import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
 export function AdminAbout() {
   return (
@@ -17,12 +18,13 @@ export function AdminAbout() {
           <ContentEditor
             section="about"
             fields={[
-              { key: 'tagline', label: 'Opening Tagline', type: 'textarea', placeholder: 'My research spans landscape and urban ecology…' },
+              { key: 'tagline', label: 'Opening Tagline', type: 'textarea' },
               { key: 'para1', label: 'Paragraph 1', type: 'textarea' },
               { key: 'para2', label: 'Paragraph 2 (Cornell)', type: 'textarea' },
-              { key: 'para3', label: 'Paragraph 3 (Queen\'s / KZN)', type: 'textarea' },
+              { key: 'para3', label: "Paragraph 3 (Queen's / KZN)", type: 'textarea' },
               { key: 'para4', label: 'Paragraph 4 (Mentorship / values)', type: 'textarea' },
             ]}
+            defaults={CONTENT_DEFAULTS.about}
           />
         </div>
 
@@ -35,6 +37,7 @@ export function AdminAbout() {
               { key: 'degree', label: 'Degree', placeholder: 'PhD Ecological Sciences' },
               { key: 'institution', label: 'Institution & Year', placeholder: 'University of KwaZulu-Natal, 2021' },
             ]}
+            defaultItems={LIST_DEFAULTS.education}
           />
         </div>
 
@@ -47,6 +50,7 @@ export function AdminAbout() {
               { key: 'title', label: 'Award Title', placeholder: 'Falling Walls Female Science Talent' },
               { key: 'year', label: 'Year', placeholder: '2024' },
             ]}
+            defaultItems={LIST_DEFAULTS.awards}
           />
         </div>
 
@@ -58,6 +62,7 @@ export function AdminAbout() {
             fields={[
               { key: 'name', label: 'Organization Name', placeholder: 'British Ecological Society' },
             ]}
+            defaultItems={LIST_DEFAULTS.affiliations}
           />
         </div>
       </div>

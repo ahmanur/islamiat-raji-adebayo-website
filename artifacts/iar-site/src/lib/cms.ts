@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { CONTENT_DEFAULTS, LIST_DEFAULTS } from './cmsDefaults';
 
 export type SectionKey =
   | 'hero'
@@ -94,4 +95,38 @@ export async function reorderList(listKey: ListKey, ids: string[]): Promise<void
       supabase.from('cms_lists').update({ sort_order: i }).eq('id', id)
     )
   );
+}
+
+export async function seedAllDefaults(): Promise<void> {
+  const contentSections = Object.entries(CONTENT_DEFAULTS) as [SectionKey, Record<string, string>][];
+  for (const [section, values] of contentSections) {
+    const rows = Object.entries(values).map(([key, value]) => ({
+      section,
+      key,
+      value,
+      updated_at: new Date().toISOString(),
+    }));
+    await supabase.from('cms_content').upsert(rows, { onConflict: 'section,key', ignoreDuplicates: false });
+  }
+
+  const listEntries = Object.entries(LIST_DEFAULTS) as [ListKey, Array<Record<string, string>>][];
+  for (const [listKey, items] of listEntries) {
+    if (items.length === 0) continue;
+    const { data: existing } = await supabase
+      .from('cms_lists')
+      .select('id')
+      .eq('list_key', listKey)
+      .limit(1);
+
+    if (existing && existing.length > 0) continue;
+
+    const rows = items.map((data, i) => ({
+      id: crypto.randomUUID(),
+      list_key: listKey,
+      sort_order: i,
+      data,
+      updated_at: new Date().toISOString(),
+    }));
+    await supabase.from('cms_lists').insert(rows);
+  }
 }

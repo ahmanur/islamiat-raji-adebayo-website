@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { getContent } from '@/lib/cms';
+import { CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
+
+const DC = CONTENT_DEFAULTS.outreach;
 
 export function Contact() {
+  const [c, setC] = useState(DC);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    getContent('outreach').then(data => {
+      if (Object.keys(data).length > 0) setC({ ...DC, ...data });
+    });
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
     setTimeout(() => {
       setIsSubmitted(true);
       setTimeout(() => setIsSubmitted(false), 5000);
@@ -29,37 +39,40 @@ export function Contact() {
           >
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Get in Touch</h2>
             <div className="w-12 h-[2px] bg-primary mb-8"></div>
-            
-            <p className="text-lg text-foreground/80 leading-relaxed mb-12 max-w-md">
-              Whether you're a prospective student, a potential collaborator, or just interested in urban ecology and bioacoustics, I'd love to hear from you.
-            </p>
+
+            {c.intro && (
+              <p className="text-lg text-foreground/80 leading-relaxed mb-12 max-w-md">{c.intro}</p>
+            )}
 
             <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-secondary/50 rounded-full text-primary shrink-0">
-                  <Mail className="w-5 h-5" />
+              {c.email && (
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-secondary/50 rounded-full text-primary shrink-0">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-foreground mb-1">Email</h3>
+                    <a href={`mailto:${c.email}`} className="text-foreground/70 hover:text-primary transition-colors">
+                      {c.email}
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-medium text-foreground mb-1">Email</h3>
-                  <a href="mailto:iar32@cornell.edu" className="text-foreground/70 hover:text-primary transition-colors">
-                    iar32@cornell.edu
-                  </a>
+              )}
+
+              {(c.institution || c.location) && (
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-secondary/50 rounded-full text-primary shrink-0">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-foreground mb-1">Location</h3>
+                    <p className="text-foreground/70 leading-relaxed">
+                      {c.institution && <>{c.institution}<br /></>}
+                      {c.location}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-secondary/50 rounded-full text-primary shrink-0">
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-foreground mb-1">Location</h3>
-                  <p className="text-foreground/70 leading-relaxed">
-                    K. Lisa Yang Center for Conservation Bioacoustics<br />
-                    Cornell Lab of Ornithology<br />
-                    Ithaca, NY
-                  </p>
-                </div>
-              </div>
+              )}
             </div>
           </motion.div>
 

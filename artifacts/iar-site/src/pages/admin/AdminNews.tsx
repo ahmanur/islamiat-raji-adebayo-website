@@ -1,6 +1,7 @@
 import React from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ListEditor } from '@/components/admin/ListEditor';
+import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
 export function AdminNews() {
   return (
@@ -15,8 +16,9 @@ export function AdminNews() {
             fields={[
               { key: 'date', label: 'Date', placeholder: 'January 2025' },
               { key: 'title', label: 'Title', placeholder: 'News headline' },
-              { key: 'description', label: 'Description', type: 'textarea', placeholder: 'Brief description…' },
+              { key: 'description', label: 'Description', type: 'textarea' },
             ]}
+            defaultItems={LIST_DEFAULTS.news_items}
           />
         </div>
       </div>

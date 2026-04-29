@@ -1,6 +1,7 @@
 import React from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ListEditor } from '@/components/admin/ListEditor';
+import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
 export function AdminPublications() {
   return (
@@ -20,6 +21,7 @@ export function AdminPublications() {
               { key: 'category', label: 'Category', placeholder: 'Journal Article / Book Chapter / Conference Paper' },
               { key: 'url', label: 'DOI / URL', type: 'url', placeholder: 'https://doi.org/…' },
             ]}
+            defaultItems={LIST_DEFAULTS.publications}
           />
         </div>
       </div>

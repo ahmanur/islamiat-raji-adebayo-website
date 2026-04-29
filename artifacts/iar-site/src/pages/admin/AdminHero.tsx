@@ -1,6 +1,7 @@
 import React from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ContentEditor } from '@/components/admin/ContentEditor';
+import { CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
 
 export function AdminHero() {
   return (
@@ -12,23 +13,15 @@ export function AdminHero() {
           <ContentEditor
             section="hero"
             fields={[
-              { key: 'badge', label: 'Badge Text', placeholder: 'Cornell Lab of Ornithology · Rose Postdoctoral Fellow' },
-              { key: 'headline', label: 'Headline', placeholder: 'Listening to the' },
-              { key: 'headline_accent', label: 'Headline Accent (italic)', placeholder: 'urban forest.' },
-              { key: 'tagline', label: 'Tagline / Subtitle', type: 'textarea', placeholder: 'Advancing conservation through bioacoustics…' },
-              { key: 'btn_primary', label: 'Primary Button Text', placeholder: 'Explore Research' },
-              { key: 'btn_secondary', label: 'Secondary Button Text', placeholder: 'Get in Touch' },
-              { key: 'institution', label: 'Institution Line', placeholder: 'K. Lisa Yang Center for Conservation Bioacoustics, Cornell Lab of Ornithology' },
+              { key: 'badge', label: 'Badge Text' },
+              { key: 'headline', label: 'Headline' },
+              { key: 'headline_accent', label: 'Headline Accent (italic)' },
+              { key: 'tagline', label: 'Tagline / Subtitle', type: 'textarea' },
+              { key: 'btn_primary', label: 'Primary Button Text' },
+              { key: 'btn_secondary', label: 'Secondary Button Text' },
+              { key: 'institution', label: 'Institution Line' },
             ]}
-            defaults={{
-              badge: 'Cornell Lab of Ornithology · Rose Postdoctoral Fellow',
-              headline: 'Listening to the',
-              headline_accent: 'urban forest.',
-              tagline: 'Advancing conservation through bioacoustics and urban ecology. Studying how urbanization shapes bird communities and the relationship between people and nature.',
-              btn_primary: 'Explore Research',
-              btn_secondary: 'Get in Touch',
-              institution: 'K. Lisa Yang Center for Conservation Bioacoustics, Cornell Lab of Ornithology',
-            }}
+            defaults={CONTENT_DEFAULTS.hero}
           />
         </div>
       </div>

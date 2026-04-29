@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'wouter';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { useAdminAuth } from '@/lib/adminAuth';
+import { seedAllDefaults } from '@/lib/cms';
 
 const sections = [
   { href: '/admin/hero', label: 'Hero Section', desc: 'Edit headline, tagline, background, portrait', icon: '🏠' },
@@ -18,6 +19,23 @@ const sections = [
 
 export function AdminDashboard() {
   const { user } = useAdminAuth();
+  const [seeding, setSeeding] = useState(false);
+  const [seedDone, setSeedDone] = useState(false);
+  const [seedError, setSeedError] = useState('');
+
+  const handleSeed = async () => {
+    if (!confirm('This will populate all CMS fields with the existing website content. List items (education, publications, etc.) are only seeded if they are currently empty. Content fields will be overwritten with defaults. Continue?')) return;
+    setSeeding(true);
+    setSeedError('');
+    try {
+      await seedAllDefaults();
+      setSeedDone(true);
+      setTimeout(() => setSeedDone(false), 4000);
+    } catch (e: unknown) {
+      setSeedError(e instanceof Error ? e.message : 'Unknown error');
+    }
+    setSeeding(false);
+  };
 
   return (
     <AdminLayout>
@@ -25,6 +43,23 @@ export function AdminDashboard() {
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-white">Welcome back</h1>
           <p className="text-slate-400 text-sm mt-1">{user?.email} · Dr. Islamiat Raji-Adebayo Website CMS</p>
+        </div>
+
+        <div className="bg-slate-900 border border-primary/20 rounded-xl p-5 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="text-white font-medium text-sm mb-1">Load Default Content</div>
+            <div className="text-slate-400 text-xs leading-relaxed max-w-md">
+              Populate all CMS fields with the existing website content so you can start editing immediately. List items are only seeded if the list is currently empty.
+            </div>
+            {seedError && <div className="text-red-400 text-xs mt-2">{seedError}</div>}
+          </div>
+          <button
+            onClick={handleSeed}
+            disabled={seeding}
+            className="shrink-0 bg-primary hover:bg-primary/90 disabled:opacity-50 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition-colors whitespace-nowrap"
+          >
+            {seeding ? 'Loading…' : seedDone ? '✓ Done!' : 'Seed Default Content'}
+          </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -37,58 +72,6 @@ export function AdminDashboard() {
               </a>
             </Link>
           ))}
-        </div>
-
-        <div className="mt-8 bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <h2 className="text-white font-medium text-sm mb-3">Quick Setup</h2>
-          <div className="text-slate-400 text-sm space-y-2">
-            <p>To get started, run the following SQL in your <strong className="text-slate-300">Supabase SQL Editor</strong> to create the required tables:</p>
-            <div className="bg-slate-950 rounded-lg p-4 text-xs font-mono text-green-400 overflow-x-auto mt-3">
-              <pre>{`-- CMS content key-value store
-CREATE TABLE IF NOT EXISTS cms_content (
-  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  section text NOT NULL,
-  key text NOT NULL,
-  value text NOT NULL DEFAULT '',
-  updated_at timestamptz DEFAULT now(),
-  UNIQUE(section, key)
-);
-
--- CMS list items (projects, publications, news, etc.)
-CREATE TABLE IF NOT EXISTS cms_lists (
-  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  list_key text NOT NULL,
-  sort_order integer NOT NULL DEFAULT 0,
-  data jsonb NOT NULL DEFAULT '{}',
-  updated_at timestamptz DEFAULT now()
-);
-
--- Enable Row Level Security
-ALTER TABLE cms_content ENABLE ROW LEVEL SECURITY;
-ALTER TABLE cms_lists ENABLE ROW LEVEL SECURITY;
-
--- Allow authenticated users full access
-CREATE POLICY "Auth full access content"
-  ON cms_content FOR ALL
-  TO authenticated
-  USING (true) WITH CHECK (true);
-
-CREATE POLICY "Auth full access lists"
-  ON cms_lists FOR ALL
-  TO authenticated
-  USING (true) WITH CHECK (true);
-
--- Allow public read access
-CREATE POLICY "Public read content"
-  ON cms_content FOR SELECT
-  TO anon USING (true);
-
-CREATE POLICY "Public read lists"
-  ON cms_lists FOR SELECT
-  TO anon USING (true);`}</pre>
-            </div>
-            <p className="mt-3 text-slate-500">After running the SQL, you can use all editors above. You also need to create an admin user in <strong className="text-slate-400">Supabase → Authentication → Users</strong>.</p>
-          </div>
         </div>
       </div>
     </AdminLayout>

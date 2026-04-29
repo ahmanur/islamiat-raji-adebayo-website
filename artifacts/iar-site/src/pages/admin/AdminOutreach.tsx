@@ -1,6 +1,7 @@
 import React from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ContentEditor } from '@/components/admin/ContentEditor';
+import { CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
 
 export function AdminOutreach() {
   return (
@@ -21,12 +22,7 @@ export function AdminOutreach() {
               { key: 'researchgate', label: 'ResearchGate URL', type: 'url', placeholder: 'https://www.researchgate.net/…' },
               { key: 'google_scholar', label: 'Google Scholar URL', type: 'url', placeholder: 'https://scholar.google.com/…' },
             ]}
-            defaults={{
-              email: 'iar32@cornell.edu',
-              institution: 'K. Lisa Yang Center for Conservation Bioacoustics, Cornell Lab of Ornithology',
-              location: 'Ithaca, NY, USA',
-              linkedin: 'https://www.linkedin.com/in/islamiat-raji-adebayo-ph-d-21931387/',
-            }}
+            defaults={CONTENT_DEFAULTS.outreach}
           />
         </div>
       </div>

@@ -13,9 +13,10 @@ interface ListEditorProps {
   fields: FieldDef[];
   itemLabel: string;
   defaultItem?: Record<string, string>;
+  defaultItems?: Array<Record<string, string>>;
 }
 
-export function ListEditor({ listKey, fields, itemLabel, defaultItem = {} }: ListEditorProps) {
+export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defaultItems }: ListEditorProps) {
   const [items, setItems] = useState<ListRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -23,6 +24,7 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {} }: Lis
   const [saving, setSaving] = useState(false);
   const [adding, setAdding] = useState(false);
   const [newValues, setNewValues] = useState<Record<string, string>>(defaultItem);
+  const [seeding, setSeeding] = useState(false);
 
   const load = async () => {
     const data = await getList(listKey);
@@ -64,10 +66,38 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {} }: Lis
     setSaving(false);
   };
 
+  const handleSeedDefaults = async () => {
+    if (!defaultItems || defaultItems.length === 0) return;
+    if (!confirm(`This will populate ${defaultItems.length} default items. Continue?`)) return;
+    setSeeding(true);
+    for (let i = 0; i < defaultItems.length; i++) {
+      await upsertListItem(listKey, {
+        id: crypto.randomUUID(),
+        sort_order: items.length + i,
+        data: defaultItems[i],
+      });
+    }
+    await load();
+    setSeeding(false);
+  };
+
   if (loading) return <div className="text-slate-400 text-sm">Loading…</div>;
 
   return (
     <div className="space-y-4">
+      {items.length === 0 && defaultItems && defaultItems.length > 0 && (
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-center justify-between gap-4">
+          <div className="text-amber-300 text-sm">No entries yet. Load the default content to get started.</div>
+          <button
+            onClick={handleSeedDefaults}
+            disabled={seeding}
+            className="shrink-0 text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-medium px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+          >
+            {seeding ? 'Loading…' : 'Load Defaults'}
+          </button>
+        </div>
+      )}
+
       {items.map(item => (
         <div key={item.id} className="bg-slate-800 border border-slate-700 rounded-xl p-4">
           {editingId === item.id ? (

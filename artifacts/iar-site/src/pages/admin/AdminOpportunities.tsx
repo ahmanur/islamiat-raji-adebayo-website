@@ -2,6 +2,7 @@ import React from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ContentEditor } from '@/components/admin/ContentEditor';
 import { ListEditor } from '@/components/admin/ListEditor';
+import { CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
 
 export function AdminOpportunities() {
   return (
@@ -20,6 +21,7 @@ export function AdminOpportunities() {
               { key: 'intro', label: 'Introduction', type: 'textarea' },
               { key: 'contact_cta', label: 'Contact Call-to-Action', type: 'textarea' },
             ]}
+            defaults={CONTENT_DEFAULTS.opportunities}
           />
         </div>
 
