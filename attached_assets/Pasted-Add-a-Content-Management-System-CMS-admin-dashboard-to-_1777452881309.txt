@@ -1,0 +1,142 @@
+Add a Content Management System (CMS) admin dashboard to the existing Dr. Islamiat Raji-Adebayo website.
+
+The CMS should allow the website owner to edit all website content without accessing the code.
+
+ADMIN DASHBOARD FEATURES:
+
+1. ADMIN LOGIN PAGE
+   - Username and password login
+   - Remember me option
+   - Logout button
+   - Session management
+
+2. DASHBOARD HOME
+   - Welcome message
+   - Quick links to all content sections
+   - Last updated information
+
+3. HERO SECTION EDITOR
+   - Edit headline text
+   - Edit tagline/subtitle text
+   - Upload/change background image
+   - Upload/change professional headshot
+   - Edit button text and links
+   - Edit institutional affiliation
+   - Live preview
+
+4. NAVIGATION EDITOR
+   - Add/Edit/Delete navigation menu items
+   - Reorder menu items
+   - Show/hide menu items
+   - Edit menu item links
+
+5. ABOUT SECTION EDITOR
+   - Edit biography text
+   - Edit professional title
+   - Add/Edit/Delete education entries
+   - Add/Edit/Delete organizational affiliations
+   - Upload images
+
+6. RESEARCH SECTION EDITOR
+   - Add/Edit/Delete research projects
+   - Edit project title and description
+   - Upload project images
+   - Reorder projects
+   - Add project tags
+
+7. PUBLICATIONS EDITOR
+   - Add/Edit/Delete publications
+   - Categorize publications
+   - Add publication details (title, authors, year, link)
+   - Upload or link to publication PDFs
+
+8. NEWS & UPDATES EDITOR
+   - Add/Edit/Delete news entries
+   - Set publication date
+   - Edit news title and content
+   - Upload news images
+   - Categorize news
+
+9. MENTORSHIP SECTION EDITOR
+   - Edit mentorship description
+   - Add/Edit/Delete opportunity types
+   - Edit opportunity details
+   - Edit application process
+
+10. CONTACT SECTION EDITOR
+    - Edit email address
+    - Edit location information
+    - View submitted contact form messages
+    - Export contact messages
+
+11. FOOTER EDITOR
+    - Edit footer text
+    - Add/Edit/Delete social media links
+    - Edit copyright information
+    - Edit affiliations list
+
+12. MEDIA MANAGER
+    - Upload images and files
+    - Organize media
+    - View all uploaded media
+    - Delete media
+    - Get image URLs
+
+13. SETTINGS
+    - Change admin password
+    - Manage admin users
+    - View activity log
+    - Website settings
+
+REQUIREMENTS:
+
+- Admin login required to access CMS
+- All changes update the live website in real-time
+- Responsive design (works on desktop, tablet, mobile)
+- Rich text editor for long-form content
+- Image upload with preview
+- Confirmation dialogs before deleting
+- Auto-save functionality
+- Success/error notifications
+- Undo/Redo functionality
+- Version history for content
+- Backup and restore functionality
+
+USER INTERFACE:
+
+- Clean, professional dashboard design
+- Sidebar navigation
+- Dark mode option
+- Intuitive layout
+- Helpful tooltips
+- Loading states
+- Clear error messages
+
+SECURITY:
+
+- Password hashing
+- Session management
+- Input validation
+- CSRF protection
+- Rate limiting on login
+- Audit logging
+
+INTEGRATION:
+
+- Connect CMS to existing website database
+- API endpoints for website to fetch content
+- Real-time content updates
+- No need to redeploy website after content changes
+
+START BY:
+
+1. Create admin login page
+2. Build dashboard home
+3. Create hero section editor
+4. Add other content editors
+5. Implement media manager
+6. Add backup/restore
+7. Test all functionality
+8. Deploy
+
+Make it easy for Dr. Raji-Adebayo to manage all website content without coding knowledge.
