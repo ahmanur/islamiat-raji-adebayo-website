@@ -151,17 +151,6 @@ export function Navbar() {
                 </li>
               );
             })}
-            <li className="mt-3 pt-3 border-t border-border/40">
-              <a
-                href="#"
-                download
-                aria-label="Download CV (placeholder)"
-                className="flex items-center gap-2 px-2 py-2.5 text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
-              >
-                <Download className="w-4 h-4" />
-                Download CV
-              </a>
-            </li>
           </ul>
         </motion.div>
       )}
