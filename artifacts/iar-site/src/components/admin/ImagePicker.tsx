@@ -1,12 +1,21 @@
 import React, { useRef, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseServiceKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY as string;
+let _adminSupabase: SupabaseClient | null = null;
 
-const adminSupabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: { persistSession: false },
-});
+function getAdminSupabase(): SupabaseClient {
+  if (!_adminSupabase) {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+    const supabaseServiceKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY as string;
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error('Supabase credentials are not configured.');
+    }
+    _adminSupabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: { persistSession: false },
+    });
+  }
+  return _adminSupabase;
+}
 
 interface ImagePickerProps {
   label: string;
@@ -36,13 +45,14 @@ export function ImagePicker({ label, value, fallback, onChange, hint }: ImagePic
       const ext = file.name.split('.').pop() ?? 'jpg';
       const path = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-      const { error: uploadError } = await adminSupabase.storage
+      const client = getAdminSupabase();
+      const { error: uploadError } = await client.storage
         .from('cms-media')
         .upload(path, file, { contentType: file.type, upsert: false });
 
       if (uploadError) throw new Error(uploadError.message);
 
-      const { data } = adminSupabase.storage.from('cms-media').getPublicUrl(path);
+      const { data } = client.storage.from('cms-media').getPublicUrl(path);
       onChange(data.publicUrl);
     } catch (err) {
       setError('Upload failed: ' + (err instanceof Error ? err.message : String(err)));
