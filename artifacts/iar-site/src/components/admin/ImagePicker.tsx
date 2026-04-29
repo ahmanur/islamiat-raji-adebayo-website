@@ -1,4 +1,12 @@
 import React, { useRef, useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const supabaseServiceKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY as string;
+
+const adminSupabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: { persistSession: false },
+});
 
 interface ImagePickerProps {
   label: string;
@@ -25,26 +33,17 @@ export function ImagePicker({ label, value, fallback, onChange, hint }: ImagePic
     setError('');
 
     try {
-      const arrayBuffer = await file.arrayBuffer();
-      const bytes = new Uint8Array(arrayBuffer);
-      let binary = '';
-      for (let i = 0; i < bytes.byteLength; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      const base64 = btoa(binary);
+      const ext = file.name.split('.').pop() ?? 'jpg';
+      const path = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: file.name, type: file.type, data: base64 }),
-      });
+      const { error: uploadError } = await adminSupabase.storage
+        .from('cms-media')
+        .upload(path, file, { contentType: file.type, upsert: false });
 
-      const json = await res.json();
-      if (!res.ok) {
-        setError('Upload failed: ' + (json.error ?? res.statusText));
-      } else {
-        onChange(json.url);
-      }
+      if (uploadError) throw new Error(uploadError.message);
+
+      const { data } = adminSupabase.storage.from('cms-media').getPublicUrl(path);
+      onChange(data.publicUrl);
     } catch (err) {
       setError('Upload failed: ' + (err instanceof Error ? err.message : String(err)));
     } finally {
