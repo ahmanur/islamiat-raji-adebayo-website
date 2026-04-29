@@ -68,9 +68,6 @@ export function Hero() {
                 <Button size="lg" className="rounded-full px-8" asChild>
                   <Link href="/research">{c.btn_primary}</Link>
                 </Button>
-                <Button variant="outline" size="lg" className="rounded-full px-8 bg-transparent border-white/40 text-white hover:bg-white/10 hover:border-white/70" asChild>
-                  <Link href="/outreach">{c.btn_secondary}</Link>
-                </Button>
               </div>
 
               <div className="mt-16 flex items-center gap-4 text-sm text-white/50">
