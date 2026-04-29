@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 
 interface ImagePickerProps {
   label: string;
@@ -21,20 +20,37 @@ export function ImagePicker({ label, value, fallback, onChange, hint }: ImagePic
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
     setUploading(true);
     setError('');
-    const path = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-    const { error: uploadErr, data } = await supabase.storage
-      .from('cms-media')
-      .upload(path, file, { upsert: true });
-    if (uploadErr) {
-      setError('Upload failed: ' + uploadErr.message);
-    } else {
-      const { data: urlData } = supabase.storage.from('cms-media').getPublicUrl(path);
-      onChange(urlData.publicUrl);
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = '';
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      const base64 = btoa(binary);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: file.name, type: file.type, data: base64 }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        setError('Upload failed: ' + (json.error ?? res.statusText));
+      } else {
+        onChange(json.url);
+      }
+    } catch (err) {
+      setError('Upload failed: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = '';
     }
-    setUploading(false);
-    if (fileRef.current) fileRef.current.value = '';
   };
 
   const handleUrlSubmit = () => {
