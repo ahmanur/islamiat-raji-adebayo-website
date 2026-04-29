@@ -10,11 +10,11 @@ export function AdminResearch() {
       <div className="max-w-2xl space-y-8">
         <div>
           <h1 className="text-xl font-semibold text-white mb-1">Research</h1>
-          <p className="text-slate-400 text-sm">Edit the research intro, themes, and projects.</p>
+          <p className="text-slate-400 text-sm">Edit the research intro, themes, and projects (including images).</p>
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <h2 className="text-white font-medium text-sm mb-4">Section Introduction</h2>
+          <h2 className="text-white font-medium text-sm mb-4">Section Introduction & Themes</h2>
           <ContentEditor
             section="research"
             fields={[
@@ -31,12 +31,21 @@ export function AdminResearch() {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <h2 className="text-white font-medium text-sm mb-4">Research Projects</h2>
-          <p className="text-slate-500 text-xs mb-4">First item appears as the current project.</p>
+          <h2 className="text-white font-medium text-sm mb-1">Research Projects</h2>
+          <p className="text-slate-500 text-xs mb-4">
+            Each project has an image you can upload or change. First item is shown as the current project.
+          </p>
           <ListEditor
             listKey="research_projects"
             itemLabel="Project"
             fields={[
+              {
+                key: 'image',
+                label: 'Project Image',
+                type: 'image',
+                imageFallback: '/images/spectrogram-art.png',
+                imageHint: 'Photo representing this research project.',
+              },
               { key: 'status', label: 'Status', placeholder: 'Current Project / Past Project / Doctoral Research' },
               { key: 'title', label: 'Project Title', placeholder: 'Urban Campus Soundscape Project' },
               { key: 'location', label: 'Location / Institution', placeholder: 'Cornell University, Ithaca NY' },

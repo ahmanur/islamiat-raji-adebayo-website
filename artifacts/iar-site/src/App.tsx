@@ -25,6 +25,7 @@ import { AdminPublications } from '@/pages/admin/AdminPublications';
 import { AdminNews } from '@/pages/admin/AdminNews';
 import { AdminMentorship } from '@/pages/admin/AdminMentorship';
 import { AdminOutreach } from '@/pages/admin/AdminOutreach';
+import { AdminFieldWork } from '@/pages/admin/AdminFieldWork';
 import { AdminOpportunities } from '@/pages/admin/AdminOpportunities';
 import { AdminMedia } from '@/pages/admin/AdminMedia';
 import { AdminSettings } from '@/pages/admin/AdminSettings';
@@ -64,6 +65,7 @@ function Router() {
         <Route path="/admin/about" component={() => <ProtectedRoute component={AdminAbout} />} />
         <Route path="/admin/research" component={() => <ProtectedRoute component={AdminResearch} />} />
         <Route path="/admin/publications" component={() => <ProtectedRoute component={AdminPublications} />} />
+        <Route path="/admin/fieldwork" component={() => <ProtectedRoute component={AdminFieldWork} />} />
         <Route path="/admin/news" component={() => <ProtectedRoute component={AdminNews} />} />
         <Route path="/admin/mentorship" component={() => <ProtectedRoute component={AdminMentorship} />} />
         <Route path="/admin/outreach" component={() => <ProtectedRoute component={AdminOutreach} />} />

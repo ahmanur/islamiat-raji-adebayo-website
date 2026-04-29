@@ -10,10 +10,16 @@ const D = CONTENT_DEFAULTS.hero;
 
 export function Hero() {
   const [c, setC] = useState(D);
+  const [bgImage, setBgImage] = useState('');
+  const [portraitImage, setPortraitImage] = useState('');
+  const [birdImage, setBirdImage] = useState('');
 
   useEffect(() => {
     getContent('hero').then(data => {
       if (Object.keys(data).length > 0) setC({ ...D, ...data });
+      setBgImage(data.bg_image ?? '');
+      setPortraitImage(data.portrait_image ?? '');
+      setBirdImage(data.bird_image ?? '');
     });
   }, []);
 
@@ -26,7 +32,7 @@ export function Hero() {
         transition={{ duration: 14, ease: 'easeOut' }}
       >
         <img
-          src="/images/forest-bg.png"
+          src={bgImage || '/images/forest-bg.png'}
           alt=""
           className="w-full h-full object-cover object-center brightness-125 saturate-150 hue-rotate-[15deg]"
           style={{ filter: 'brightness(1.35) saturate(1.6) hue-rotate(15deg)' }}
@@ -83,7 +89,7 @@ export function Hero() {
             >
               <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative z-10">
                 <img
-                  src="/images/portrait.jpg"
+                  src={portraitImage || '/images/portrait.jpg'}
                   alt="Portrait of Dr. Islamiat Raji-Adebayo"
                   className="w-full h-full object-cover object-top"
                 />
@@ -91,7 +97,7 @@ export function Hero() {
               </div>
               <div className="absolute -bottom-10 -left-10 w-2/5 aspect-square rounded-2xl overflow-hidden shadow-xl z-20 border-4 border-background hidden md:block">
                 <img
-                  src="/images/hero-bird.png"
+                  src={birdImage || '/images/hero-bird.png'}
                   alt="Small bird in urban park at dawn"
                   className="w-full h-full object-cover"
                 />

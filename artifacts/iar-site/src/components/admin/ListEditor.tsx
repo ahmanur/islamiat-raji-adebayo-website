@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { getList, upsertListItem, deleteListItem, type ListKey, type ListRecord } from '@/lib/cms';
+import { ImagePicker } from './ImagePicker';
 
 interface FieldDef {
   key: string;
   label: string;
-  type?: 'text' | 'textarea' | 'url';
+  type?: 'text' | 'textarea' | 'url' | 'image';
   placeholder?: string;
+  imageFallback?: string;
+  imageHint?: string;
 }
 
 interface ListEditorProps {
@@ -14,6 +17,40 @@ interface ListEditorProps {
   itemLabel: string;
   defaultItem?: Record<string, string>;
   defaultItems?: Array<Record<string, string>>;
+}
+
+function FieldInput({ field, value, onChange }: { field: FieldDef; value: string; onChange: (v: string) => void }) {
+  if (field.type === 'image') {
+    return (
+      <ImagePicker
+        label={field.label}
+        value={value}
+        fallback={field.imageFallback}
+        onChange={onChange}
+        hint={field.imageHint}
+      />
+    );
+  }
+  if (field.type === 'textarea') {
+    return (
+      <textarea
+        rows={3}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        placeholder={field.placeholder}
+        className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 resize-y"
+      />
+    );
+  }
+  return (
+    <input
+      type={field.type === 'url' ? 'url' : 'text'}
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      placeholder={field.placeholder}
+      className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+    />
+  );
 }
 
 export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defaultItems }: ListEditorProps) {
@@ -101,25 +138,17 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
       {items.map(item => (
         <div key={item.id} className="bg-slate-800 border border-slate-700 rounded-xl p-4">
           {editingId === item.id ? (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {fields.map(f => (
                 <div key={f.key}>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
-                  {f.type === 'textarea' ? (
-                    <textarea
-                      rows={3}
-                      value={editValues[f.key] ?? ''}
-                      onChange={e => setEditValues(v => ({ ...v, [f.key]: e.target.value }))}
-                      className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 resize-y"
-                    />
-                  ) : (
-                    <input
-                      type={f.type === 'url' ? 'url' : 'text'}
-                      value={editValues[f.key] ?? ''}
-                      onChange={e => setEditValues(v => ({ ...v, [f.key]: e.target.value }))}
-                      className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
+                  {f.type !== 'image' && (
+                    <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
                   )}
+                  <FieldInput
+                    field={f}
+                    value={editValues[f.key] ?? ''}
+                    onChange={v => setEditValues(prev => ({ ...prev, [f.key]: v }))}
+                  />
                 </div>
               ))}
               <div className="flex gap-2 pt-1">
@@ -135,15 +164,25 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
             </div>
           ) : (
             <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <div className="text-white text-sm font-medium truncate">
-                  {item.data[fields[0].key] || '(empty)'}
-                </div>
-                {fields[1] && (
-                  <div className="text-slate-400 text-xs mt-0.5 line-clamp-1">
-                    {item.data[fields[1].key]}
+              <div className="flex gap-3 min-w-0 flex-1">
+                {(() => {
+                  const imgField = fields.find(f => f.type === 'image');
+                  const imgSrc = imgField ? (item.data[imgField.key] || imgField.imageFallback) : null;
+                  return imgSrc ? (
+                    <img src={imgSrc} alt="" className="w-14 h-10 rounded-lg object-cover flex-shrink-0 border border-slate-700" />
+                  ) : null;
+                })()}
+                <div className="min-w-0">
+                  <div className="text-white text-sm font-medium truncate">
+                    {item.data[fields.find(f => f.type !== 'image')?.key ?? fields[0].key] || '(empty)'}
                   </div>
-                )}
+                  {(() => {
+                    const second = fields.filter(f => f.type !== 'image')[1];
+                    return second ? (
+                      <div className="text-slate-400 text-xs mt-0.5 line-clamp-1">{item.data[second.key]}</div>
+                    ) : null;
+                  })()}
+                </div>
               </div>
               <div className="flex gap-2 flex-shrink-0">
                 <button onClick={() => startEdit(item)}
@@ -161,28 +200,18 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
       ))}
 
       {adding ? (
-        <div className="bg-slate-800 border border-primary/30 rounded-xl p-4 space-y-3">
+        <div className="bg-slate-800 border border-primary/30 rounded-xl p-4 space-y-4">
           <div className="text-sm font-medium text-white">New {itemLabel}</div>
           {fields.map(f => (
             <div key={f.key}>
-              <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
-              {f.type === 'textarea' ? (
-                <textarea
-                  rows={3}
-                  value={newValues[f.key] ?? ''}
-                  onChange={e => setNewValues(v => ({ ...v, [f.key]: e.target.value }))}
-                  placeholder={f.placeholder}
-                  className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 resize-y"
-                />
-              ) : (
-                <input
-                  type={f.type === 'url' ? 'url' : 'text'}
-                  value={newValues[f.key] ?? ''}
-                  onChange={e => setNewValues(v => ({ ...v, [f.key]: e.target.value }))}
-                  placeholder={f.placeholder}
-                  className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
+              {f.type !== 'image' && (
+                <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
               )}
+              <FieldInput
+                field={f}
+                value={newValues[f.key] ?? ''}
+                onChange={v => setNewValues(prev => ({ ...prev, [f.key]: v }))}
+              />
             </div>
           ))}
           <div className="flex gap-2 pt-1">

@@ -65,6 +65,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
   ],
   research_projects: [
     {
+      image: '',
       status: 'Current Project',
       title: 'Urban Campus Soundscape Project',
       location: 'Cornell University, Ithaca NY',
@@ -72,6 +73,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       methods: 'Autonomous acoustic recorders, Community science, Bioacoustics analysis',
     },
     {
+      image: '',
       status: 'Past Project',
       title: 'Multi-country Urban Bird Monitoring',
       location: "Queen's University, Canada",
@@ -79,6 +81,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       methods: 'Passive acoustic recorders, Community science, Comparative ecology',
     },
     {
+      image: '',
       status: 'Doctoral Research',
       title: 'Frugivory & Seed Dispersal in Urban Mosaics',
       location: 'University of KwaZulu-Natal, South Africa',

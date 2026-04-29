@@ -9,6 +9,7 @@ const navItems = [
   { href: '/admin/about', label: 'About', icon: '👤' },
   { href: '/admin/research', label: 'Research', icon: '🔬' },
   { href: '/admin/publications', label: 'Publications', icon: '📄' },
+  { href: '/admin/fieldwork', label: 'Field Work', icon: '🌿' },
   { href: '/admin/news', label: 'News', icon: '📰' },
   { href: '/admin/mentorship', label: 'Mentorship', icon: '🎓' },
   { href: '/admin/outreach', label: 'Outreach', icon: '🌍' },

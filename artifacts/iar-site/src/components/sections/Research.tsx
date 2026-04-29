@@ -5,9 +5,9 @@ import { getContent, getList } from '@/lib/cms';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
 const DC = CONTENT_DEFAULTS.research;
-type ProjectItem = { status: string; title: string; location: string; description: string; methods: string };
+type ProjectItem = { status: string; title: string; location: string; description: string; methods: string; image?: string };
 
-const PROJECT_IMAGES = [
+const DEFAULT_IMAGES = [
   '/images/spectrogram-art.png',
   '/images/hero-bird.png',
   '/images/field-fruit.png',
@@ -44,9 +44,7 @@ export function Research() {
         >
           <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Research</h2>
           <div className="w-12 h-[2px] bg-primary mb-8"></div>
-          <p className="text-xl text-foreground/80 font-light leading-relaxed">
-            {c.intro}
-          </p>
+          <p className="text-xl text-foreground/80 font-light leading-relaxed">{c.intro}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
@@ -82,7 +80,7 @@ export function Research() {
               <div className="w-full lg:w-1/2">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg relative group">
                   <img
-                    src={PROJECT_IMAGES[i % PROJECT_IMAGES.length]}
+                    src={project.image || DEFAULT_IMAGES[i % DEFAULT_IMAGES.length]}
                     alt={project.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />

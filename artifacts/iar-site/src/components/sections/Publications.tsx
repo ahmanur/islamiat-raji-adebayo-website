@@ -9,7 +9,8 @@ type PubItem = { title: string; authors: string; journal: string; year: string; 
 
 export function Publications() {
   const [pubs, setPubs] = useState<PubItem[]>(LIST_DEFAULTS.publications as PubItem[]);
-  const [scholarUrl, setScholarUrl] = useState(CONTENT_DEFAULTS.outreach.google_scholar || '#');
+  const [scholarUrl, setScholarUrl] = useState(CONTENT_DEFAULTS.outreach.google_scholar || '');
+  const [bannerImage, setBannerImage] = useState('');
 
   useEffect(() => {
     getList('publications').then(rows => {
@@ -17,6 +18,9 @@ export function Publications() {
     });
     getContent('outreach').then(data => {
       if (data.google_scholar) setScholarUrl(data.google_scholar);
+    });
+    getContent('publications').then(data => {
+      if (data.banner_image) setBannerImage(data.banner_image);
     });
   }, []);
 
@@ -31,6 +35,12 @@ export function Publications() {
 
   return (
     <section id="publications" className="py-24 md:py-32 bg-background relative border-t border-border/50">
+      {bannerImage && (
+        <div className="relative h-48 md:h-64 mb-16 overflow-hidden">
+          <img src={bannerImage} alt="Publications banner" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background" />
+        </div>
+      )}
       <div className="container mx-auto px-6 md:px-12">
         <motion.div
           className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16"
@@ -43,7 +53,7 @@ export function Publications() {
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Selected Publications</h2>
             <div className="w-12 h-[2px] bg-primary"></div>
           </div>
-          {scholarUrl && scholarUrl !== '#' && (
+          {scholarUrl && (
             <Button variant="outline" className="gap-2 shrink-0 rounded-full" asChild>
               <a href={scholarUrl} target="_blank" rel="noopener noreferrer">
                 View Google Scholar

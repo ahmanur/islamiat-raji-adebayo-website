@@ -1,34 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { getList } from '@/lib/cms';
+import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
-const projects = [
-  {
-    status: 'Current Project',
-    title: 'Urban Campus Soundscape Project',
-    location: 'Cornell University, Ithaca NY',
-    image: '/images/spectrogram-art.png',
-    description:
-      'Using autonomous acoustic recorders deployed across university campuses and cities in multiple countries, this project investigates bird diversity in rapidly changing urban landscapes. I collaborate with local experts and students to record bird songs—identifying which species persist, which do not, and why—helping us understand the factors that shape urban bird populations and guide conservation planning.',
-    methods: ['Autonomous acoustic recorders', 'Community science', 'Bird song identification', 'Multi-country comparison'],
-  },
-  {
-    status: 'Past Project',
-    title: 'Multi-country Urban Bird Monitoring',
-    location: "Queen's University, Canada",
-    image: '/images/hero-bird.png',
-    description:
-      'As a Postdoctoral Research Fellow at Queen\'s University, I coordinated a global urban bird survey project spanning five countries — Brazil, Canada, France, Kenya, and Senegal. The project used passive acoustic recorders and an innovative Community Science approach, actively involving local experts and the public in data collection to promote human–wildlife coexistence and address geographic bias in urban ecology research.',
-    methods: ['Passive acoustic recorders', 'Community Science', 'Five-country comparison', 'GIS land-use analysis'],
-  },
-  {
-    status: 'Doctoral Research',
-    title: 'Frugivory & Seed Dispersal in Urban Mosaics',
-    location: 'University of KwaZulu-Natal, South Africa',
-    image: '/images/field-fruit.png',
-    description:
-      'My doctoral research focused on frugivory and seed dispersal by birds, bats, and monkeys in urban mosaic landscapes, with particular attention to the ecological role of Ficus species. The work demonstrated how habitat fragmentation disrupts mutualistic plant–animal interactions, with significant implications for forest regeneration in heavily modified environments.',
-    methods: ['Focal plant observations', 'Bat and bird surveys', 'Seed germination trials', 'Landscape fragmentation metrics'],
-  },
+type ProjectItem = {
+  status: string;
+  title: string;
+  location: string;
+  description: string;
+  methods: string;
+  image?: string;
+};
+
+const DEFAULT_IMAGES = [
+  '/images/spectrogram-art.png',
+  '/images/hero-bird.png',
+  '/images/field-fruit.png',
 ];
 
 function MapPinIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -41,6 +28,14 @@ function MapPinIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export function FieldWorkPage() {
+  const [projects, setProjects] = useState<ProjectItem[]>(LIST_DEFAULTS.research_projects as ProjectItem[]);
+
+  useEffect(() => {
+    getList('research_projects').then(rows => {
+      if (rows.length > 0) setProjects(rows.map(r => r.data as ProjectItem));
+    });
+  }, []);
+
   return (
     <div className="pt-20 min-h-screen">
       <section className="py-24 md:py-32">
@@ -56,14 +51,14 @@ export function FieldWorkPage() {
             <p className="text-xl text-foreground/80 font-light leading-relaxed">
               My research is deeply grounded in fieldwork — in the quiet patience of listening to forest edges at dawn,
               in the careful documentation of birds foraging on fruiting trees, and in the collaborative effort of training
-              communities to listen and record alongside me. Below are the major field campaigns that have defined my career.
+              communities to listen and record alongside me.
             </p>
           </motion.div>
 
           <div className="space-y-24">
             {projects.map((project, i) => (
               <motion.div
-                key={project.title}
+                key={project.title + i}
                 className={`flex flex-col gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -73,7 +68,7 @@ export function FieldWorkPage() {
                 <div className="w-full lg:w-1/2">
                   <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg relative group">
                     <img
-                      src={project.image}
+                      src={project.image || DEFAULT_IMAGES[i % DEFAULT_IMAGES.length]}
                       alt={project.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
@@ -91,16 +86,18 @@ export function FieldWorkPage() {
                     {project.location}
                   </div>
                   <p className="text-lg text-foreground/80 leading-relaxed mb-8">{project.description}</p>
-                  <div>
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground/50 mb-3">Methods</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {project.methods.map((m) => (
-                        <span key={m} className="text-xs px-3 py-1 rounded-full bg-secondary border border-secondary/80 text-foreground/70">
-                          {m}
-                        </span>
-                      ))}
+                  {project.methods && (
+                    <div>
+                      <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground/50 mb-3">Methods</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {project.methods.split(',').map(m => m.trim()).filter(Boolean).map(m => (
+                          <span key={m} className="text-xs px-3 py-1 rounded-full bg-secondary border border-secondary/80 text-foreground/70">
+                            {m}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </motion.div>
             ))}
