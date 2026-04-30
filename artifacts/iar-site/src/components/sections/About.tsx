@@ -6,13 +6,10 @@ import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 const DC = CONTENT_DEFAULTS.about;
 type EducationItem = { degree: string; institution: string };
 type AwardItem = { title: string; year: string };
-type AffiliationItem = { name: string };
-
 export function About() {
   const [c, setC] = useState(DC);
   const [education, setEducation] = useState<EducationItem[]>(LIST_DEFAULTS.education as EducationItem[]);
   const [awards, setAwards] = useState<AwardItem[]>(LIST_DEFAULTS.awards as AwardItem[]);
-  const [affiliations, setAffiliations] = useState<AffiliationItem[]>(LIST_DEFAULTS.affiliations as AffiliationItem[]);
 
   useEffect(() => {
     getContent('about').then(data => {
@@ -23,9 +20,6 @@ export function About() {
     });
     getList('awards').then(rows => {
       if (rows.length > 0) setAwards(rows.map(r => r.data as AwardItem));
-    });
-    getList('affiliations').then(rows => {
-      if (rows.length > 0) setAffiliations(rows.map(r => r.data as AffiliationItem));
     });
   }, []);
 
@@ -87,25 +81,6 @@ export function About() {
               <p>{c.para2}</p>
               <p dangerouslySetInnerHTML={{ __html: c.para3.replace(/Ficus/g, '<em>Ficus</em>') }} />
               <p>{c.para4}</p>
-
-              {affiliations.length > 0 && (
-                <div className="my-12 p-8 bg-background border border-primary/10 rounded-2xl shadow-sm relative overflow-hidden">
-                  <div className="absolute -right-4 -top-4 text-primary/5">
-                    <svg width="100" height="100" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
-                    </svg>
-                  </div>
-                  <h4 className="font-serif text-2xl text-foreground mt-0 mb-4 relative z-10">Affiliations & Memberships</h4>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 m-0 p-0 list-none relative z-10">
-                    {affiliations.map((a, i) => (
-                      <li key={i} className="flex items-center gap-2 text-foreground/80">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span>
-                        {a.name}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </motion.div>
           </div>
         </div>
