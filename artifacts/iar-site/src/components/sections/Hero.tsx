@@ -10,16 +10,16 @@ const D = CONTENT_DEFAULTS.hero;
 
 export function Hero() {
   const [c, setC] = useState(D);
-  const [bgImage, setBgImage] = useState('');
-  const [portraitImage, setPortraitImage] = useState('');
-  const [birdImage, setBirdImage] = useState('');
+  const [bgImage, setBgImage] = useState<string | undefined>(undefined);
+  const [portraitImage, setPortraitImage] = useState<string | undefined>(undefined);
+  const [birdImage, setBirdImage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     getContent('hero').then(data => {
       if (Object.keys(data).length > 0) setC({ ...D, ...data });
-      setBgImage(data.bg_image ?? '');
-      setPortraitImage(data.portrait_image ?? '');
-      setBirdImage(data.bird_image ?? '');
+      setBgImage(data.bg_image || '/images/forest-bg.png');
+      setPortraitImage(data.portrait_image || '/images/portrait.jpg');
+      setBirdImage(data.bird_image || '/images/hero-bird.png');
     });
   }, []);
 
@@ -31,12 +31,14 @@ export function Hero() {
         animate={{ scale: 1 }}
         transition={{ duration: 14, ease: 'easeOut' }}
       >
-        <img
-          src={bgImage || '/images/forest-bg.png'}
-          alt=""
-          className="w-full h-full object-cover object-center brightness-125 saturate-150 hue-rotate-[15deg]"
-          style={{ filter: 'brightness(1.35) saturate(1.6) hue-rotate(15deg)' }}
-        />
+        {bgImage !== undefined && (
+          <img
+            src={bgImage}
+            alt=""
+            className="w-full h-full object-cover object-center brightness-125 saturate-150 hue-rotate-[15deg]"
+            style={{ filter: 'brightness(1.35) saturate(1.6) hue-rotate(15deg)' }}
+          />
+        )}
       </motion.div>
       <div className="absolute inset-0 z-0 pointer-events-none bg-black/35" />
       <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-r from-black/30 via-black/5 to-transparent" />
@@ -84,20 +86,24 @@ export function Hero() {
               transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
               className="relative"
             >
-              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative z-10">
-                <img
-                  src={portraitImage || '/images/portrait.jpg'}
-                  alt="Portrait of Dr. Islamiat Raji-Adebayo"
-                  className="w-full h-full object-cover object-top"
-                />
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl relative z-10 bg-secondary">
+                {portraitImage !== undefined && (
+                  <img
+                    src={portraitImage}
+                    alt="Portrait of Dr. Islamiat Raji-Adebayo"
+                    className="w-full h-full object-cover object-top"
+                  />
+                )}
                 <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl pointer-events-none"></div>
               </div>
-              <div className="absolute -bottom-10 -left-10 w-2/5 aspect-square rounded-2xl overflow-hidden shadow-xl z-20 border-4 border-background hidden md:block">
-                <img
-                  src={birdImage || '/images/hero-bird.png'}
-                  alt="Small bird in urban park at dawn"
-                  className="w-full h-full object-cover"
-                />
+              <div className="absolute -bottom-10 -left-10 w-2/5 aspect-square rounded-2xl overflow-hidden shadow-xl z-20 border-4 border-background hidden md:block bg-secondary">
+                {birdImage !== undefined && (
+                  <img
+                    src={birdImage}
+                    alt="Small bird in urban park at dawn"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
             </motion.div>
           </div>
