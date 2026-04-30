@@ -50,7 +50,7 @@ export function Footer() {
         
         <div className="mt-16 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-background/50">
           <p>© {new Date().getFullYear()} Dr. Islamiat Raji-Adebayo. All rights reserved.</p>
-          <p>Designed thoughtfully.</p>
+          <p>Designed by IBK Technologies</p>
         </div>
       </div>
     </footer>
