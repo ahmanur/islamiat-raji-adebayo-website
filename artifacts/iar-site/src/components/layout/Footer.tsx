@@ -12,7 +12,7 @@ export function Footer() {
             <div className="flex items-center gap-3 mb-6 opacity-80">
               <SpectrogramWave />
             </div>
-            <h3 className="font-serif text-2xl mb-4">Dr. Islamiat Raji-Adebayo</h3>
+            <h3 className="font-serif text-2xl mb-4">Islamiat Abidemi Raji. Ph.D.</h3>
             <p className="text-background/70 max-w-md text-sm leading-relaxed mb-8">
               Advancing conservation through bioacoustics, urban ecology, and community engagement. Exploring the intersections of sound, biodiversity, and human well-being.
             </p>
