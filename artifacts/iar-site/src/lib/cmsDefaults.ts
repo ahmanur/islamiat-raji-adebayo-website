@@ -64,8 +64,9 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
     { name: 'Stable Planet Alliance' },
   ],
   research_themes: [
+    { icon: 'trees', title: 'Urban Ecology', description: 'Investigating how rapid urbanization shapes bird communities and alters the ecological processes that sustain biodiversity in cities.' },
     { icon: 'mic', title: 'Bioacoustics', description: 'Using sound as a non-invasive lens to monitor biodiversity, revealing hidden ecological patterns in urban environments.' },
-    { icon: 'trees', title: 'Urban Ecology', description: 'Investigating how rapid urbanization shapes bird communities and alters fundamental plant-animal interactions.' },
+    { icon: 'leaf', title: 'Plant-Animal Interactions', description: 'Studying the mutualistic relationships between plants and animals — particularly frugivory and seed dispersal — and how land-use change disrupts these critical ecological networks.' },
     { icon: 'globe', title: 'Human-Nature Dynamics', description: 'Exploring the relationship between people and nature, emphasizing community engagement for sustainable cities.' },
   ],
   research_projects: [
