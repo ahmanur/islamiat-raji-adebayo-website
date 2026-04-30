@@ -29,7 +29,8 @@ export function ContentEditor({ section, fields, defaults = {} }: ContentEditorP
 
   const handleSave = async () => {
     setSaving(true);
-    await setContentBulk(section, values);
+    const fieldsToSave = Object.fromEntries(fields.map(f => [f.key, values[f.key] ?? '']));
+    await setContentBulk(section, fieldsToSave);
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
