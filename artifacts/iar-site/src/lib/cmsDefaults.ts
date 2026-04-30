@@ -143,4 +143,20 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
     },
   ],
   opportunities_list: [],
+  teaching_events: [
+    {
+      image: '/images/teaching-field-outing.jpg',
+      title: 'Field Ornithology Training — Amurum Forest Reserve',
+      date: '2023',
+      location: 'Nigeria',
+      description: 'Led a hands-on field ornithology workshop training early-career researchers and students in bird identification, binocular use, and field survey techniques in the forest reserve.',
+    },
+    {
+      image: '/images/teaching-conference.jpg',
+      title: 'Frugivores & Seed Dispersal Conference 2020',
+      date: '2020',
+      location: 'Corbett, India',
+      description: 'Presented research on Ficus-frugivore interactions and seed dispersal networks at the international Frugivores & Seed Dispersal Conference, sharing findings with global ecology and conservation audiences.',
+    },
+  ],
 };

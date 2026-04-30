@@ -63,7 +63,8 @@ export type ListKey =
   | 'nav_items'
   | 'social_links'
   | 'opportunities_list'
-  | 'mentorship_roles';
+  | 'mentorship_roles'
+  | 'teaching_events';
 
 export interface ListRecord {
   id: string;
