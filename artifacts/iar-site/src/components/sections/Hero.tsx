@@ -55,7 +55,7 @@ export function Hero() {
                 {c.badge}
               </div>
 
-              <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl leading-[1.1] text-white mb-6">
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.1] text-white mb-6">
                 {c.headline}<br />
                 <span className="text-primary italic">{c.headline_accent}</span>
               </h1>
