@@ -1,5 +1,10 @@
 import { supabase } from './supabase';
+import { supabaseAdmin } from './supabaseAdmin';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from './cmsDefaults';
+
+function writeClient() {
+  return supabaseAdmin ?? supabase;
+}
 
 export type SectionKey =
   | 'hero'
@@ -31,7 +36,7 @@ export async function getContent(section: SectionKey): Promise<Record<string, st
 }
 
 export async function setContent(section: SectionKey, key: string, value: string): Promise<void> {
-  await supabase.from('cms_content').upsert(
+  await writeClient().from('cms_content').upsert(
     { section, key, value, updated_at: new Date().toISOString() },
     { onConflict: 'section,key' }
   );
@@ -44,7 +49,7 @@ export async function setContentBulk(section: SectionKey, entries: Record<string
     value,
     updated_at: new Date().toISOString(),
   }));
-  await supabase.from('cms_content').upsert(rows, { onConflict: 'section,key' });
+  await writeClient().from('cms_content').upsert(rows, { onConflict: 'section,key' });
 }
 
 export type ListKey =
@@ -79,25 +84,26 @@ export async function getList(listKey: ListKey): Promise<ListRecord[]> {
 }
 
 export async function upsertListItem(listKey: ListKey, item: Partial<ListRecord> & { data: Record<string, string> }): Promise<void> {
-  await supabase.from('cms_lists').upsert(
+  await writeClient().from('cms_lists').upsert(
     { ...item, list_key: listKey, updated_at: new Date().toISOString() },
     { onConflict: 'id' }
   );
 }
 
 export async function deleteListItem(id: string): Promise<void> {
-  await supabase.from('cms_lists').delete().eq('id', id);
+  await writeClient().from('cms_lists').delete().eq('id', id);
 }
 
 export async function reorderList(listKey: ListKey, ids: string[]): Promise<void> {
   await Promise.all(
     ids.map((id, i) =>
-      supabase.from('cms_lists').update({ sort_order: i }).eq('id', id)
+      writeClient().from('cms_lists').update({ sort_order: i }).eq('id', id)
     )
   );
 }
 
 export async function seedAllDefaults(): Promise<void> {
+  const client = writeClient();
   const contentSections = Object.entries(CONTENT_DEFAULTS) as [SectionKey, Record<string, string>][];
   for (const [section, values] of contentSections) {
     const rows = Object.entries(values).map(([key, value]) => ({
@@ -106,7 +112,7 @@ export async function seedAllDefaults(): Promise<void> {
       value,
       updated_at: new Date().toISOString(),
     }));
-    await supabase.from('cms_content').upsert(rows, { onConflict: 'section,key', ignoreDuplicates: false });
+    await client.from('cms_content').upsert(rows, { onConflict: 'section,key', ignoreDuplicates: false });
   }
 
   const listEntries = Object.entries(LIST_DEFAULTS) as [ListKey, Array<Record<string, string>>][];
@@ -127,6 +133,6 @@ export async function seedAllDefaults(): Promise<void> {
       data,
       updated_at: new Date().toISOString(),
     }));
-    await supabase.from('cms_lists').insert(rows);
+    await client.from('cms_lists').insert(rows);
   }
 }
