@@ -2,7 +2,7 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
   hero: {
     badge: 'Cornell Lab of Ornithology · Rose Postdoctoral Fellow',
     headline: 'Listening to the',
-    headline_accent: 'urban forest.',
+    headline_accent: 'urban ecosystem.',
     tagline: 'Advancing conservation through bioacoustics and urban ecology. Studying how urbanization shapes bird communities and the relationship between people and nature.',
     btn_primary: 'Explore Research',
     btn_secondary: 'Get in Touch',
