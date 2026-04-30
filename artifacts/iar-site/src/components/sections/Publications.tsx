@@ -50,7 +50,7 @@ export function Publications() {
           transition={{ duration: 0.6 }}
         >
           <div>
-            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Selected Publications</h2>
+            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Publications</h2>
             <div className="w-12 h-[2px] bg-primary"></div>
           </div>
           {scholarUrl && (
