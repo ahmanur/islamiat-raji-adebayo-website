@@ -54,6 +54,7 @@ export async function setContentBulk(section: SectionKey, entries: Record<string
 
 export type ListKey =
   | 'research_projects'
+  | 'research_themes'
   | 'publications'
   | 'news_items'
   | 'education'

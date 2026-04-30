@@ -17,6 +17,7 @@ interface ListEditorProps {
   itemLabel: string;
   defaultItem?: Record<string, string>;
   defaultItems?: Array<Record<string, string>>;
+  addAtTop?: boolean;
 }
 
 function FieldInput({ field, value, onChange }: { field: FieldDef; value: string; onChange: (v: string) => void }) {
@@ -53,7 +54,7 @@ function FieldInput({ field, value, onChange }: { field: FieldDef; value: string
   );
 }
 
-export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defaultItems }: ListEditorProps) {
+export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defaultItems, addAtTop = false }: ListEditorProps) {
   const [items, setItems] = useState<ListRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -118,6 +119,36 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
     setSeeding(false);
   };
 
+  const cancelAdd = () => { setAdding(false); setNewValues(defaultItem); };
+
+  const AddForm = (
+    <div className="bg-slate-800 border border-primary/30 rounded-xl p-4 space-y-4">
+      <div className="text-sm font-medium text-white">New {itemLabel}</div>
+      {fields.map(f => (
+        <div key={f.key}>
+          {f.type !== 'image' && (
+            <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
+          )}
+          <FieldInput
+            field={f}
+            value={newValues[f.key] ?? ''}
+            onChange={v => setNewValues(prev => ({ ...prev, [f.key]: v }))}
+          />
+        </div>
+      ))}
+      <div className="flex gap-2 pt-1">
+        <button onClick={handleAdd} disabled={saving}
+          className="bg-primary hover:bg-primary/90 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50">
+          {saving ? 'Adding…' : `Add ${itemLabel}`}
+        </button>
+        <button onClick={cancelAdd}
+          className="bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-colors">
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+
   if (loading) return <div className="text-slate-400 text-sm">Loading…</div>;
 
   return (
@@ -133,6 +164,19 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
             {seeding ? 'Loading…' : 'Load Defaults'}
           </button>
         </div>
+      )}
+
+      {addAtTop && (
+        adding
+          ? AddForm
+          : (
+            <button
+              onClick={() => setAdding(true)}
+              className="flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80 bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              + Add New {itemLabel}
+            </button>
+          )
       )}
 
       {items.map(item => (
@@ -199,37 +243,15 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
         </div>
       ))}
 
-      {adding ? (
-        <div className="bg-slate-800 border border-primary/30 rounded-xl p-4 space-y-4">
-          <div className="text-sm font-medium text-white">New {itemLabel}</div>
-          {fields.map(f => (
-            <div key={f.key}>
-              {f.type !== 'image' && (
-                <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
-              )}
-              <FieldInput
-                field={f}
-                value={newValues[f.key] ?? ''}
-                onChange={v => setNewValues(prev => ({ ...prev, [f.key]: v }))}
-              />
-            </div>
-          ))}
-          <div className="flex gap-2 pt-1">
-            <button onClick={handleAdd} disabled={saving}
-              className="bg-primary hover:bg-primary/90 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50">
-              {saving ? 'Adding…' : `Add ${itemLabel}`}
+      {!addAtTop && (
+        adding
+          ? AddForm
+          : (
+            <button onClick={() => setAdding(true)}
+              className="w-full border-2 border-dashed border-slate-700 hover:border-slate-600 rounded-xl py-3 text-slate-500 hover:text-slate-400 text-sm transition-colors">
+              + Add {itemLabel}
             </button>
-            <button onClick={() => { setAdding(false); setNewValues(defaultItem); }}
-              className="bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-colors">
-              Cancel
-            </button>
-          </div>
-        </div>
-      ) : (
-        <button onClick={() => setAdding(true)}
-          className="w-full border-2 border-dashed border-slate-700 hover:border-slate-600 rounded-xl py-3 text-slate-500 hover:text-slate-400 text-sm transition-colors">
-          + Add {itemLabel}
-        </button>
+          )
       )}
     </div>
   );

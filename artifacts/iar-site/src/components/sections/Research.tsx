@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mic, Trees, Globe } from 'lucide-react';
+import { Mic, Trees, Globe, Leaf, Heart, Mountain, FlaskConical, Bird } from 'lucide-react';
 import { getContent, getList } from '@/lib/cms';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
 const DC = CONTENT_DEFAULTS.research;
 type ProjectItem = { status: string; title: string; location: string; description: string; methods: string; image?: string };
+type ThemeItem = { icon: string; title: string; description: string };
 
 const DEFAULT_IMAGES = [
   '/images/spectrogram-art.png',
@@ -13,9 +14,21 @@ const DEFAULT_IMAGES = [
   '/images/field-fruit.png',
 ];
 
+const ICON_MAP: Record<string, React.ReactNode> = {
+  mic: <Mic className="w-6 h-6" />,
+  trees: <Trees className="w-6 h-6" />,
+  globe: <Globe className="w-6 h-6" />,
+  leaf: <Leaf className="w-6 h-6" />,
+  heart: <Heart className="w-6 h-6" />,
+  mountain: <Mountain className="w-6 h-6" />,
+  flask: <FlaskConical className="w-6 h-6" />,
+  bird: <Bird className="w-6 h-6" />,
+};
+
 export function Research() {
   const [c, setC] = useState(DC);
   const [projects, setProjects] = useState<ProjectItem[]>(LIST_DEFAULTS.research_projects as ProjectItem[]);
+  const [themes, setThemes] = useState<ThemeItem[]>(LIST_DEFAULTS.research_themes as ThemeItem[]);
 
   useEffect(() => {
     getContent('research').then(data => {
@@ -24,13 +37,10 @@ export function Research() {
     getList('research_projects').then(rows => {
       if (rows.length > 0) setProjects(rows.map(r => r.data as ProjectItem));
     });
+    getList('research_themes').then(rows => {
+      if (rows.length > 0) setThemes(rows.map(r => r.data as ThemeItem));
+    });
   }, []);
-
-  const themes = [
-    { icon: <Mic className="w-6 h-6" />, title: c.theme1_title, description: c.theme1_desc },
-    { icon: <Trees className="w-6 h-6" />, title: c.theme2_title, description: c.theme2_desc },
-    { icon: <Globe className="w-6 h-6" />, title: c.theme3_title, description: c.theme3_desc },
-  ];
 
   return (
     <section id="research" className="py-24 md:py-32">
@@ -50,7 +60,7 @@ export function Research() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
           {themes.map((theme, i) => (
             <motion.div
-              key={theme.title}
+              key={theme.title + i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -58,7 +68,7 @@ export function Research() {
               className="p-8 rounded-2xl bg-secondary/50 border border-secondary/80 hover:bg-secondary transition-colors"
             >
               <div className="w-12 h-12 rounded-full bg-background flex items-center justify-center text-primary mb-6 shadow-sm">
-                {theme.icon}
+                {ICON_MAP[theme.icon] ?? <Mic className="w-6 h-6" />}
               </div>
               <h3 className="font-serif text-2xl text-foreground mb-4">{theme.title}</h3>
               <p className="text-foreground/70 leading-relaxed">{theme.description}</p>

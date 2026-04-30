@@ -10,34 +10,51 @@ export function AdminResearch() {
       <div className="max-w-2xl space-y-8">
         <div>
           <h1 className="text-xl font-semibold text-white mb-1">Research</h1>
-          <p className="text-slate-400 text-sm">Edit the research intro, themes, and projects (including images).</p>
+          <p className="text-slate-400 text-sm">Edit the research introduction, themes, and projects.</p>
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <h2 className="text-white font-medium text-sm mb-4">Section Introduction & Themes</h2>
+          <h2 className="text-white font-medium text-sm mb-4">Section Introduction</h2>
           <ContentEditor
             section="research"
             fields={[
               { key: 'intro', label: 'Introduction Paragraph', type: 'textarea' },
-              { key: 'theme1_title', label: 'Theme 1 Title', placeholder: 'Bioacoustics' },
-              { key: 'theme1_desc', label: 'Theme 1 Description', type: 'textarea' },
-              { key: 'theme2_title', label: 'Theme 2 Title', placeholder: 'Urban Ecology' },
-              { key: 'theme2_desc', label: 'Theme 2 Description', type: 'textarea' },
-              { key: 'theme3_title', label: 'Theme 3 Title', placeholder: 'Human-Nature Dynamics' },
-              { key: 'theme3_desc', label: 'Theme 3 Description', type: 'textarea' },
             ]}
             defaults={CONTENT_DEFAULTS.research}
           />
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <h2 className="text-white font-medium text-sm mb-1">Research Projects</h2>
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="text-white font-medium text-sm">Research Themes</h2>
+          </div>
           <p className="text-slate-500 text-xs mb-4">
-            Each project has an image you can upload or change. First item is shown as the current project.
+            Themes appear as cards on the Research page. Icon options: <span className="text-slate-400">mic, trees, globe, leaf, heart, mountain, flask, bird</span>
+          </p>
+          <ListEditor
+            listKey="research_themes"
+            itemLabel="Theme"
+            addAtTop
+            fields={[
+              { key: 'icon', label: 'Icon Name', placeholder: 'mic / trees / globe / leaf / heart / mountain' },
+              { key: 'title', label: 'Theme Title', placeholder: 'Bioacoustics' },
+              { key: 'description', label: 'Description', type: 'textarea' },
+            ]}
+            defaultItems={LIST_DEFAULTS.research_themes}
+          />
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="text-white font-medium text-sm">Research Projects</h2>
+          </div>
+          <p className="text-slate-500 text-xs mb-4">
+            Each project has an image you can upload. The first item is shown as the current project.
           </p>
           <ListEditor
             listKey="research_projects"
             itemLabel="Project"
+            addAtTop
             fields={[
               {
                 key: 'image',
