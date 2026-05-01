@@ -13,6 +13,7 @@ import { MentorshipPage } from '@/pages/MentorshipPage';
 import { OutreachPage } from '@/pages/OutreachPage';
 import { FieldWorkPage } from '@/pages/FieldWorkPage';
 import { OpportunitiesPage } from '@/pages/OpportunitiesPage';
+import { ProjectDetailPage } from '@/pages/ProjectDetailPage';
 import NotFound from '@/pages/not-found';
 
 import { AdminAuthProvider, useAdminAuth } from '@/lib/adminAuth';
@@ -81,6 +82,7 @@ function Router() {
               <Switch>
                 <Route path="/" component={HomePage} />
                 <Route path="/about" component={AboutPage} />
+                <Route path="/research/:id" component={ProjectDetailPage} />
                 <Route path="/research" component={ResearchPage} />
                 <Route path="/publications" component={PublicationsPage} />
                 <Route path="/mentorship" component={MentorshipPage} />
