@@ -77,6 +77,13 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       location: 'Cornell University, Ithaca NY',
       description: 'Using autonomous acoustic recorders deployed across university campuses and cities in multiple countries, this project investigates bird diversity in rapidly changing urban landscapes. I collaborate with local experts and students to record bird songs—identifying which species persist, which do not, and why—to understand the factors that shape urban bird populations and guide conservation planning.',
       methods: 'Autonomous acoustic recorders, Community science, Bioacoustics analysis',
+      network: JSON.stringify({
+        network_name: 'Campus Biodiversity Network',
+        stats: { institutions: 23, countries: 12, expanding: true },
+        previous_countries: ['Brazil', 'Canada', 'France', 'Kenya', 'Senegal'],
+        current_countries: ['Brazil', 'Canada', 'France', 'Kenya', 'Senegal', 'Nigeria', 'South Africa', 'India', 'Colombia', 'Spain', 'Belgium', 'United States'],
+        network_url: 'https://www.biodivcampus.org/en/institutions',
+      }),
     },
     {
       image: '',

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MapPin, Users, ExternalLink, Image } from 'lucide-react';
+import { ArrowLeft, MapPin, Users, ExternalLink, Image, Globe, Building2 } from 'lucide-react';
 import { getList } from '@/lib/cms';
 import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
 import { Lightbox } from '@/components/Lightbox';
@@ -17,6 +17,7 @@ type ProjectItem = {
   map_image?: string;
   map_link?: string;
   collaborators?: string;
+  network?: string;
 };
 type ProjectEntry = { id: string; data: ProjectItem };
 
@@ -39,6 +40,21 @@ function parseGallery(raw?: string): GalleryEntry[] {
         : { url: String(item.url ?? ''), caption: String(item.caption ?? '') }
     );
   } catch { return []; }
+}
+
+interface NetworkData {
+  stats: { institutions: number; countries: number; expanding: boolean };
+  current_countries: string[];
+  previous_countries: string[];
+  network_url?: string;
+  network_name?: string;
+}
+
+function parseNetwork(raw?: string): NetworkData | null {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as NetworkData;
+  } catch { return null; }
 }
 
 export function ProjectDetailPage() {
@@ -91,6 +107,7 @@ export function ProjectDetailPage() {
 
   const imgSrc = project.image || DEFAULT_IMAGES[entryIndex % DEFAULT_IMAGES.length];
   const gallery = parseGallery(project.gallery);
+  const network = parseNetwork(project.network);
   const collaborators = (project.collaborators ?? '')
     .split('\n')
     .map(s => s.trim())
@@ -155,6 +172,74 @@ export function ProjectDetailPage() {
                       </span>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {network && (
+                <div>
+                  <div className="flex items-center gap-2 mb-5">
+                    <Globe className="w-4 h-4 text-primary" />
+                    <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground/40">
+                      {network.network_name ?? 'Partner Network'}
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    {[
+                      { value: network.stats.institutions, label: 'Institutions', icon: <Building2 className="w-4 h-4" /> },
+                      { value: network.stats.countries, label: 'Countries', icon: <Globe className="w-4 h-4" /> },
+                      { value: network.previous_countries.length, label: 'Previous Phase', icon: <MapPin className="w-4 h-4" /> },
+                    ].map(stat => (
+                      <div key={stat.label} className="rounded-xl bg-secondary/40 border border-secondary/60 p-4 text-center">
+                        <div className="flex items-center justify-center gap-1.5 text-primary mb-1">{stat.icon}</div>
+                        <div className="font-serif text-3xl font-semibold text-foreground">{stat.value}</div>
+                        <div className="text-xs text-foreground/50 mt-0.5">{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {network.previous_countries.length > 0 && (
+                    <div className="mb-5">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-foreground/40 mb-3">Previous Phase Countries</p>
+                      <div className="flex flex-wrap gap-2">
+                        {network.previous_countries.map(c => (
+                          <span key={c} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary border border-secondary/70 text-foreground/60 text-sm">
+                            <MapPin className="w-3 h-3 text-primary/60" /> {c}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {network.current_countries.length > 0 && (
+                    <div className="mb-5">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-foreground/40 mb-3">Current Network Countries</p>
+                      <div className="flex flex-wrap gap-2">
+                        {network.current_countries.map(c => (
+                          <span key={c} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-foreground/70 text-sm">
+                            <Globe className="w-3 h-3 text-primary" /> {c}
+                          </span>
+                        ))}
+                        {network.stats.expanding && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary border border-dashed border-primary/30 text-foreground/40 text-sm italic">
+                            + expanding
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {network.network_url && (
+                    <a
+                      href={network.network_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm text-primary hover:underline font-medium"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      View all institutions in the network
+                    </a>
+                  )}
                 </div>
               )}
 
