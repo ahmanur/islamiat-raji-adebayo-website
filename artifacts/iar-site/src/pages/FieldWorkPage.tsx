@@ -33,11 +33,11 @@ function MapPinIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export function FieldWorkPage() {
   const [entries, setEntries] = useState<ProjectEntry[]>(
-    () => LIST_DEFAULTS.research_projects.map((d, i) => ({ id: String(i), data: d as ProjectItem }))
+    () => LIST_DEFAULTS.field_work_projects.map((d, i) => ({ id: String(i), data: d as ProjectItem }))
   );
 
   useEffect(() => {
-    getList('research_projects').then(rows => {
+    getList('field_work_projects').then(rows => {
       if (rows.length > 0) setEntries(rows.map(r => ({ id: r.id, data: r.data as ProjectItem })));
     });
   }, []);
@@ -74,7 +74,7 @@ export function FieldWorkPage() {
                   viewport={{ once: true, margin: '-100px' }}
                   transition={{ duration: 0.8 }}
                 >
-                  <Link href={`/research/${entry.id}`} className="w-full lg:w-1/2 block group cursor-pointer">
+                  <Link href={`/field-work/${entry.id}`} className="w-full lg:w-1/2 block group cursor-pointer">
                     <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg relative">
                       <img
                         src={imgSrc}
@@ -114,7 +114,7 @@ export function FieldWorkPage() {
                       </div>
                     )}
                     <Link
-                      href={`/research/${entry.id}`}
+                      href={`/field-work/${entry.id}`}
                       className="inline-flex items-center gap-2 text-primary hover:text-primary/80 text-sm font-medium transition-colors w-fit"
                     >
                       Read more <ArrowRight className="w-4 h-4" />

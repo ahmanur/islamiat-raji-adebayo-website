@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'wouter';
+import { useParams, Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin } from 'lucide-react';
 import { getList } from '@/lib/cms';
@@ -16,19 +16,28 @@ const DEFAULT_IMAGES = [
 
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const [location] = useLocation();
+  const isFieldWork = location.startsWith('/field-work');
+  const listKey = isFieldWork ? 'field_work_projects' : 'research_projects';
+  const backHref = isFieldWork ? '/field-work' : '/research';
+  const backLabel = isFieldWork ? 'Back to Field Work' : 'Back to Research';
+
+  const defaults = isFieldWork ? LIST_DEFAULTS.field_work_projects : LIST_DEFAULTS.research_projects;
   const [entries, setEntries] = useState<ProjectEntry[]>(
-    () => LIST_DEFAULTS.research_projects.map((d, i) => ({ id: String(i), data: d as ProjectItem }))
+    () => defaults.map((d, i) => ({ id: String(i), data: d as ProjectItem }))
   );
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    getList('research_projects').then(rows => {
+    setEntries(defaults.map((d, i) => ({ id: String(i), data: d as ProjectItem })));
+    setLoaded(false);
+    getList(listKey).then(rows => {
       if (rows.length > 0) {
         setEntries(rows.map(r => ({ id: r.id, data: r.data as ProjectItem })));
       }
       setLoaded(true);
     });
-  }, []);
+  }, [listKey]);
 
   const entry = entries.find(e => e.id === id);
   const entryIndex = entries.findIndex(e => e.id === id);
@@ -46,7 +55,7 @@ export function ProjectDetailPage() {
     return (
       <div className="pt-20 min-h-screen flex flex-col items-center justify-center gap-6">
         <p className="text-foreground/60">Project not found.</p>
-        <Link href="/research" className="text-primary text-sm hover:underline">← Back to Research</Link>
+        <Link href={backHref} className="text-primary text-sm hover:underline">← {backLabel}</Link>
       </div>
     );
   }
@@ -77,11 +86,11 @@ export function ProjectDetailPage() {
       <div className="container mx-auto px-6 md:px-12 py-16">
         <div className="max-w-3xl">
           <Link
-            href="/research"
+            href={backHref}
             className="inline-flex items-center gap-2 text-sm text-foreground/50 hover:text-primary transition-colors mb-10"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Research
+            {backLabel}
           </Link>
 
           <motion.div
@@ -119,7 +128,7 @@ export function ProjectDetailPage() {
                 <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground/40 mb-6">Other Projects</h3>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {entries.filter(e => e.id !== id).slice(0, 2).map((e, i) => (
-                    <Link key={e.id} href={`/research/${e.id}`}>
+                    <Link key={e.id} href={`${backHref}/${e.id}`}>
                       <div className="group flex gap-4 p-4 rounded-xl border border-secondary/80 hover:bg-secondary/40 transition-colors cursor-pointer">
                         <img
                           src={e.data.image || DEFAULT_IMAGES[i % DEFAULT_IMAGES.length]}

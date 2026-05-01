@@ -95,6 +95,32 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       methods: 'Field surveys, Plant-animal interaction networks, Frugivory analysis',
     },
   ],
+  field_work_projects: [
+    {
+      image: '',
+      status: 'Doctoral Fieldwork',
+      title: 'Frugivore & Fig Tree Surveys — KwaZulu-Natal',
+      location: 'Durban, South Africa',
+      description: 'Intensive focal-tree observations and transect surveys across urban mosaic landscapes in the Durban metro area, documenting frugivore visits to native Ficus species by birds, bats, and vervet monkeys. Data collection involved dawn-to-dusk watches at fruiting trees to characterise visitation rates, species richness, and seed dispersal quality across a gradient of habitat fragmentation.',
+      methods: 'Focal-tree watches, Transect surveys, Video recording, Seed viability testing',
+    },
+    {
+      image: '',
+      status: 'Past Fieldwork',
+      title: 'Acoustic Recorder Deployment — Global Urban Transects',
+      location: 'Brazil · Canada · France · Kenya · Senegal',
+      description: 'Coordinated the deployment and retrieval of passive acoustic recorders along standardised urban transects in five countries as part of the multi-country urban bird monitoring initiative at Queen\'s University. Worked closely with in-country collaborators and community scientists to select sites, install equipment, and train local volunteers in recorder maintenance and field protocols.',
+      methods: 'Passive acoustic recorders, Site selection surveys, Community science protocols',
+    },
+    {
+      image: '',
+      status: 'Active Fieldwork',
+      title: 'Campus Bird Soundscape Monitoring — Cornell',
+      location: 'Ithaca, NY, USA',
+      description: 'On-the-ground deployment of autonomous acoustic recording units (ARUs) across the Cornell University campus and surrounding urban areas. Fieldwork involves seasonal installation and retrieval of recorders, GPS mapping of recording stations, and quality checks of captured audio files for downstream bioacoustic analysis of bird community composition and diel soundscape patterns.',
+      methods: 'ARU deployment, GPS mapping, Audio quality control, Seasonal monitoring',
+    },
+  ],
   publications: [
     { title: 'Does Ficus species fruit mastication and ingestion by Wahlberg\'s epauletted fruit bats enhance seed germination and seedling emergence?', authors: 'Raji, I.A. & Downs, C.T.', journal: 'African Journal of Ecology', year: '2024', category: 'Journal Article', url: 'https://onlinelibrary.wiley.com/doi/10.1111/aje.13250' },
     { title: 'Farmers and pastoralists\' socio-cultural interaction: mitigating conflicts in rural communities for livelihood development in Nigeria', authors: 'Aderinoye-Abdulwahab, S.A., Adebayo, J.A., Raza, H.A., Dolapo, T.A. & Raji, I.A.', journal: 'Journal of Global Innovations in Agricultural Sciences', year: '2023', category: 'Journal Article', url: 'https://scholar.google.com/citations?user=LqhoC-4AAAAJ&hl=en' },
