@@ -68,6 +68,20 @@ export function AdminResearch() {
               { key: 'location', label: 'Location / Institution', placeholder: 'Cornell University, Ithaca NY' },
               { key: 'description', label: 'Description', type: 'textarea' },
               { key: 'methods', label: 'Methods (comma-separated)', placeholder: 'Autonomous acoustic recorders, Community science' },
+              {
+                key: 'gallery',
+                label: 'Additional Photos',
+                type: 'gallery',
+                imageHint: 'Upload extra photos shown in the project gallery on the detail page.',
+              },
+              {
+                key: 'map_image',
+                label: 'Map / Site Photo',
+                type: 'image',
+                imageHint: 'A map, satellite image, or site overview photo.',
+              },
+              { key: 'map_link', label: 'Google Maps Link (optional)', type: 'url', placeholder: 'https://maps.google.com/…' },
+              { key: 'collaborators', label: 'Collaborators (one per line)', type: 'textarea', placeholder: 'Dr. Jane Smith — Cornell University\nProf. Kwame Osei — University of Ghana' },
             ]}
             defaultItems={LIST_DEFAULTS.research_projects}
           />

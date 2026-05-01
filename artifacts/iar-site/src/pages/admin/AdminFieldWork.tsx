@@ -30,6 +30,20 @@ export function AdminFieldWork() {
               { key: 'location', label: 'Location', placeholder: 'Durban, South Africa' },
               { key: 'description', label: 'Description', type: 'textarea' },
               { key: 'methods', label: 'Methods (comma-separated)', placeholder: 'Focal-tree watches, Transect surveys' },
+              {
+                key: 'gallery',
+                label: 'Additional Photos',
+                type: 'gallery',
+                imageHint: 'Upload extra field photos shown in the gallery on the detail page.',
+              },
+              {
+                key: 'map_image',
+                label: 'Map / Site Photo',
+                type: 'image',
+                imageHint: 'A map, satellite image, or field site overview photo.',
+              },
+              { key: 'map_link', label: 'Google Maps Link (optional)', type: 'url', placeholder: 'https://maps.google.com/…' },
+              { key: 'collaborators', label: 'Collaborators (one per line)', type: 'textarea', placeholder: 'Dr. Jane Smith — Cornell University\nProf. Kwame Osei — University of Ghana' },
             ]}
             defaultItems={LIST_DEFAULTS.field_work_projects}
           />

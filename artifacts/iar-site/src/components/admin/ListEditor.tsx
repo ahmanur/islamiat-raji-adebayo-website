@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getList, upsertListItem, deleteListItem, type ListKey, type ListRecord } from '@/lib/cms';
 import { ImagePicker } from './ImagePicker';
+import { GalleryPicker } from './GalleryPicker';
 
 interface FieldDef {
   key: string;
   label: string;
-  type?: 'text' | 'textarea' | 'url' | 'image';
+  type?: 'text' | 'textarea' | 'url' | 'image' | 'gallery';
   placeholder?: string;
   imageFallback?: string;
   imageHint?: string;
@@ -27,6 +28,16 @@ function FieldInput({ field, value, onChange }: { field: FieldDef; value: string
         label={field.label}
         value={value}
         fallback={field.imageFallback}
+        onChange={onChange}
+        hint={field.imageHint}
+      />
+    );
+  }
+  if (field.type === 'gallery') {
+    return (
+      <GalleryPicker
+        label={field.label}
+        value={value}
         onChange={onChange}
         hint={field.imageHint}
       />
@@ -126,7 +137,7 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
       <div className="text-sm font-medium text-white">New {itemLabel}</div>
       {fields.map(f => (
         <div key={f.key}>
-          {f.type !== 'image' && (
+          {f.type !== 'image' && f.type !== 'gallery' && (
             <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
           )}
           <FieldInput
@@ -185,7 +196,7 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
             <div className="space-y-4">
               {fields.map(f => (
                 <div key={f.key}>
-                  {f.type !== 'image' && (
+                  {f.type !== 'image' && f.type !== 'gallery' && (
                     <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
                   )}
                   <FieldInput
