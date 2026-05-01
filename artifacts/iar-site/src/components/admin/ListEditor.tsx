@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { getList, upsertListItem, deleteListItem, type ListKey, type ListRecord } from '@/lib/cms';
 import { ImagePicker } from './ImagePicker';
 import { GalleryPicker } from './GalleryPicker';
+import { NetworkEditor } from './NetworkEditor';
 
 interface FieldDef {
   key: string;
   label: string;
-  type?: 'text' | 'textarea' | 'url' | 'image' | 'gallery';
+  type?: 'text' | 'textarea' | 'url' | 'image' | 'gallery' | 'network';
   placeholder?: string;
   imageFallback?: string;
   imageHint?: string;
@@ -40,6 +41,15 @@ function FieldInput({ field, value, onChange }: { field: FieldDef; value: string
         value={value}
         onChange={onChange}
         hint={field.imageHint}
+      />
+    );
+  }
+  if (field.type === 'network') {
+    return (
+      <NetworkEditor
+        label={field.label}
+        value={value}
+        onChange={onChange}
       />
     );
   }
@@ -137,7 +147,7 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
       <div className="text-sm font-medium text-white">New {itemLabel}</div>
       {fields.map(f => (
         <div key={f.key}>
-          {f.type !== 'image' && f.type !== 'gallery' && (
+          {f.type !== 'image' && f.type !== 'gallery' && f.type !== 'network' && (
             <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
           )}
           <FieldInput
@@ -196,7 +206,7 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
             <div className="space-y-4">
               {fields.map(f => (
                 <div key={f.key}>
-                  {f.type !== 'image' && f.type !== 'gallery' && (
+                  {f.type !== 'image' && f.type !== 'gallery' && f.type !== 'network' && (
                     <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
                   )}
                   <FieldInput

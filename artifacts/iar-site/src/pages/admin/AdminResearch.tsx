@@ -82,7 +82,7 @@ export function AdminResearch() {
               },
               { key: 'map_link', label: 'Google Maps Link (optional)', type: 'url', placeholder: 'https://maps.google.com/…' },
               { key: 'collaborators', label: 'Collaborators (one per line)', type: 'textarea', placeholder: 'Dr. Jane Smith — Cornell University\nProf. Kwame Osei — University of Ghana' },
-              { key: 'network', label: 'Partner Network (JSON — leave blank if none)', type: 'textarea', placeholder: '{"network_name":"Campus Biodiversity Network","stats":{"institutions":23,"countries":12,"expanding":true},"previous_countries":["Brazil","Canada"],"current_countries":["Brazil","Canada","France"],"network_url":"https://www.biodivcampus.org/en/institutions"}' },
+              { key: 'network', label: 'Partner Network', type: 'network' },
             ]}
             defaultItems={LIST_DEFAULTS.research_projects}
           />
