@@ -11,16 +11,30 @@ function getAdminSupabase(): SupabaseClient {
   return _adminSupabase;
 }
 
+export interface GalleryEntry { url: string; caption: string }
+
+export function parseGallery(raw: string): GalleryEntry[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map(item =>
+      typeof item === 'string'
+        ? { url: item, caption: '' }
+        : { url: String(item.url ?? ''), caption: String(item.caption ?? '') }
+    );
+  } catch { return []; }
+}
+
+export function serializeGallery(entries: GalleryEntry[]): string {
+  return JSON.stringify(entries);
+}
+
 interface GalleryPickerProps {
   label: string;
   value: string;
   onChange: (jsonValue: string) => void;
   hint?: string;
-}
-
-function parseGallery(raw: string): string[] {
-  if (!raw) return [];
-  try { return JSON.parse(raw) as string[]; } catch { return []; }
 }
 
 export function GalleryPicker({ label, value, onChange, hint }: GalleryPickerProps) {
@@ -30,15 +44,17 @@ export function GalleryPicker({ label, value, onChange, hint }: GalleryPickerPro
   const [urlMode, setUrlMode] = useState(false);
   const [urlInput, setUrlInput] = useState('');
 
-  const images = parseGallery(value);
+  const entries = parseGallery(value);
 
-  const add = (url: string) => {
-    onChange(JSON.stringify([...images, url]));
-  };
+  const update = (next: GalleryEntry[]) => onChange(serializeGallery(next));
 
-  const remove = (idx: number) => {
-    const next = images.filter((_, i) => i !== idx);
-    onChange(JSON.stringify(next));
+  const add = (url: string) => update([...entries, { url, caption: '' }]);
+
+  const remove = (idx: number) => update(entries.filter((_, i) => i !== idx));
+
+  const setCaption = (idx: number, caption: string) => {
+    const next = entries.map((e, i) => i === idx ? { ...e, caption } : e);
+    update(next);
   };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,20 +89,34 @@ export function GalleryPicker({ label, value, onChange, hint }: GalleryPickerPro
       <label className="block text-sm font-medium text-slate-300">{label}</label>
       {hint && <p className="text-xs text-slate-500">{hint}</p>}
 
-      {images.length > 0 && (
-        <div className="grid grid-cols-3 gap-2">
-          {images.map((url, idx) => (
-            <div key={idx} className="relative group aspect-[4/3] rounded-lg overflow-hidden bg-slate-800 border border-slate-700">
-              <img src={url} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
-              <button
-                onClick={() => remove(idx)}
-                title="Remove photo"
-                className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/70 text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-              >
-                ✕
-              </button>
-              <div className="absolute bottom-1 left-1 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">
-                {idx + 1}
+      {entries.length > 0 && (
+        <div className="space-y-4">
+          {entries.map((entry, idx) => (
+            <div key={idx} className="bg-slate-900 border border-slate-700 rounded-xl overflow-hidden">
+              <div className="relative group aspect-[4/3]">
+                <img src={entry.url} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
+                <button
+                  onClick={() => remove(idx)}
+                  title="Remove photo"
+                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/70 text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                >
+                  ✕
+                </button>
+                <div className="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">
+                  Photo {idx + 1}
+                </div>
+              </div>
+              <div className="p-3">
+                <label className="block text-[10px] font-medium text-slate-500 mb-1.5 uppercase tracking-wide">
+                  Caption (optional)
+                </label>
+                <input
+                  type="text"
+                  value={entry.caption}
+                  onChange={e => setCaption(idx, e.target.value)}
+                  placeholder="Describe what's shown in this photo…"
+                  className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-slate-600"
+                />
               </div>
             </div>
           ))}
@@ -114,7 +144,7 @@ export function GalleryPicker({ label, value, onChange, hint }: GalleryPickerPro
           </button>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 items-center">
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
           <button
             onClick={() => fileRef.current?.click()}
@@ -129,8 +159,8 @@ export function GalleryPicker({ label, value, onChange, hint }: GalleryPickerPro
           >
             🔗 Add by URL
           </button>
-          {images.length > 0 && (
-            <span className="text-slate-500 text-xs self-center">{images.length} photo{images.length !== 1 ? 's' : ''}</span>
+          {entries.length > 0 && (
+            <span className="text-slate-500 text-xs">{entries.length} photo{entries.length !== 1 ? 's' : ''}</span>
           )}
         </div>
       )}

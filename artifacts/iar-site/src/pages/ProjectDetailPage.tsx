@@ -25,9 +25,19 @@ const DEFAULT_IMAGES = [
   '/images/field-fruit.png',
 ];
 
-function parseGallery(raw?: string): string[] {
+interface GalleryEntry { url: string; caption: string }
+
+function parseGallery(raw?: string): GalleryEntry[] {
   if (!raw) return [];
-  try { return JSON.parse(raw) as string[]; } catch { return []; }
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map(item =>
+      typeof item === 'string'
+        ? { url: item, caption: '' }
+        : { url: String(item.url ?? ''), caption: String(item.caption ?? '') }
+    );
+  } catch { return []; }
 }
 
 export function ProjectDetailPage() {
@@ -150,25 +160,34 @@ export function ProjectDetailPage() {
                   <Image className="w-4 h-4 text-primary" />
                   <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground/40">Photo Gallery</h3>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {gallery.map((url, i) => (
-                    <motion.a
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {gallery.map((entry, i) => (
+                    <motion.div
                       key={i}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       initial={{ opacity: 0, scale: 0.95 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.4, delay: i * 0.06 }}
-                      className="group aspect-[4/3] rounded-xl overflow-hidden bg-secondary block"
+                      className="group"
                     >
-                      <img
-                        src={url}
-                        alt={`Photo ${i + 1}`}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </motion.a>
+                      <a
+                        href={entry.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block aspect-[4/3] rounded-xl overflow-hidden bg-secondary"
+                      >
+                        <img
+                          src={entry.url}
+                          alt={entry.caption || `Photo ${i + 1}`}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </a>
+                      {entry.caption && (
+                        <p className="mt-2 text-xs text-foreground/50 leading-relaxed px-0.5">
+                          {entry.caption}
+                        </p>
+                      )}
+                    </motion.div>
                   ))}
                 </div>
               </div>
