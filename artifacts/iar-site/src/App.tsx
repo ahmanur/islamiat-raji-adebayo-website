@@ -74,8 +74,8 @@ function Router() {
         <Route path="/admin/news" component={() => <ProtectedRoute component={AdminNews} />} />
         <Route path="/admin/mentorship" component={() => <ProtectedRoute component={AdminMentorship} />} />
         <Route path="/admin/teaching" component={() => <ProtectedRoute component={AdminTeaching} />} />
-        <Route path="/admin/outreach" component={() => <ProtectedRoute component={AdminOutreach} />} />
-        <Route path="/admin/outreach-engagement" component={() => <ProtectedRoute component={AdminOutreachEngagement} />} />
+        <Route path="/admin/contact-info" component={() => <ProtectedRoute component={AdminOutreach} />} />
+        <Route path="/admin/outreach" component={() => <ProtectedRoute component={AdminOutreachEngagement} />} />
         <Route path="/admin/opportunities" component={() => <ProtectedRoute component={AdminOpportunities} />} />
         <Route path="/admin/media" component={() => <ProtectedRoute component={AdminMedia} />} />
         <Route path="/admin/settings" component={() => <ProtectedRoute component={AdminSettings} />} />
