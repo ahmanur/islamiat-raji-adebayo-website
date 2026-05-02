@@ -12,7 +12,6 @@ import {
   Coins,
   ExternalLink,
   Calendar,
-  Building2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getContent, getList } from '@/lib/cms';
@@ -164,67 +163,70 @@ function ResourcesSection() {
             No resources in this category yet.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((r, i) => {
-              const cat = categoryMeta[r.category] ?? categoryMeta.Other;
-              return (
-                <motion.article
-                  key={`${r.title}-${i}`}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.45, delay: Math.min(i, 4) * 0.05 }}
-                  className="flex flex-col bg-background border border-secondary rounded-2xl p-6 hover:border-foreground/30 hover:shadow-md transition-all"
-                >
-                  <div className="flex items-center gap-2 flex-wrap mb-4">
-                    <span className={`inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full border ${cat.tone}`}>
-                      {cat.icon}
-                      {r.category}
-                    </span>
-                    {r.audience && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-secondary/70 text-foreground/70 border border-secondary">
-                        {audienceMeta[r.audience]?.icon}
-                        {r.audience}
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="font-serif text-xl text-foreground leading-snug mb-2">
-                    {r.title}
-                  </h3>
-                  {r.organization && (
-                    <div className="flex items-center gap-1.5 text-foreground/60 text-sm mb-3">
-                      <Building2 className="w-3.5 h-3.5 shrink-0" />
-                      <span>{r.organization}</span>
-                    </div>
-                  )}
-                  {r.description && (
-                    <p className="text-foreground/70 text-sm leading-relaxed mb-5 flex-1">
-                      {r.description}
-                    </p>
-                  )}
-                  <div className="mt-auto space-y-3">
-                    {r.deadline && (
-                      <div className="flex items-center gap-1.5 text-foreground/60 text-xs">
-                        <Calendar className="w-3.5 h-3.5 shrink-0" />
-                        <span>Deadline: {r.deadline}</span>
+          <div className="max-w-4xl">
+            <ul className="space-y-8">
+              {filtered.map((r, i) => {
+                const cat = categoryMeta[r.category] ?? categoryMeta.Other;
+                return (
+                  <motion.li
+                    key={`${r.title}-${i}`}
+                    className="group border-b border-border/50 pb-8 last:border-0"
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.45, delay: Math.min(i, 5) * 0.05 }}
+                  >
+                    <div className="flex flex-col md:flex-row gap-4 md:gap-8 items-start">
+                      <div className="md:w-40 shrink-0 md:pt-1">
+                        <div className="flex md:flex-col gap-2 flex-wrap">
+                          <span className={`inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full border w-fit ${cat.tone}`}>
+                            {cat.icon}
+                            {r.category}
+                          </span>
+                          {r.audience && (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-secondary/70 text-foreground/70 border border-secondary w-fit">
+                              {audienceMeta[r.audience]?.icon}
+                              {r.audience}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    )}
-                    {r.url && (
-                      <a
-                        href={r.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-                      >
-                        Visit resource
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    )}
-                  </div>
-                </motion.article>
-              );
-            })}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg md:text-xl font-medium text-foreground mb-2 leading-snug group-hover:text-primary transition-colors">
+                          {r.title}
+                        </h3>
+                        {r.organization && (
+                          <p className="text-foreground/70 mb-3 font-light italic">{r.organization}</p>
+                        )}
+                        {r.description && (
+                          <p className="text-foreground/70 text-sm md:text-base leading-relaxed mb-4">
+                            {r.description}
+                          </p>
+                        )}
+                        <div className="flex flex-wrap items-center gap-4 text-sm">
+                          {r.deadline && (
+                            <span className="inline-flex items-center gap-1.5 text-foreground/60">
+                              <Calendar className="w-3.5 h-3.5 shrink-0" />
+                              Deadline: {r.deadline}
+                            </span>
+                          )}
+                          {r.url && (
+                            <a
+                              href={r.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-medium"
+                            >
+                              Visit resource <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.li>
+                );
+              })}
+            </ul>
           </div>
         )}
       </div>
