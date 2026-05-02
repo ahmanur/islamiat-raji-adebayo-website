@@ -11,7 +11,7 @@ const navItems = [
   { href: '/admin/publications', label: 'Publications', icon: '📄' },
   { href: '/admin/fieldwork', label: 'Field Work', icon: '🌿' },
   { href: '/admin/news', label: 'News', icon: '📰' },
-  { href: '/admin/mentorship', label: 'Mentorship', icon: '🎓' },
+  { href: '/admin/mentorship', label: 'People', icon: '🎓' },
   { href: '/admin/outreach', label: 'Outreach', icon: '🌍' },
   { href: '/admin/opportunities', label: 'Opportunities', icon: '✨' },
   { href: '/admin/media', label: 'Media', icon: '🖼' },
