@@ -61,9 +61,16 @@ export function Research() {
     ? entries.filter(e => e.data.theme?.trim().toLowerCase() === selectedTheme.title?.trim().toLowerCase())
     : [];
 
+  const bgImage = c.bg_image;
+
   return (
-    <section id="research" className="py-24 md:py-32">
-      <div className="container mx-auto px-6 md:px-12">
+    <section
+      id="research"
+      className="py-24 md:py-32 relative"
+      style={bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' } : undefined}
+    >
+      {bgImage && <div className="absolute inset-0 bg-background/85 pointer-events-none" />}
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
 
         <motion.div
           className="max-w-3xl mb-16 md:mb-20"

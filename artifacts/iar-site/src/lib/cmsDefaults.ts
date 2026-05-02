@@ -16,6 +16,7 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     para4: 'I enjoy working with students and community and local scientists to co-design participatory monitoring methods that are scalable, community-driven, and relevant to both science and society. I am passionate about mentorship, outreach, and interdisciplinary collaboration.',
   },
   research: {
+    bg_image: '',
     intro: 'My research program asks fundamental questions about ecological resilience in the Anthropocene. I focus on understanding how we can build cities that act as refuges rather than barriers to biodiversity.',
     theme1_title: 'Bioacoustics',
     theme1_desc: 'Using sound as a non-invasive lens to monitor biodiversity, revealing hidden ecological patterns in urban environments.',

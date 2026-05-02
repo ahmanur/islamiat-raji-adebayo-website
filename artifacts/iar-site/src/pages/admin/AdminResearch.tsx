@@ -18,6 +18,12 @@ export function AdminResearch() {
           <ContentEditor
             section="research"
             fields={[
+              {
+                key: 'bg_image',
+                label: 'Section Background Image',
+                type: 'image',
+                imageHint: 'Optional full-width photo shown behind the Research section.',
+              },
               { key: 'intro', label: 'Introduction Paragraph', type: 'textarea' },
             ]}
             defaults={CONTENT_DEFAULTS.research}
