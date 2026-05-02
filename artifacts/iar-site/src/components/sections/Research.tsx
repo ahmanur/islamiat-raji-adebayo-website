@@ -89,7 +89,7 @@ export function Research() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className={`text-left rounded-2xl overflow-hidden border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
+                className={`text-left rounded-2xl overflow-hidden border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer w-full flex flex-col ${
                   isActive
                     ? 'border-primary shadow-xl shadow-primary/10 scale-[1.02]'
                     : 'border-secondary/80 hover:border-primary/40 hover:shadow-md'
@@ -118,7 +118,7 @@ export function Research() {
                   </div>
                 </div>
 
-                <div className={`p-5 transition-colors duration-300 ${isActive ? 'bg-primary/5' : 'bg-secondary/30'}`}>
+                <div className={`p-5 flex-1 flex flex-col transition-colors duration-300 ${isActive ? 'bg-primary/5' : 'bg-secondary/30'}`}>
                   <h3 className="font-serif text-lg text-foreground mb-2">{theme.title}</h3>
                   <p className="text-foreground/65 text-sm leading-relaxed line-clamp-2">{theme.description}</p>
                   {isActive && (
