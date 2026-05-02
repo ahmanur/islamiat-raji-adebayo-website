@@ -48,18 +48,18 @@ const categoryMeta: Record<string, { icon: React.ReactNode; tone: string }> = {
 
 const opportunities = [
   {
-    icon: <BookOpen className="w-6 h-6" />,
-    title: 'Graduate Students',
-    description:
-      'I welcome inquiries from motivated MSc and PhD applicants with interests in bioacoustics, urban ecology, plant–animal interactions, or conservation science. Strong candidates are curious, collaborative, and committed to rigorous fieldwork.',
-    cta: 'Email to express interest',
-  },
-  {
     icon: <Microscope className="w-6 h-6" />,
     title: 'Undergraduate Researchers',
     description:
       'Undergraduate students looking for hands-on research experience in ecology or acoustic monitoring are encouraged to reach out. Opportunities may include field data collection, acoustic annotation, and data analysis.',
     cta: 'Email to enquire',
+  },
+  {
+    icon: <BookOpen className="w-6 h-6" />,
+    title: 'Graduate Students',
+    description:
+      'I welcome inquiries from motivated MSc and PhD applicants with interests in bioacoustics, urban ecology, plant–animal interactions, or conservation science. Strong candidates are curious, collaborative, and committed to rigorous fieldwork.',
+    cta: 'Email to express interest',
   },
   {
     icon: <Users className="w-6 h-6" />,
