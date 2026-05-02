@@ -68,7 +68,8 @@ export type ListKey =
   | 'teaching_events'
   | 'collaborators'
   | 'mentees'
-  | 'funding';
+  | 'funding'
+  | 'teaching_courses';
 
 export interface ListRecord {
   id: string;

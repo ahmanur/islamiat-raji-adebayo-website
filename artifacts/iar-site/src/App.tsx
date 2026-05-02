@@ -13,6 +13,7 @@ import { MentorshipPage } from '@/pages/MentorshipPage';
 import { OutreachPage } from '@/pages/OutreachPage';
 import { FieldWorkPage } from '@/pages/FieldWorkPage';
 import { OpportunitiesPage } from '@/pages/OpportunitiesPage';
+import { TeachingPage } from '@/pages/TeachingPage';
 import { ProjectDetailPage } from '@/pages/ProjectDetailPage';
 import NotFound from '@/pages/not-found';
 
@@ -28,6 +29,7 @@ import { AdminMentorship } from '@/pages/admin/AdminMentorship';
 import { AdminOutreach } from '@/pages/admin/AdminOutreach';
 import { AdminFieldWork } from '@/pages/admin/AdminFieldWork';
 import { AdminOpportunities } from '@/pages/admin/AdminOpportunities';
+import { AdminTeaching } from '@/pages/admin/AdminTeaching';
 import { AdminMedia } from '@/pages/admin/AdminMedia';
 import { AdminSettings } from '@/pages/admin/AdminSettings';
 
@@ -69,6 +71,7 @@ function Router() {
         <Route path="/admin/fieldwork" component={() => <ProtectedRoute component={AdminFieldWork} />} />
         <Route path="/admin/news" component={() => <ProtectedRoute component={AdminNews} />} />
         <Route path="/admin/mentorship" component={() => <ProtectedRoute component={AdminMentorship} />} />
+        <Route path="/admin/teaching" component={() => <ProtectedRoute component={AdminTeaching} />} />
         <Route path="/admin/outreach" component={() => <ProtectedRoute component={AdminOutreach} />} />
         <Route path="/admin/opportunities" component={() => <ProtectedRoute component={AdminOpportunities} />} />
         <Route path="/admin/media" component={() => <ProtectedRoute component={AdminMedia} />} />
@@ -86,6 +89,7 @@ function Router() {
                 <Route path="/research" component={ResearchPage} />
                 <Route path="/publications" component={PublicationsPage} />
                 <Route path="/mentorship" component={MentorshipPage} />
+                <Route path="/teaching" component={TeachingPage} />
                 <Route path="/outreach" component={OutreachPage} />
                 <Route path="/field-work/:id" component={ProjectDetailPage} />
                 <Route path="/field-work" component={FieldWorkPage} />
