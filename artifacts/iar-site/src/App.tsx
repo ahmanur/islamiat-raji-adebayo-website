@@ -33,6 +33,7 @@ import { AdminFieldWork } from '@/pages/admin/AdminFieldWork';
 import { AdminOpportunities } from '@/pages/admin/AdminOpportunities';
 import { AdminTeaching } from '@/pages/admin/AdminTeaching';
 import { AdminMedia } from '@/pages/admin/AdminMedia';
+import { AdminNavigation } from '@/pages/admin/AdminNavigation';
 import { AdminSettings } from '@/pages/admin/AdminSettings';
 
 const queryClient = new QueryClient();
@@ -78,6 +79,7 @@ function Router() {
         <Route path="/admin/outreach" component={() => <ProtectedRoute component={AdminOutreachEngagement} />} />
         <Route path="/admin/opportunities" component={() => <ProtectedRoute component={AdminOpportunities} />} />
         <Route path="/admin/media" component={() => <ProtectedRoute component={AdminMedia} />} />
+        <Route path="/admin/navigation" component={() => <ProtectedRoute component={AdminNavigation} />} />
         <Route path="/admin/settings" component={() => <ProtectedRoute component={AdminSettings} />} />
 
         {/* Public site routes */}

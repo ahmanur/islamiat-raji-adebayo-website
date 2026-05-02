@@ -2,20 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
+import { getList } from '@/lib/cms';
+import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
+type NavLink = { name: string; href: string; accent?: boolean };
 
-const navLinks = [
-  { name: 'Home',         href: '/' },
-  { name: 'About',        href: '/about' },
-  { name: 'Research',     href: '/research' },
-  { name: 'Publications', href: '/publications' },
-  { name: 'People',    href: '/mentorship' },
-  { name: 'Teaching',  href: '/teaching' },
-  { name: 'News',         href: '/news' },
-  { name: 'Outreach',     href: '/outreach' },
-  { name: 'Field Work',   href: '/field-work' },
-  { name: 'Opportunities',href: '/opportunities', accent: true },
-];
+const defaultNavLinks: NavLink[] = (LIST_DEFAULTS.nav_items ?? []) as NavLink[];
 
 function isActive(href: string, location: string): boolean {
   if (href === '/') return location === '/';
@@ -26,11 +18,24 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [location] = useLocation();
+  const [navLinks, setNavLinks] = useState<NavLink[]>(defaultNavLinks);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    getList('nav_items').then(rows => {
+      if (rows.length > 0) {
+        setNavLinks(rows.map(r => ({
+          name: (r.data?.name as string) ?? '',
+          href: (r.data?.href as string) ?? '/',
+          accent: r.data?.accent === true || r.data?.accent === 'true',
+        })).filter(n => n.name && n.href));
+      }
+    });
   }, []);
 
   // Close mobile menu on route change

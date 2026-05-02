@@ -77,6 +77,18 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
     { title: 'National Postdoctoral Association IMPACT Fellow', year: '2024' },
     { title: 'NRF-TWAS Scholar', year: '' },
   ],
+  nav_items: [
+    { name: 'Home', href: '/', accent: false },
+    { name: 'About', href: '/about', accent: false },
+    { name: 'Research', href: '/research', accent: false },
+    { name: 'Publications', href: '/publications', accent: false },
+    { name: 'People', href: '/mentorship', accent: false },
+    { name: 'Teaching', href: '/teaching', accent: false },
+    { name: 'News', href: '/news', accent: false },
+    { name: 'Outreach', href: '/outreach', accent: false },
+    { name: 'Field Work', href: '/field-work', accent: false },
+    { name: 'Opportunities', href: '/opportunities', accent: true },
+  ],
   affiliations: [
     { name: 'American Scientific Affiliation' },
     { name: 'Society for Conservation Biology (Global & Nigeria)' },

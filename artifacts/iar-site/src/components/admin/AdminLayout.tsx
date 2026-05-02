@@ -17,6 +17,7 @@ const navItems = [
   { href: '/admin/outreach', label: 'Outreach', icon: '📣' },
   { href: '/admin/opportunities', label: 'Opportunities', icon: '✨' },
   { href: '/admin/media', label: 'Media', icon: '🖼' },
+  { href: '/admin/navigation', label: 'Navigation', icon: '🧭' },
   { href: '/admin/settings', label: 'Settings', icon: '⚙' },
 ];
 
