@@ -4,13 +4,27 @@ import { ContentEditor } from '@/components/admin/ContentEditor';
 import { ListEditor } from '@/components/admin/ListEditor';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
+const PERSON_FIELDS = [
+  {
+    key: 'image',
+    label: 'Photo',
+    type: 'image' as const,
+    imageFallback: '',
+    imageHint: 'Headshot or profile photo.',
+  },
+  { key: 'name', label: 'Name', placeholder: 'Full Name' },
+  { key: 'role', label: 'Role / Position', placeholder: 'PhD Student' },
+  { key: 'institution', label: 'Institution', placeholder: 'Cornell University' },
+  { key: 'description', label: 'Bio / Description', type: 'textarea' as const },
+];
+
 export function AdminMentorship() {
   return (
     <AdminLayout>
       <div className="max-w-2xl space-y-8">
         <div>
-          <h1 className="text-xl font-semibold text-white mb-1">Teachings</h1>
-          <p className="text-slate-400 text-sm">Edit the intro text, roles, and teaching/collaboration events with photos.</p>
+          <h1 className="text-xl font-semibold text-white mb-1">People</h1>
+          <p className="text-slate-400 text-sm">Edit the intro text, roles, and People sub-sections (Collaborators, Mentees, Funding).</p>
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
@@ -29,7 +43,7 @@ export function AdminMentorship() {
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
           <h2 className="text-white font-medium text-sm mb-1">Roles / Opportunity Cards</h2>
-          <p className="text-slate-500 text-xs mb-4">Shown as small cards on the Teachings page.</p>
+          <p className="text-slate-500 text-xs mb-4">Shown as small cards on the upper People section.</p>
           <ListEditor
             listKey="mentorship_roles"
             itemLabel="Role"
@@ -42,28 +56,47 @@ export function AdminMentorship() {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <h2 className="text-white font-medium text-sm mb-1">Teaching & Collaboration Events</h2>
-          <p className="text-slate-500 text-xs mb-4">
-            Each event appears as a photo card on the public Teachings page. Upload a photo and add the event details.
-          </p>
+          <h2 className="text-white font-medium text-sm mb-1">Collaborators</h2>
+          <p className="text-slate-500 text-xs mb-4">Each entry appears as a photo card in the Collaborators section.</p>
           <ListEditor
-            listKey="teaching_events"
-            itemLabel="Event"
-            addAtTop
+            listKey="collaborators"
+            itemLabel="Collaborator"
+            fields={PERSON_FIELDS}
+            defaultItems={LIST_DEFAULTS.collaborators}
+          />
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <h2 className="text-white font-medium text-sm mb-1">Mentees</h2>
+          <p className="text-slate-500 text-xs mb-4">Each entry appears as a photo card in the Mentees section.</p>
+          <ListEditor
+            listKey="mentees"
+            itemLabel="Mentee"
+            fields={PERSON_FIELDS}
+            defaultItems={LIST_DEFAULTS.mentees}
+          />
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <h2 className="text-white font-medium text-sm mb-1">Funding</h2>
+          <p className="text-slate-500 text-xs mb-4">Each entry appears as a card in the Funding section. Use the photo field for a funder logo.</p>
+          <ListEditor
+            listKey="funding"
+            itemLabel="Funder"
             fields={[
               {
                 key: 'image',
-                label: 'Event Photo',
-                type: 'image',
-                imageFallback: '/images/spectrogram-art.png',
-                imageHint: 'Photo from the teaching or collaboration event.',
+                label: 'Logo / Image',
+                type: 'image' as const,
+                imageFallback: '',
+                imageHint: 'Funder logo or representative image.',
               },
-              { key: 'title', label: 'Event Title', placeholder: 'Field Ornithology Workshop' },
-              { key: 'date', label: 'Date / Year', placeholder: '2024' },
-              { key: 'location', label: 'Location', placeholder: 'Ithaca, NY' },
-              { key: 'description', label: 'Description', type: 'textarea' },
+              { key: 'name', label: 'Funder / Organisation Name', placeholder: 'NSF' },
+              { key: 'role', label: 'Grant / Award Title', placeholder: 'Rose Postdoctoral Fellowship' },
+              { key: 'institution', label: 'Programme (optional)', placeholder: '' },
+              { key: 'description', label: 'Description', type: 'textarea' as const },
             ]}
-            defaultItems={LIST_DEFAULTS.teaching_events}
+            defaultItems={LIST_DEFAULTS.funding}
           />
         </div>
       </div>

@@ -180,6 +180,15 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
     },
   ],
   opportunities_list: [],
+  collaborators: [
+    { image: '', name: 'Collaborator Name', role: 'Associate Professor', institution: 'University Name', description: 'Brief description of collaboration and shared research interests.' },
+  ],
+  mentees: [
+    { image: '', name: 'Mentee Name', role: 'PhD Student', institution: 'University Name', description: 'Research focus and mentoring context.' },
+  ],
+  funding: [
+    { image: '', name: 'Funding Body', role: 'Grant / Award Title', institution: '', description: 'Brief description of the funded project or award.' },
+  ],
   teaching_events: [
     {
       image: '/images/teaching-field-outing.jpg',

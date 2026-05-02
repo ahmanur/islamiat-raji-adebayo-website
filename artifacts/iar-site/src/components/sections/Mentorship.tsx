@@ -1,19 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, BookOpen, HeartHandshake, MapPin, Calendar } from 'lucide-react';
+import { Users, BookOpen, HeartHandshake } from 'lucide-react';
 import { getContent, getList } from '@/lib/cms';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
 const DC = CONTENT_DEFAULTS.mentorship;
 type RoleItem = { title: string; description: string };
-type EventItem = { image: string; title: string; date: string; location: string; description: string };
+type PersonItem = { image: string; name: string; role: string; institution: string; description: string };
 
 const ROLE_ICONS = [Users, BookOpen];
+
+function PersonCard({ person, index }: { person: PersonItem; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      className="flex flex-col items-center text-center group"
+    >
+      <div className="w-36 h-36 rounded-full overflow-hidden mb-5 border-2 border-secondary/80 group-hover:border-primary/50 transition-colors duration-300 shadow-md bg-secondary/30 flex-shrink-0">
+        {person.image ? (
+          <img src={person.image} alt={person.name} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary/40">
+            <Users className="w-12 h-12" />
+          </div>
+        )}
+      </div>
+      <h3 className="font-serif text-lg text-foreground mb-1 leading-snug">{person.name}</h3>
+      <p className="text-primary text-xs font-medium uppercase tracking-wider mb-0.5">{person.role}</p>
+      {person.institution && (
+        <p className="text-foreground/50 text-xs mb-3">{person.institution}</p>
+      )}
+      {person.description && (
+        <p className="text-foreground/65 text-sm leading-relaxed max-w-xs">{person.description}</p>
+      )}
+    </motion.div>
+  );
+}
+
+function SubSection({ title, items }: { title: string; items: PersonItem[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="mb-20">
+      <motion.div
+        className="mb-12"
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.5 }}
+      >
+        <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-3">{title}</h3>
+        <div className="w-8 h-[2px] bg-primary" />
+      </motion.div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
+        {items.map((person, i) => (
+          <PersonCard key={person.name + i} person={person} index={i} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function Mentorship() {
   const [c, setC] = useState(DC);
   const [roles, setRoles] = useState<RoleItem[]>(LIST_DEFAULTS.mentorship_roles as RoleItem[]);
-  const [events, setEvents] = useState<EventItem[]>(LIST_DEFAULTS.teaching_events as EventItem[]);
+  const [collaborators, setCollaborators] = useState<PersonItem[]>(LIST_DEFAULTS.collaborators as PersonItem[]);
+  const [mentees, setMentees] = useState<PersonItem[]>(LIST_DEFAULTS.mentees as PersonItem[]);
+  const [funding, setFunding] = useState<PersonItem[]>(LIST_DEFAULTS.funding as PersonItem[]);
 
   useEffect(() => {
     getContent('mentorship').then(data => {
@@ -22,13 +77,20 @@ export function Mentorship() {
     getList('mentorship_roles').then(rows => {
       if (rows.length > 0) setRoles(rows.map(r => r.data as RoleItem));
     });
-    getList('teaching_events').then(rows => {
-      if (rows.length > 0) setEvents(rows.map(r => r.data as EventItem));
+    getList('collaborators').then(rows => {
+      if (rows.length > 0) setCollaborators(rows.map(r => r.data as PersonItem));
+    });
+    getList('mentees').then(rows => {
+      if (rows.length > 0) setMentees(rows.map(r => r.data as PersonItem));
+    });
+    getList('funding').then(rows => {
+      if (rows.length > 0) setFunding(rows.map(r => r.data as PersonItem));
     });
   }, []);
 
   return (
     <>
+      {/* ── Upper section (untouched) ── */}
       <section id="mentorship" className="py-24 md:py-32 bg-foreground text-background">
         <div className="container mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -89,58 +151,25 @@ export function Mentorship() {
           </div>
         </div>
       </section>
-      {events.length > 0 && (
+
+      {/* ── People sub-sections ── */}
+      {(collaborators.length > 0 || mentees.length > 0 || funding.length > 0) && (
         <section className="py-24 md:py-32 bg-background">
           <div className="container mx-auto px-6 md:px-12">
             <motion.div
               className="mb-16"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">Teaching & Collaboration</h2>
-              <div className="w-12 h-[2px] bg-primary"></div>
+              <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">Our People</h2>
+              <div className="w-12 h-[2px] bg-primary" />
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {events.map((event, i) => (
-                <motion.div
-                  key={event.title + i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="group rounded-2xl overflow-hidden border border-secondary/80 bg-secondary/20 hover:bg-secondary/40 transition-colors"
-                >
-                  <div className="aspect-[4/3] overflow-hidden">
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex flex-wrap items-center gap-4 text-xs text-foreground/50 uppercase tracking-wider font-medium mb-3">
-                      {event.date && (
-                        <span className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5" />
-                          {event.date}
-                        </span>
-                      )}
-                      {event.location && (
-                        <span className="flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5" />
-                          {event.location}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="font-serif text-xl text-foreground mb-3 leading-snug">{event.title}</h3>
-                    <p className="text-foreground/70 text-sm leading-relaxed">{event.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            <SubSection title="Collaborators" items={collaborators} />
+            <SubSection title="Mentees" items={mentees} />
+            <SubSection title="Funding" items={funding} />
           </div>
         </section>
       )}
