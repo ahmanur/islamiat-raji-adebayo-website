@@ -78,6 +78,7 @@ export function Research() {
         </motion.div>
 
         {/* Theme selector cards */}
+        <p className="text-foreground/60 text-sm mb-6 italic">Please click on each of the themes below to learn more about my research.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
           {themes.map((theme, i) => {
             const isActive = activeTheme === i;
