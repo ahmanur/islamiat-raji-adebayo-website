@@ -114,6 +114,32 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       methods: 'Field surveys, Plant-animal interaction networks, Frugivory analysis',
     },
   ],
+  field_work_gallery: [
+    {
+      image: '/images/field-fruit.png',
+      caption: 'Documenting frugivore visits to a fruiting Ficus tree during dawn focal-tree watches in KwaZulu-Natal, South Africa.',
+    },
+    {
+      image: '/images/teaching-field-outing.jpg',
+      caption: 'Leading a hands-on field ornithology training session at the A.P. Leventis Ornithological Research Institute, Nigeria.',
+    },
+    {
+      image: '/images/spectrogram-art.png',
+      caption: 'Spectrogram of dawn chorus recordings captured by autonomous acoustic recorders deployed across an urban transect.',
+    },
+    {
+      image: '/images/hero-bird.png',
+      caption: 'Resident urban bird observed during a community bird walk — part of ongoing campus biodiversity monitoring.',
+    },
+    {
+      image: '/images/teaching-conference.jpg',
+      caption: 'Sharing fieldwork outcomes with collaborators and students during a working session on community science protocols.',
+    },
+    {
+      image: '/images/forest-bg.png',
+      caption: 'Forest edge habitat at one of the long-term acoustic monitoring sites — a key listening station in the network.',
+    },
+  ],
   field_work_projects: [
     {
       status: 'Doctoral Fieldwork',

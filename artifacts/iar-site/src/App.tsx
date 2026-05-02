@@ -95,7 +95,6 @@ function Router() {
                 <Route path="/teaching" component={TeachingPage} />
                 <Route path="/news" component={OutreachPage} />
                 <Route path="/outreach" component={OutreachEngagementPage} />
-                <Route path="/field-work/:id" component={ProjectDetailPage} />
                 <Route path="/field-work" component={FieldWorkPage} />
                 <Route path="/opportunities" component={OpportunitiesPage} />
                 <Route component={NotFound} />

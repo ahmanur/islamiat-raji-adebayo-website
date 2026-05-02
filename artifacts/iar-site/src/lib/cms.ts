@@ -73,7 +73,8 @@ export type ListKey =
   | 'funding'
   | 'teaching_courses'
   | 'outreach_engagement'
-  | 'science_writing';
+  | 'science_writing'
+  | 'field_work_gallery';
 
 export interface ListRecord {
   id: string;

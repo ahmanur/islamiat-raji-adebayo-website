@@ -1,131 +1,189 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import { Link } from 'wouter';
+import React, { useEffect, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getList } from '@/lib/cms';
 import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
-type ProjectItem = {
-  status: string;
-  title: string;
-  location: string;
-  description: string;
-  methods: string;
-  image?: string;
+type GalleryItem = {
+  image: string;
+  caption: string;
 };
 
-type ProjectEntry = { id: string; data: ProjectItem };
-
-const DEFAULT_IMAGES = [
-  '/images/spectrogram-art.png',
-  '/images/hero-bird.png',
-  '/images/field-fruit.png',
-];
-
-function MapPinIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  );
-}
+type GalleryEntry = { id: string; data: GalleryItem };
 
 export function FieldWorkPage() {
-  const [entries, setEntries] = useState<ProjectEntry[]>(
-    () => LIST_DEFAULTS.field_work_projects.map((d, i) => ({ id: String(i), data: d as ProjectItem }))
+  const [entries, setEntries] = useState<GalleryEntry[]>(
+    () => LIST_DEFAULTS.field_work_gallery.map((d, i) => ({ id: String(i), data: d as GalleryItem }))
   );
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    getList('field_work_projects').then(rows => {
-      if (rows.length > 0) setEntries(rows.map(r => ({ id: r.id, data: r.data as ProjectItem })));
+    getList('field_work_gallery').then(rows => {
+      if (rows.length > 0) {
+        setEntries(rows.map(r => ({ id: r.id, data: r.data as GalleryItem })));
+      }
     });
   }, []);
 
+  const closeLightbox = useCallback(() => setActiveIndex(null), []);
+  const showPrev = useCallback(
+    () => setActiveIndex(i => (i === null ? null : (i - 1 + entries.length) % entries.length)),
+    [entries.length]
+  );
+  const showNext = useCallback(
+    () => setActiveIndex(i => (i === null ? null : (i + 1) % entries.length)),
+    [entries.length]
+  );
+
+  useEffect(() => {
+    if (activeIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showPrev();
+      if (e.key === 'ArrowRight') showNext();
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [activeIndex, closeLightbox, showPrev, showNext]);
+
+  const active = activeIndex !== null ? entries[activeIndex] : null;
+
   return (
     <div className="pt-20 min-h-screen">
-      <section className="py-24 md:py-32">
+      <section className="py-20 md:py-28">
         <div className="container mx-auto px-6 md:px-12">
           <motion.div
-            className="max-w-3xl mb-16 md:mb-24"
+            className="max-w-3xl mb-14 md:mb-20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Field Work</h1>
             <div className="w-12 h-[2px] bg-primary mb-8" />
-            <p className="text-xl text-foreground/80 font-light leading-relaxed">
-              My research is deeply grounded in fieldwork — in the quiet patience of listening to forest edges at dawn,
-              in the careful documentation of birds foraging on fruiting trees, and in the collaborative effort of training
-              communities to listen and record alongside me.
+            <p className="text-lg md:text-xl text-foreground/80 font-light leading-relaxed">
+              A visual record of fieldwork — from dawn surveys at fruiting trees to acoustic
+              monitoring across cities and forest edges. Click any photo to view it larger.
             </p>
           </motion.div>
 
-          <div className="space-y-24">
-            {entries.map((entry, i) => {
-              const project = entry.data;
-              const imgSrc = project.image || DEFAULT_IMAGES[i % DEFAULT_IMAGES.length];
-              return (
-                <motion.div
+          {entries.length === 0 ? (
+            <p className="text-foreground/50 italic">No field work photos yet.</p>
+          ) : (
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
+              {entries.map((entry, i) => (
+                <motion.button
                   key={entry.id}
-                  className={`flex flex-col gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}
-                  initial={{ opacity: 0, y: 40 }}
+                  type="button"
+                  onClick={() => setActiveIndex(i)}
+                  initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-100px' }}
-                  transition={{ duration: 0.8 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.5, delay: (i % 6) * 0.05 }}
+                  className="group mb-6 block w-full break-inside-avoid overflow-hidden rounded-xl border border-secondary/60 bg-secondary/30 text-left shadow-sm hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-primary/60"
+                  aria-label={`Open photo: ${entry.data.caption || 'field work photo'}`}
                 >
-                  <Link href={`/field-work/${entry.id}`} className="w-full lg:w-1/2 block group cursor-pointer">
-                    <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg relative">
-                      <img
-                        src={imgSrc}
-                        alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-2xl" />
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span className="bg-white/90 text-foreground text-sm font-medium px-5 py-2 rounded-full flex items-center gap-2">
-                          View Details <ArrowRight className="w-4 h-4" />
-                        </span>
-                      </div>
-                      <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl pointer-events-none" />
-                    </div>
-                  </Link>
-
-                  <div className="w-full lg:w-1/2 flex flex-col justify-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium tracking-wide mb-6 uppercase w-fit">
-                      {project.status}
-                    </div>
-                    <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-3">{project.title}</h2>
-                    <div className="flex items-center gap-2 text-foreground/60 text-sm mb-6 uppercase tracking-wider font-medium">
-                      <MapPinIcon className="w-4 h-4" />
-                      {project.location}
-                    </div>
-                    <p className="text-lg text-foreground/80 leading-relaxed mb-8 line-clamp-4">{project.description}</p>
-                    {project.methods && (
-                      <div className="mb-8">
-                        <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground/50 mb-3">Methods</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {project.methods.split(',').map(m => m.trim()).filter(Boolean).map(m => (
-                            <span key={m} className="text-xs px-3 py-1 rounded-full bg-secondary border border-secondary/80 text-foreground/70">
-                              {m}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    <Link
-                      href={`/field-work/${entry.id}`}
-                      className="inline-flex items-center gap-2 text-primary hover:text-primary/80 text-sm font-medium transition-colors w-fit"
-                    >
-                      Read more <ArrowRight className="w-4 h-4" />
-                    </Link>
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={entry.data.image}
+                      alt={entry.data.caption || 'Field work photo'}
+                      className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300" />
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                  {entry.data.caption && (
+                    <div className="px-4 py-3">
+                      <p className="text-sm text-foreground/75 leading-relaxed line-clamp-3">
+                        {entry.data.caption}
+                      </p>
+                    </div>
+                  )}
+                </motion.button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            key="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-8"
+            onClick={closeLightbox}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Photo viewer"
+          >
+            <button
+              type="button"
+              onClick={closeLightbox}
+              aria-label="Close"
+              className="absolute top-4 right-4 md:top-6 md:right-6 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {entries.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); showPrev(); }}
+                  aria-label="Previous photo"
+                  className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); showNext(); }}
+                  aria-label="Next photo"
+                  className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </>
+            )}
+
+            <motion.div
+              key={active.id}
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.98, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="relative max-w-6xl w-full max-h-full flex flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={active.data.image}
+                alt={active.data.caption || 'Field work photo'}
+                className="max-w-full max-h-[78vh] object-contain rounded-lg shadow-2xl"
+              />
+              {active.data.caption && (
+                <div className="mt-4 max-w-3xl text-center">
+                  <p className="text-white/90 text-sm md:text-base leading-relaxed">
+                    {active.data.caption}
+                  </p>
+                  {entries.length > 1 && (
+                    <p className="text-white/50 text-xs mt-2">
+                      {(activeIndex ?? 0) + 1} / {entries.length}
+                    </p>
+                  )}
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
