@@ -137,9 +137,13 @@ export function Outreach() {
 
   return (
     <>
-      {/* Header / intro */}
-      <section className="py-24 md:py-32 bg-background">
-        <div className="container mx-auto px-6 md:px-12 max-w-4xl">
+      {/* Header / intro — optional background image */}
+      <section
+        className="relative bg-background"
+        style={c.bg_image ? { backgroundImage: `url(${c.bg_image})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+      >
+        {c.bg_image && <div className="absolute inset-0 bg-background/55 pointer-events-none" />}
+        <div className={`container mx-auto px-6 md:px-12 max-w-4xl relative z-10 ${c.bg_image ? 'py-24 md:py-32' : 'py-24 md:py-32'}`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

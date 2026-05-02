@@ -17,7 +17,13 @@ export function AdminOutreachEngagement() {
             <ContentEditor
               section="outreach_page"
               fields={[
-                { key: 'intro', label: 'Page Intro', type: 'textarea' },
+                {
+                key: 'bg_image',
+                label: 'Section Background Image',
+                type: 'image',
+                imageHint: 'Optional full-width photo shown behind the Outreach header.',
+              },
+              { key: 'intro', label: 'Page Intro', type: 'textarea' },
                 { key: 'subintro', label: 'Secondary Intro (optional)', type: 'textarea' },
                 { key: 'engagement_text', label: 'Public Engagement Description', type: 'textarea' },
                 { key: 'writing_text', label: 'Science Writing Description', type: 'textarea' },

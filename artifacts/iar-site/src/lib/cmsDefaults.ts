@@ -50,6 +50,7 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     contact_cta: 'To express interest, please email iar32@cornell.edu with your CV, a brief statement of research interests, and any relevant experience.',
   },
   outreach_page: {
+    bg_image: '',
     intro: 'Sharing science with broader audiences is central to my work. Through public engagement and writing, I aim to make ecology and conservation accessible, relevant, and inspiring to communities beyond academia.',
     subintro: 'From classroom visits and community workshops to popular articles and podcasts, I enjoy translating research into stories that connect people with the natural world around them.',
     engagement_text: 'A selection of talks, workshops, citizen-science initiatives, and community events I have led or contributed to.',
