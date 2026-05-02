@@ -7,10 +7,11 @@ import { NetworkEditor } from './NetworkEditor';
 interface FieldDef {
   key: string;
   label: string;
-  type?: 'text' | 'textarea' | 'url' | 'image' | 'gallery' | 'network';
+  type?: 'text' | 'textarea' | 'url' | 'image' | 'gallery' | 'network' | 'select';
   placeholder?: string;
   imageFallback?: string;
   imageHint?: string;
+  options?: string[];
 }
 
 interface ListEditorProps {
@@ -51,6 +52,20 @@ function FieldInput({ field, value, onChange }: { field: FieldDef; value: string
         value={value}
         onChange={onChange}
       />
+    );
+  }
+  if (field.type === 'select') {
+    return (
+      <select
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+      >
+        <option value="">— Select a theme —</option>
+        {(field.options ?? []).map(opt => (
+          <option key={opt} value={opt}>{opt}</option>
+        ))}
+      </select>
     );
   }
   if (field.type === 'textarea') {

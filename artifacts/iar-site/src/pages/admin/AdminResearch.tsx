@@ -69,7 +69,7 @@ export function AdminResearch() {
                 imageFallback: '/images/spectrogram-art.png',
                 imageHint: 'Photo representing this research project.',
               },
-              { key: 'theme', label: 'Research Theme', placeholder: 'Urban Ecology / Bioacoustics / Plant-Animal Interactions / Human-Nature Dynamics' },
+              { key: 'theme', label: 'Research Theme', type: 'select', options: ['Urban Ecology', 'Bioacoustics', 'Plant and Animal Interactions', 'Human Nature Interaction'] },
               { key: 'status', label: 'Status', placeholder: 'Current Project / Past Project / Doctoral Research' },
               { key: 'title', label: 'Project Title', placeholder: 'Urban Campus Soundscape Project' },
               { key: 'location', label: 'Location / Institution', placeholder: 'Cornell University, Ithaca NY' },
