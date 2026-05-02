@@ -160,11 +160,11 @@ export function FieldWorkPage() {
                         className="group block w-full text-left focus:outline-none focus:ring-2 focus:ring-primary/60 rounded-lg overflow-hidden"
                         aria-label={`Open photo: ${photo.caption || 'field work photo'}`}
                       >
-                        <div className="overflow-hidden rounded-lg bg-secondary/30 border border-secondary/60">
+                        <div className="overflow-hidden rounded-lg bg-secondary/30 border border-secondary/60 aspect-[4/3]">
                           <img
                             src={photo.image}
                             alt={photo.caption || 'Field work photo'}
-                            className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                             loading="lazy"
                           />
                         </div>
