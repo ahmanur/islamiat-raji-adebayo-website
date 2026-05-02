@@ -64,25 +64,30 @@ export function Research() {
   const bgImage = c.bg_image;
 
   return (
-    <section
-      id="research"
-      className="py-24 md:py-32 relative"
-      style={bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' } : undefined}
-    >
-      {bgImage && <div className="absolute inset-0 bg-background/85 pointer-events-none" />}
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
+    <section id="research" className="pt-24 md:pt-32 pb-24 md:pb-32">
 
-        <motion.div
-          className="max-w-3xl mb-16 md:mb-20"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Research</h2>
-          <div className="w-12 h-[2px] bg-primary mb-8" />
-          <p className="text-xl text-foreground/80 font-light leading-relaxed">{c.intro}</p>
-        </motion.div>
+      {/* Header band — optional background image */}
+      <div
+        className="relative mb-16 md:mb-20"
+        style={bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+      >
+        {bgImage && <div className="absolute inset-0 bg-background/80 pointer-events-none" />}
+        <div className={`container mx-auto px-6 md:px-12 relative z-10 ${bgImage ? 'py-16 md:py-24' : ''}`}>
+          <motion.div
+            className="max-w-3xl"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Research</h2>
+            <div className="w-12 h-[2px] bg-primary mb-8" />
+            <p className="text-xl text-foreground/80 font-light leading-relaxed">{c.intro}</p>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-6 md:px-12">
 
         {/* Theme selector cards */}
         <p className="text-foreground/60 text-sm mb-6 italic">Please click on each of the themes below to learn more about my research.</p>
