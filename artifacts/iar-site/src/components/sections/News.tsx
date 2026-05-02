@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { getList } from '@/lib/cms';
 import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
-type NewsItem = { date: string; title: string; description: string };
+type NewsItem = { date: string; title: string; description: string; image?: string };
 
 export function News() {
   const [news, setNews] = useState<NewsItem[]>(LIST_DEFAULTS.news_items as NewsItem[]);
@@ -44,6 +44,13 @@ export function News() {
                   {item.date}
                 </span>
                 <h3 className="text-xl font-medium text-foreground mb-3 leading-snug">{item.title}</h3>
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="mb-4 rounded-lg w-full max-w-md object-cover border border-border/40"
+                  />
+                )}
                 <p className="text-foreground/70 leading-relaxed">{item.description}</p>
               </motion.div>
             ))}

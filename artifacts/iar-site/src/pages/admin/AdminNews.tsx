@@ -17,6 +17,7 @@ export function AdminNews() {
               { key: 'date', label: 'Date', placeholder: 'January 2025' },
               { key: 'title', label: 'Title', placeholder: 'News headline' },
               { key: 'description', label: 'Description', type: 'textarea' },
+              { key: 'image', label: 'Image (optional)', type: 'image', imageHint: 'Upload an image related to this news entry.' },
             ]}
             defaultItems={LIST_DEFAULTS.news_items}
           />
