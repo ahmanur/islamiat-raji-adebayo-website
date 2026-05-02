@@ -112,7 +112,7 @@ function ResourcesSection() {
   }, [resources]);
 
   return (
-    <section id="resources" className="py-20 md:py-28 bg-secondary/30 border-t border-secondary/60">
+    <section id="resources" className="pt-10 md:pt-14 pb-20 md:pb-24 bg-secondary/30 border-t border-secondary/60">
       <div className="container mx-auto px-6 md:px-12">
         <motion.div
           className="max-w-3xl mb-10 md:mb-14"
@@ -237,7 +237,7 @@ function ResourcesSection() {
 export function OpportunitiesPage() {
   return (
     <div className="pt-20 min-h-screen">
-      <section className="py-24 md:py-32">
+      <section className="pt-24 md:pt-32 pb-12 md:pb-16">
         <div className="container mx-auto px-6 md:px-12">
           <motion.div
             className="max-w-3xl mb-16 md:mb-24"
