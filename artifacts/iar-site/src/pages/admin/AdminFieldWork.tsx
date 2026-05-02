@@ -28,15 +28,15 @@ export function AdminFieldWork() {
               fields={[
                 {
                   key: 'bg_image',
-                  label: 'Header Background Image',
+                  label: 'Header Background Image (optional)',
                   type: 'image',
-                  imageHint: 'Wide landscape photo shown behind the page title.',
+                  imageHint: 'Optional wide landscape photo shown behind the title. Leave empty for the plain text-only header style.',
                 },
                 {
                   key: 'intro',
-                  label: 'Header Intro Text (optional)',
+                  label: 'Intro Paragraph',
                   type: 'textarea',
-                  placeholder: 'Optional short subtitle shown under the title.',
+                  placeholder: 'Short paragraph introducing your fieldwork.',
                 },
               ]}
               defaults={CONTENT_DEFAULTS.field_work_page}

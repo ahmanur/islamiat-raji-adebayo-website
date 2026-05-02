@@ -122,39 +122,36 @@ export function FieldWorkPage() {
     );
   };
 
+  const bgImage = c.bg_image;
+
   return (
-    <div className="min-h-screen">
-      {/* Hero with background image and overlay title */}
-      <section
-        className="relative h-[55vh] min-h-[360px] md:h-[65vh] md:min-h-[460px] flex items-center justify-center overflow-hidden"
+    <div className="pt-20 min-h-screen">
+      {/* Header band — optional background image, otherwise plain title + intro */}
+      <div
+        className="relative"
+        style={bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
       >
-        {c.bg_image && (
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${c.bg_image})` }}
-            aria-hidden="true"
-          />
-        )}
-        <div className="absolute inset-0 bg-black/35" aria-hidden="true" />
-        <motion.div
-          className="relative z-10 px-6 text-center"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          <h1 className="font-serif text-5xl md:text-7xl text-white drop-shadow-lg tracking-tight">
-            Field Work
-          </h1>
-          {c.intro && (
-            <p className="mt-6 max-w-2xl mx-auto text-white/90 text-base md:text-lg leading-relaxed drop-shadow">
-              {c.intro}
-            </p>
-          )}
-        </motion.div>
-      </section>
+        {bgImage && <div className="absolute inset-0 bg-background/65 pointer-events-none" aria-hidden="true" />}
+        <div className={`container mx-auto px-6 md:px-12 relative z-10 ${bgImage ? 'py-20 md:py-28' : 'pt-12 md:pt-16 pb-4'}`}>
+          <motion.div
+            className="max-w-3xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Field Work</h1>
+            <div className="w-12 h-[2px] bg-primary mb-8" />
+            {c.intro && (
+              <p className="text-lg md:text-xl text-foreground/80 font-light leading-relaxed">
+                {c.intro}
+              </p>
+            )}
+          </motion.div>
+        </div>
+      </div>
 
       {/* Regions */}
-      <section className="py-16 md:py-24 bg-background">
+      <section className="pt-12 md:pt-16 pb-16 md:pb-24 bg-background">
         <div className="container mx-auto px-6 md:px-12 max-w-5xl space-y-20 md:space-y-24">
           {regions.length === 0 && otherPhotos.length === 0 ? (
             <p className="text-foreground/50 italic text-center">No field work photos yet.</p>

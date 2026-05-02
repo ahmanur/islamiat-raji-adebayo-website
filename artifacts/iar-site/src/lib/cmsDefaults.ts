@@ -57,8 +57,8 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     writing_text: 'Selected popular articles, blog posts, and op-eds written for general audiences.',
   },
   field_work_page: {
-    bg_image: '/images/forest-bg.png',
-    intro: '',
+    bg_image: '',
+    intro: 'My research is deeply grounded in fieldwork — in the quiet patience of listening to forest edges at dawn, in the careful documentation of birds foraging on fruiting trees, and in the collaborative effort of training communities to listen and record alongside me.',
   },
 };
 
