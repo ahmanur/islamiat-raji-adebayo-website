@@ -38,7 +38,7 @@ export function Mentorship() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="font-serif text-4xl md:text-5xl mb-6">People & Teachings</h2>
+              <h2 className="font-serif text-4xl md:text-5xl mb-6">People </h2>
               <div className="w-12 h-[2px] bg-primary mb-8"></div>
 
               <div className="prose prose-lg prose-p:text-background/80 prose-p:leading-relaxed max-w-none mb-10">
@@ -89,7 +89,6 @@ export function Mentorship() {
           </div>
         </div>
       </section>
-
       {events.length > 0 && (
         <section className="py-24 md:py-32 bg-background">
           <div className="container mx-auto px-6 md:px-12">
