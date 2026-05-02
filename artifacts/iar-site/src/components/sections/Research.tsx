@@ -95,29 +95,32 @@ export function Research() {
                     : 'border-secondary/80 hover:border-primary/40 hover:shadow-md'
                 }`}
               >
-                {theme.image ? (
-                  <div className="aspect-[16/9] overflow-hidden">
-                    <img
-                      src={theme.image}
-                      alt={theme.title}
-                      className={`w-full h-full object-cover transition-transform duration-500 ${isActive ? 'scale-105' : 'group-hover:scale-105'}`}
-                    />
-                  </div>
-                ) : (
-                  <div className={`h-28 flex items-center justify-center transition-colors duration-300 ${isActive ? 'bg-primary/10' : 'bg-secondary/50'}`}>
-                    <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-sm transition-all duration-300 ${isActive ? 'bg-primary text-primary-foreground' : 'bg-background text-primary'}`}>
-                      {ICON_MAP[theme.icon] ?? <Mic className="w-6 h-6" />}
-                    </div>
-                  </div>
-                )}
-                <div className={`p-5 transition-colors duration-300 ${isActive ? 'bg-primary/5' : 'bg-secondary/30'}`}>
+                {/* Top area: image background (if set) with icon always centred on top */}
+                <div className={`h-28 relative flex items-center justify-center overflow-hidden transition-colors duration-300 ${!theme.image ? (isActive ? 'bg-primary/10' : 'bg-secondary/50') : ''}`}>
                   {theme.image && (
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-3 shadow-sm transition-all duration-300 ${isActive ? 'bg-primary text-primary-foreground' : 'bg-background text-primary'}`}>
-                      <span className="scale-75">{ICON_MAP[theme.icon] ?? <Mic className="w-6 h-6" />}</span>
-                    </div>
+                    <>
+                      <img
+                        src={theme.image}
+                        alt={theme.title}
+                        className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 ${isActive ? 'scale-105' : ''}`}
+                      />
+                      <div className="absolute inset-0 bg-black/30" />
+                    </>
                   )}
+                  <div className={`relative z-10 w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${
+                    theme.image
+                      ? 'bg-white/90 text-primary'
+                      : isActive
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-background text-primary'
+                  }`}>
+                    {ICON_MAP[theme.icon] ?? <Mic className="w-6 h-6" />}
+                  </div>
+                </div>
+
+                <div className={`p-5 transition-colors duration-300 ${isActive ? 'bg-primary/5' : 'bg-secondary/30'}`}>
                   <h3 className="font-serif text-lg text-foreground mb-2">{theme.title}</h3>
-                  <p className="text-foreground/65 text-sm leading-relaxed line-clamp-3">{theme.description}</p>
+                  <p className="text-foreground/65 text-sm leading-relaxed line-clamp-2">{theme.description}</p>
                   {isActive && (
                     <div className="mt-3 flex items-center gap-1 text-primary text-xs font-medium">
                       <span>View projects</span>
