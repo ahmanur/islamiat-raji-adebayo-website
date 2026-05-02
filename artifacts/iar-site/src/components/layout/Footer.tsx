@@ -1,9 +1,37 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 import { FaLinkedin, FaResearchgate, FaGoogle } from 'react-icons/fa';
-
+import { getList, getContent } from '@/lib/cms';
+import { LIST_DEFAULTS, CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
 
 export function Footer() {
+  const [affiliations, setAffiliations] = useState(
+    LIST_DEFAULTS.affiliations.map(a => a.name)
+  );
+  const [contact, setContact] = useState({
+    email: CONTENT_DEFAULTS.outreach.email,
+    location: CONTENT_DEFAULTS.outreach.location,
+    linkedin: CONTENT_DEFAULTS.outreach.linkedin,
+    researchgate: CONTENT_DEFAULTS.outreach.researchgate ?? '',
+    google_scholar: CONTENT_DEFAULTS.outreach.google_scholar ?? '',
+  });
+
+  useEffect(() => {
+    getList('affiliations').then(rows => {
+      if (rows.length > 0) setAffiliations(rows.map(r => r.data.name).filter(Boolean));
+    });
+    getContent('outreach').then(data => {
+      if (Object.keys(data).length > 0) {
+        setContact(prev => ({
+          email: data.email ?? prev.email,
+          location: data.location ?? prev.location,
+          linkedin: data.linkedin ?? prev.linkedin,
+          researchgate: data.researchgate ?? prev.researchgate,
+          google_scholar: data.google_scholar ?? prev.google_scholar,
+        }));
+      }
+    });
+  }, []);
+
   return (
     <footer className="bg-foreground text-background py-16 md:py-24 border-t border-primary/20">
       <div className="container mx-auto px-6 md:px-12">
@@ -14,37 +42,51 @@ export function Footer() {
               Advancing conservation through bioacoustics, urban ecology, and community engagement. Exploring the intersections of sound, biodiversity, and human well-being.
             </p>
             <div className="flex gap-4">
-              <a href="https://www.linkedin.com/in/islamiat-raji-adebayo-ph-d-21931387/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-background/10 hover:bg-primary hover:text-primary-foreground transition-all duration-300" aria-label="LinkedIn">
-                <FaLinkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="p-2 rounded-full bg-background/10 hover:bg-primary hover:text-primary-foreground transition-all duration-300" aria-label="ResearchGate">
-                <FaResearchgate className="w-5 h-5" />
-              </a>
-              <a href="#" className="p-2 rounded-full bg-background/10 hover:bg-primary hover:text-primary-foreground transition-all duration-300" aria-label="Google Scholar">
-                <FaGoogle className="w-5 h-5" />
-              </a>
+              {contact.linkedin && (
+                <a href={contact.linkedin} target="_blank" rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-background/10 hover:bg-primary hover:text-primary-foreground transition-all duration-300" aria-label="LinkedIn">
+                  <FaLinkedin className="w-5 h-5" />
+                </a>
+              )}
+              {contact.researchgate && (
+                <a href={contact.researchgate} target="_blank" rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-background/10 hover:bg-primary hover:text-primary-foreground transition-all duration-300" aria-label="ResearchGate">
+                  <FaResearchgate className="w-5 h-5" />
+                </a>
+              )}
+              {contact.google_scholar && (
+                <a href={contact.google_scholar} target="_blank" rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-background/10 hover:bg-primary hover:text-primary-foreground transition-all duration-300" aria-label="Google Scholar">
+                  <FaGoogle className="w-5 h-5" />
+                </a>
+              )}
             </div>
           </div>
-          
+
           <div>
             <h4 className="font-medium mb-6 text-primary tracking-wide uppercase text-xs">Affiliations</h4>
             <ul className="space-y-3 text-sm text-background/70">
-              <li>K. Lisa Yang Center for Conservation Bioacoustics</li>
-              <li>Cornell Lab of Ornithology</li>
-              <li>Society for Conservation Biology</li>
-              <li>British Ecological Society</li>
+              {affiliations.map((name, i) => (
+                <li key={i}>{name}</li>
+              ))}
             </ul>
           </div>
-          
+
           <div>
             <h4 className="font-medium mb-6 text-primary tracking-wide uppercase text-xs">Contact</h4>
             <ul className="space-y-3 text-sm text-background/70">
-              <li><a href="mailto:iar32@cornell.edu" className="hover:text-primary transition-colors">iar32@cornell.edu</a></li>
-              <li>Ithaca, New York</li>
+              {contact.email && (
+                <li>
+                  <a href={`mailto:${contact.email}`} className="hover:text-primary transition-colors">
+                    {contact.email}
+                  </a>
+                </li>
+              )}
+              {contact.location && <li>{contact.location}</li>}
             </ul>
           </div>
         </div>
-        
+
         <div className="mt-16 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-background/50">
           <p>© {new Date().getFullYear()} Islamiat Abidemi Raji. All rights reserved.</p>
           <p>Designed by IBK Technologies</p>
