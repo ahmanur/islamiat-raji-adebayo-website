@@ -140,10 +140,6 @@ export function TeachingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="flex items-center gap-3 mb-6">
-              <BookOpen className="w-6 h-6 text-primary" />
-              <span className="text-primary text-sm font-medium uppercase tracking-widest">Teaching</span>
-            </div>
             <h1 className="font-serif text-5xl md:text-6xl text-foreground mb-6">Teaching</h1>
             <div className="w-12 h-[2px] bg-primary mb-8" />
             {intro ? (
