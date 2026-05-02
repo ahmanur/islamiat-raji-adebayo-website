@@ -209,17 +209,6 @@ export function Mentorship() {
       {(collaborators.length > 0 || mentees.length > 0 || funding.length > 0) && (
         <section className="py-24 md:py-32 bg-background">
           <div className="container mx-auto px-6 md:px-12 max-w-4xl">
-            <motion.div
-              className="mb-16"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">Our People</h2>
-              <div className="w-12 h-[2px] bg-primary" />
-            </motion.div>
-
             <SubSection title="Collaborators" items={collaborators} />
             <SubSection title="Mentees" items={mentees} />
             <SubSection title="Funding" items={funding} />
