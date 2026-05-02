@@ -52,11 +52,6 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs font-medium tracking-widest mb-6 uppercase border border-white/20">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                {c.badge}
-              </div>
-
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.1] text-white mb-6">
                 {c.headline}<br />
                 <span className="text-primary italic">{c.headline_accent}</span>
