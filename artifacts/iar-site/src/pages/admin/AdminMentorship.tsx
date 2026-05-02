@@ -16,6 +16,12 @@ const PERSON_FIELDS = [
   { key: 'role', label: 'Role / Position', placeholder: 'PhD Student' },
   { key: 'institution', label: 'Institution', placeholder: 'Cornell University' },
   { key: 'description', label: 'Bio / Description', type: 'textarea' as const },
+  { key: 'email', label: 'Email Address', placeholder: 'name@university.edu' },
+  {
+    key: 'links',
+    label: 'Profile Links (comma-separated "Label|URL" pairs)',
+    placeholder: 'CV|https://..., Google Scholar|https://..., Twitter/X|https://...',
+  },
 ];
 
 export function AdminMentorship() {

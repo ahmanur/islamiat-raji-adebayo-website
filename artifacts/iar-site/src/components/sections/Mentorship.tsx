@@ -1,41 +1,94 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, BookOpen, HeartHandshake } from 'lucide-react';
+import { Users, BookOpen, HeartHandshake, Mail, ExternalLink } from 'lucide-react';
 import { getContent, getList } from '@/lib/cms';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
 const DC = CONTENT_DEFAULTS.mentorship;
 type RoleItem = { title: string; description: string };
-type PersonItem = { image: string; name: string; role: string; institution: string; description: string };
+type PersonItem = {
+  image: string;
+  name: string;
+  role: string;
+  institution: string;
+  description: string;
+  email: string;
+  links: string; // "Label|URL, Label|URL, ..."
+};
 
 const ROLE_ICONS = [Users, BookOpen];
 
+function parseLinks(raw: string): { label: string; url: string }[] {
+  if (!raw?.trim()) return [];
+  return raw
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean)
+    .map(pair => {
+      const idx = pair.indexOf('|');
+      if (idx === -1) return null;
+      return { label: pair.slice(0, idx).trim(), url: pair.slice(idx + 1).trim() };
+    })
+    .filter(Boolean) as { label: string; url: string }[];
+}
+
 function PersonCard({ person, index }: { person: PersonItem; index: number }) {
+  const links = parseLinks(person.links);
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="flex flex-col items-center text-center group"
+      className="flex gap-7 items-start py-8 border-b border-secondary/60 last:border-0"
     >
-      <div className="w-36 h-36 rounded-full overflow-hidden mb-5 border-2 border-secondary/80 group-hover:border-primary/50 transition-colors duration-300 shadow-md bg-secondary/30 flex-shrink-0">
+      {/* Photo */}
+      <div className="w-36 h-36 flex-shrink-0 overflow-hidden rounded-lg border border-secondary/60 bg-secondary/30 shadow-sm">
         {person.image ? (
           <img src={person.image} alt={person.name} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary/40">
-            <Users className="w-12 h-12" />
+          <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary/30">
+            <Users className="w-10 h-10" />
           </div>
         )}
       </div>
-      <h3 className="font-serif text-lg text-foreground mb-1 leading-snug">{person.name}</h3>
-      <p className="text-primary text-xs font-medium uppercase tracking-wider mb-0.5">{person.role}</p>
-      {person.institution && (
-        <p className="text-foreground/50 text-xs mb-3">{person.institution}</p>
-      )}
-      {person.description && (
-        <p className="text-foreground/65 text-sm leading-relaxed max-w-xs">{person.description}</p>
-      )}
+
+      {/* Text */}
+      <div className="flex-1 min-w-0">
+        <h3 className="font-semibold text-foreground text-base leading-snug mb-0.5">
+          {person.name}
+          {person.role && <span className="font-normal text-foreground/80"> – {person.role}</span>}
+        </h3>
+        {person.institution && (
+          <p className="text-foreground/60 text-sm mb-3">{person.institution}</p>
+        )}
+        {person.description && (
+          <p className="text-foreground/70 text-sm leading-relaxed mb-3">{person.description}</p>
+        )}
+        {person.email && (
+          <p className="text-foreground/55 text-sm mb-2 flex items-center gap-1.5">
+            <Mail className="w-3.5 h-3.5 flex-shrink-0" />
+            <a href={`mailto:${person.email}`} className="hover:text-primary transition-colors">{person.email}</a>
+          </p>
+        )}
+        {links.length > 0 && (
+          <div className="flex flex-wrap items-center gap-x-2 text-sm">
+            {links.map((link, i) => (
+              <React.Fragment key={link.label + i}>
+                {i > 0 && <span className="text-foreground/30">|</span>}
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/70 transition-colors flex items-center gap-0.5"
+                >
+                  {link.label}
+                </a>
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 }
@@ -45,7 +98,7 @@ function SubSection({ title, items }: { title: string; items: PersonItem[] }) {
   return (
     <div className="mb-20">
       <motion.div
-        className="mb-12"
+        className="mb-6"
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
@@ -54,7 +107,7 @@ function SubSection({ title, items }: { title: string; items: PersonItem[] }) {
         <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-3">{title}</h3>
         <div className="w-8 h-[2px] bg-primary" />
       </motion.div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
+      <div className="flex flex-col">
         {items.map((person, i) => (
           <PersonCard key={person.name + i} person={person} index={i} />
         ))}
@@ -155,7 +208,7 @@ export function Mentorship() {
       {/* ── People sub-sections ── */}
       {(collaborators.length > 0 || mentees.length > 0 || funding.length > 0) && (
         <section className="py-24 md:py-32 bg-background">
-          <div className="container mx-auto px-6 md:px-12">
+          <div className="container mx-auto px-6 md:px-12 max-w-4xl">
             <motion.div
               className="mb-16"
               initial={{ opacity: 0, y: 20 }}
