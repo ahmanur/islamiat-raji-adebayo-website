@@ -36,6 +36,12 @@ export function AdminResearch() {
             itemLabel="Theme"
             addAtTop
             fields={[
+              {
+                key: 'image',
+                label: 'Theme Image',
+                type: 'image',
+                imageHint: 'Optional photo shown at the top of the theme card.',
+              },
               { key: 'icon', label: 'Icon Name', placeholder: 'mic / trees / globe / leaf / heart / mountain' },
               { key: 'title', label: 'Theme Title', placeholder: 'Bioacoustics' },
               { key: 'description', label: 'Description', type: 'textarea' },
@@ -63,6 +69,7 @@ export function AdminResearch() {
                 imageFallback: '/images/spectrogram-art.png',
                 imageHint: 'Photo representing this research project.',
               },
+              { key: 'theme', label: 'Research Theme', placeholder: 'Urban Ecology / Bioacoustics / Plant-Animal Interactions / Human-Nature Dynamics' },
               { key: 'status', label: 'Status', placeholder: 'Current Project / Past Project / Doctoral Research' },
               { key: 'title', label: 'Project Title', placeholder: 'Urban Campus Soundscape Project' },
               { key: 'location', label: 'Location / Institution', placeholder: 'Cornell University, Ithaca NY' },

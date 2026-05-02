@@ -64,14 +64,15 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
     { name: 'Stable Planet Alliance' },
   ],
   research_themes: [
-    { icon: 'trees', title: 'Urban Ecology', description: 'Investigating how rapid urbanization shapes bird communities and alters the ecological processes that sustain biodiversity in cities.' },
-    { icon: 'mic', title: 'Bioacoustics', description: 'Using sound as a non-invasive lens to monitor biodiversity, revealing hidden ecological patterns in urban environments.' },
-    { icon: 'leaf', title: 'Plant-Animal Interactions', description: 'Studying the mutualistic relationships between plants and animals — particularly frugivory and seed dispersal — and how land-use change disrupts these critical ecological networks.' },
-    { icon: 'globe', title: 'Human-Nature Dynamics', description: 'Exploring the relationship between people and nature, emphasizing community engagement for sustainable cities.' },
+    { icon: 'trees', title: 'Urban Ecology', description: 'Investigating how rapid urbanization shapes bird communities and alters the ecological processes that sustain biodiversity in cities.', image: '' },
+    { icon: 'mic', title: 'Bioacoustics', description: 'Using sound as a non-invasive lens to monitor biodiversity, revealing hidden ecological patterns in urban environments.', image: '' },
+    { icon: 'leaf', title: 'Plant-Animal Interactions', description: 'Studying the mutualistic relationships between plants and animals — particularly frugivory and seed dispersal — and how land-use change disrupts these critical ecological networks.', image: '' },
+    { icon: 'globe', title: 'Human-Nature Dynamics', description: 'Exploring the relationship between people and nature, emphasizing community engagement for sustainable cities.', image: '' },
   ],
   research_projects: [
     {
       image: '',
+      theme: 'Bioacoustics',
       status: 'Current Project',
       title: 'Urban Campus Soundscape Project',
       location: 'Cornell University, Ithaca NY',
@@ -87,6 +88,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
     },
     {
       image: '',
+      theme: 'Urban Ecology',
       status: 'Past Project',
       title: 'Multi-country Urban Bird Monitoring',
       location: "Queen's University, Canada",
@@ -95,6 +97,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
     },
     {
       image: '',
+      theme: 'Plant-Animal Interactions',
       status: 'Doctoral Research',
       title: 'Frugivory & Seed Dispersal in Urban Mosaics',
       location: 'University of KwaZulu-Natal, South Africa',
