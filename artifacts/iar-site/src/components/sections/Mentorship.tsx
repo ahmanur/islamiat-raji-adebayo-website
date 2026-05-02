@@ -43,7 +43,7 @@ function PersonCard({ person, index }: { person: PersonItem; index: number }) {
       className="flex gap-7 items-start py-8 border-b border-secondary/60 last:border-0"
     >
       {/* Photo */}
-      <div className="w-36 h-36 flex-shrink-0 overflow-hidden rounded-lg border border-secondary/60 bg-secondary/30 shadow-sm">
+      <div className="w-52 h-52 flex-shrink-0 overflow-hidden rounded-lg border border-secondary/60 bg-secondary/30 shadow-sm">
         {person.image ? (
           <img src={person.image} alt={person.name} className="w-full h-full object-cover" />
         ) : (
