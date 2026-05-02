@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
-import { SpectrogramWave } from '@/components/ui/SpectrogramWave';
+
 
 const navLinks = [
   { name: 'Home',         href: '/' },
@@ -54,7 +54,6 @@ export function Navbar() {
           className="flex items-center gap-2.5 group shrink-0"
           aria-label="Dr. Islamiat Raji-Adebayo — home"
         >
-          <SpectrogramWave />
           <img
             src="/images/portrait.jpg"
             alt="Dr. Islamiat Raji-Adebayo"
