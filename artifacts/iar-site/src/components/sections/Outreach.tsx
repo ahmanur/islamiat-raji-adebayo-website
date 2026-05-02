@@ -16,7 +16,6 @@ type EngagementItem = {
 };
 
 type WritingItem = {
-  image?: string;
   title: string;
   publication: string;
   date: string;
@@ -77,17 +76,8 @@ function WritingCard({ item, index }: { item: WritingItem; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 py-8 border-b border-secondary/60 last:border-0"
+      className="py-8 border-b border-secondary/60 last:border-0"
     >
-      <div className="w-full md:w-[200px] aspect-[4/3] overflow-hidden rounded-lg border border-secondary/60 bg-secondary/30">
-        {item.image ? (
-          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary/30">
-            <PenLine className="w-10 h-10" />
-          </div>
-        )}
-      </div>
       <div className="min-w-0">
         <h3 className="font-semibold text-foreground text-lg leading-snug mb-2">{item.title}</h3>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-foreground/60 text-sm mb-3">

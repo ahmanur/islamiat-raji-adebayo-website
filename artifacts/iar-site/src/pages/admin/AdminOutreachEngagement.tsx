@@ -70,7 +70,6 @@ export function AdminOutreachEngagement() {
                 { key: 'date', label: 'Date', placeholder: '2024' },
                 { key: 'description', label: 'Description / Excerpt', type: 'textarea' },
                 { key: 'url', label: 'Link', type: 'url', placeholder: 'https://…' },
-                { key: 'image', label: 'Image (optional)', type: 'image', imageHint: 'Upload a related image.' },
               ]}
               defaultItems={LIST_DEFAULTS.science_writing}
             />

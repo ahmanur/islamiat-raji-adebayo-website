@@ -83,7 +83,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
   ],
   research_projects: [
     {
-      image: '',
       theme: 'Bioacoustics',
       status: 'Current Project',
       title: 'Urban Campus Soundscape Project',
@@ -99,7 +98,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       }),
     },
     {
-      image: '',
       theme: 'Urban Ecology',
       status: 'Past Project',
       title: 'Multi-country Urban Bird Monitoring',
@@ -108,7 +106,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       methods: 'Passive acoustic recorders, Community science, Comparative ecology',
     },
     {
-      image: '',
       theme: 'Plant-Animal Interactions',
       status: 'Doctoral Research',
       title: 'Frugivory & Seed Dispersal in Urban Mosaics',
@@ -119,7 +116,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
   ],
   field_work_projects: [
     {
-      image: '',
       status: 'Doctoral Fieldwork',
       title: 'Frugivore & Fig Tree Surveys — KwaZulu-Natal',
       location: 'Durban, South Africa',
@@ -127,7 +123,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       methods: 'Focal-tree watches, Transect surveys, Video recording, Seed viability testing',
     },
     {
-      image: '',
       status: 'Past Fieldwork',
       title: 'Acoustic Recorder Deployment — Global Urban Transects',
       location: 'Brazil · Canada · France · Kenya · Senegal',
@@ -135,7 +130,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       methods: 'Passive acoustic recorders, Site selection surveys, Community science protocols',
     },
     {
-      image: '',
       status: 'Active Fieldwork',
       title: 'Campus Bird Soundscape Monitoring — Cornell',
       location: 'Ithaca, NY, USA',
@@ -193,7 +187,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
   opportunities_list: [],
   teaching_courses: [
     {
-      image: '',
       status: 'Current',
       title: 'Urban Ecology and Biodiversity',
       code: 'NTRES 4850',
@@ -204,7 +197,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       syllabus_url: '',
     },
     {
-      image: '',
       status: 'Past',
       title: 'Conservation Biology',
       code: 'BIOL 3200',
@@ -215,7 +207,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       syllabus_url: '',
     },
     {
-      image: '',
       status: 'Past',
       title: 'Field Ornithology Training Workshop',
       code: '',
@@ -237,7 +228,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
   ],
   outreach_engagement: [
     {
-      image: '',
       title: 'Falling Walls Female Science Talent — Public Lecture',
       date: '2024',
       venue: 'Berlin, Germany',
@@ -245,7 +235,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: 'https://falling-walls.com/people/islamiat-raji-adebayo/',
     },
     {
-      image: '',
       title: 'Campus Biodiversity Network — Community Science Launch',
       date: '2023–present',
       venue: 'Brazil · Canada · France · Kenya · Senegal · Nigeria · South Africa · USA',
@@ -253,7 +242,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: 'https://www.biodivcampus.org/en/institutions',
     },
     {
-      image: '',
       title: 'IMPACT Fellow — National Postdoctoral Association',
       date: '2024',
       venue: 'Virtual / United States',
@@ -261,7 +249,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: 'https://www.nationalpostdoc.org/page/IMPACT',
     },
     {
-      image: '',
       title: 'Field Ornithology Training Workshop',
       date: '2023',
       venue: 'A.P. Leventis Ornithological Research Institute, Nigeria',
@@ -269,7 +256,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: '',
     },
     {
-      image: '',
       title: 'School & Community Bird Walks',
       date: 'Ongoing',
       venue: 'Ithaca, NY · Durban, South Africa · Ilorin, Nigeria',
@@ -277,7 +263,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: '',
     },
     {
-      image: '',
       title: 'Frugivores & Seed Dispersal Conference — Invited Talk',
       date: '2020',
       venue: 'Corbett, India',
@@ -287,7 +272,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
   ],
   science_writing: [
     {
-      image: '',
       title: 'Listening to cities: how bioacoustics is reshaping urban biodiversity monitoring',
       publication: 'Cornell Lab of Ornithology — All About Birds',
       date: '2025',
@@ -295,7 +279,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: 'https://www.allaboutbirds.org/news/',
     },
     {
-      image: '',
       title: 'Why community science is essential for urban conservation in the Global South',
       publication: 'The Conversation Africa',
       date: '2024',
@@ -303,7 +286,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: 'https://theconversation.com/africa',
     },
     {
-      image: '',
       title: 'Fig trees, fruit bats and the hidden architecture of African cities',
       publication: 'Mongabay',
       date: '2023',
@@ -311,7 +293,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: 'https://news.mongabay.com/',
     },
     {
-      image: '',
       title: 'Birds as barometers: what urban soundscapes tell us about climate and land-use change',
       publication: 'British Ecological Society — Niche Magazine',
       date: '2023',
@@ -319,7 +300,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: 'https://www.britishecologicalsociety.org/membership-community/niche/',
     },
     {
-      image: '',
       title: 'From Ilorin to Ithaca: a Nigerian ecologist’s journey through urban bird research',
       publication: 'Nature Careers',
       date: '2024',
@@ -327,7 +307,6 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       url: 'https://www.nature.com/nature-careers',
     },
     {
-      image: '',
       title: 'How to start a campus bird monitoring program (a practical guide)',
       publication: 'Campus Biodiversity Network Blog',
       date: '2024',
