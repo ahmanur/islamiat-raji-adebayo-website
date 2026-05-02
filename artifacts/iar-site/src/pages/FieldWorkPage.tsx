@@ -6,72 +6,83 @@ import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
 const DC = CONTENT_DEFAULTS.field_work_page;
 
-type GalleryItem = {
+type Photo = { image: string; caption: string };
+
+type FieldworkEntry = {
   region: string;
-  image: string;
   caption: string;
+  photos: Photo[];
 };
 
-type RegionItem = {
-  title: string;
-  description: string;
-};
+type EntryRecord = { id: string; data: FieldworkEntry };
 
-type GalleryEntry = { id: string; data: GalleryItem };
-type RegionEntry = { id: string; data: RegionItem };
+type LightboxRef = { entryId: string; photoIndex: number };
 
 export function FieldWorkPage() {
   const [c, setC] = useState(DC);
-  const [regions, setRegions] = useState<RegionEntry[]>(
-    () => LIST_DEFAULTS.field_work_regions.map((d, i) => ({ id: 'r' + i, data: d as RegionItem }))
+  const [entries, setEntries] = useState<EntryRecord[]>(
+    () => LIST_DEFAULTS.field_work_entries.map((d, i) => ({ id: 'e' + i, data: d as FieldworkEntry }))
   );
-  const [photos, setPhotos] = useState<GalleryEntry[]>(
-    () => LIST_DEFAULTS.field_work_gallery.map((d, i) => ({ id: 'p' + i, data: d as GalleryItem }))
-  );
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [active, setActive] = useState<LightboxRef | null>(null);
 
   useEffect(() => {
     getContent('field_work_page').then(data => {
       if (Object.keys(data).length > 0) setC({ ...DC, ...data });
     });
-    getList('field_work_regions').then(rows => {
-      if (rows.length > 0) setRegions(rows.map(r => ({ id: r.id, data: r.data as RegionItem })));
-    });
-    getList('field_work_gallery').then(rows => {
-      if (rows.length > 0) setPhotos(rows.map(r => ({ id: r.id, data: r.data as GalleryItem })));
+    getList('field_work_entries').then(rows => {
+      if (rows.length > 0) {
+        setEntries(rows.map(r => ({
+          id: r.id,
+          data: {
+            region: (r.data?.region as string) ?? '',
+            caption: (r.data?.caption as string) ?? '',
+            photos: Array.isArray(r.data?.photos) ? (r.data.photos as Photo[]) : [],
+          },
+        })));
+      }
     });
   }, []);
 
-  // Build the flat ordered list of photos used for the lightbox (matches render order).
-  const orderedPhotos = useMemo(() => {
-    const grouped: GalleryEntry[] = [];
-    const seenRegions = new Set<string>();
-    regions.forEach(r => {
-      seenRegions.add(r.data.title);
-      photos.filter(p => p.data.region === r.data.title).forEach(p => grouped.push(p));
+  // Flat ordered photo list across all entries (for lightbox prev/next).
+  const allPhotos = useMemo(() => {
+    const out: Array<{ entryId: string; photoIndex: number; photo: Photo; region: string }> = [];
+    entries.forEach(e => {
+      e.data.photos.forEach((p, i) => {
+        out.push({ entryId: e.id, photoIndex: i, photo: p, region: e.data.region });
+      });
     });
-    // Photos whose region doesn't match any region row — show under "Other" at the end.
-    photos.filter(p => !seenRegions.has(p.data.region)).forEach(p => grouped.push(p));
-    return grouped;
-  }, [regions, photos]);
+    return out;
+  }, [entries]);
 
-  const otherPhotos = useMemo(
-    () => photos.filter(p => !regions.some(r => r.data.title === p.data.region)),
-    [regions, photos]
-  );
+  const activeFlatIndex = useMemo(() => {
+    if (!active) return -1;
+    return allPhotos.findIndex(p => p.entryId === active.entryId && p.photoIndex === active.photoIndex);
+  }, [active, allPhotos]);
 
-  const closeLightbox = useCallback(() => setActiveIndex(null), []);
-  const showPrev = useCallback(
-    () => setActiveIndex(i => (i === null ? null : (i - 1 + orderedPhotos.length) % orderedPhotos.length)),
-    [orderedPhotos.length]
-  );
-  const showNext = useCallback(
-    () => setActiveIndex(i => (i === null ? null : (i + 1) % orderedPhotos.length)),
-    [orderedPhotos.length]
-  );
+  const closeLightbox = useCallback(() => setActive(null), []);
+  const showPrev = useCallback(() => {
+    if (allPhotos.length === 0) return;
+    setActive(curr => {
+      if (!curr) return curr;
+      const idx = allPhotos.findIndex(p => p.entryId === curr.entryId && p.photoIndex === curr.photoIndex);
+      const next = (idx - 1 + allPhotos.length) % allPhotos.length;
+      const ref = allPhotos[next];
+      return { entryId: ref.entryId, photoIndex: ref.photoIndex };
+    });
+  }, [allPhotos]);
+  const showNext = useCallback(() => {
+    if (allPhotos.length === 0) return;
+    setActive(curr => {
+      if (!curr) return curr;
+      const idx = allPhotos.findIndex(p => p.entryId === curr.entryId && p.photoIndex === curr.photoIndex);
+      const next = (idx + 1) % allPhotos.length;
+      const ref = allPhotos[next];
+      return { entryId: ref.entryId, photoIndex: ref.photoIndex };
+    });
+  }, [allPhotos]);
 
   useEffect(() => {
-    if (activeIndex === null) return;
+    if (!active) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') showPrev();
@@ -83,50 +94,15 @@ export function FieldWorkPage() {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', onKey);
     };
-  }, [activeIndex, closeLightbox, showPrev, showNext]);
+  }, [active, closeLightbox, showPrev, showNext]);
 
-  const active = activeIndex !== null ? orderedPhotos[activeIndex] : null;
-
-  // Helper to find index of a photo entry in orderedPhotos
-  const indexOf = (entry: GalleryEntry) => orderedPhotos.findIndex(p => p.id === entry.id);
-
-  const renderRegionPhotos = (regionTitle: string) => {
-    const items = photos.filter(p => p.data.region === regionTitle);
-    if (items.length === 0) return null;
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-        {items.map((entry) => (
-          <button
-            key={entry.id}
-            type="button"
-            onClick={() => setActiveIndex(indexOf(entry))}
-            className="group block w-full text-left focus:outline-none focus:ring-2 focus:ring-primary/60 rounded-lg overflow-hidden"
-            aria-label={`Open photo: ${entry.data.caption || 'field work photo'}`}
-          >
-            <div className="overflow-hidden rounded-lg bg-secondary/30 border border-secondary/60">
-              <img
-                src={entry.data.image}
-                alt={entry.data.caption || 'Field work photo'}
-                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                loading="lazy"
-              />
-            </div>
-            {entry.data.caption && (
-              <p className="mt-3 text-sm text-foreground/70 leading-relaxed">
-                {entry.data.caption}
-              </p>
-            )}
-          </button>
-        ))}
-      </div>
-    );
-  };
+  const activePhoto = activeFlatIndex >= 0 ? allPhotos[activeFlatIndex] : null;
 
   const bgImage = c.bg_image;
 
   return (
     <div className="pt-20 min-h-screen">
-      {/* Header band — optional background image, otherwise plain title + intro */}
+      {/* Header */}
       <div
         className="relative"
         style={bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
@@ -150,77 +126,66 @@ export function FieldWorkPage() {
         </div>
       </div>
 
-      {/* Regions */}
+      {/* Fieldwork entries */}
       <section className="pt-12 md:pt-16 pb-16 md:pb-24 bg-background">
         <div className="container mx-auto px-6 md:px-12 max-w-7xl space-y-20 md:space-y-24">
-          {regions.length === 0 && otherPhotos.length === 0 ? (
-            <p className="text-foreground/50 italic text-center">No field work photos yet.</p>
+          {entries.length === 0 ? (
+            <p className="text-foreground/50 italic text-center">No fieldwork entries yet.</p>
           ) : (
-            <>
-              {regions.map((region, i) => (
-                <motion.div
-                  key={region.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.55, delay: i === 0 ? 0 : 0.05 }}
-                >
+            entries.map((entry, i) => (
+              <motion.div
+                key={entry.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.55, delay: i === 0 ? 0 : 0.05 }}
+              >
+                {entry.data.region && (
                   <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-3">
-                    {region.data.title}
+                    {entry.data.region}
                   </h2>
-                  {region.data.description && (
-                    <p className="text-foreground/75 text-base md:text-lg leading-relaxed mb-8 max-w-3xl">
-                      {region.data.description}
-                    </p>
-                  )}
-                  {renderRegionPhotos(region.data.title)}
-                </motion.div>
-              ))}
-
-              {otherPhotos.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.55 }}
-                >
-                  <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-8">
-                    More from the Field
-                  </h2>
+                )}
+                {entry.data.caption && (
+                  <p className="text-foreground/75 text-base md:text-lg leading-relaxed mb-8 max-w-3xl">
+                    {entry.data.caption}
+                  </p>
+                )}
+                {entry.data.photos.length > 0 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                    {otherPhotos.map(entry => (
+                    {entry.data.photos.map((photo, pi) => (
                       <button
-                        key={entry.id}
+                        key={pi}
                         type="button"
-                        onClick={() => setActiveIndex(indexOf(entry))}
+                        onClick={() => setActive({ entryId: entry.id, photoIndex: pi })}
                         className="group block w-full text-left focus:outline-none focus:ring-2 focus:ring-primary/60 rounded-lg overflow-hidden"
+                        aria-label={`Open photo: ${photo.caption || 'field work photo'}`}
                       >
                         <div className="overflow-hidden rounded-lg bg-secondary/30 border border-secondary/60">
                           <img
-                            src={entry.data.image}
-                            alt={entry.data.caption || 'Field work photo'}
+                            src={photo.image}
+                            alt={photo.caption || 'Field work photo'}
                             className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                             loading="lazy"
                           />
                         </div>
-                        {entry.data.caption && (
+                        {photo.caption && (
                           <p className="mt-3 text-sm text-foreground/70 leading-relaxed">
-                            {entry.data.caption}
+                            {photo.caption}
                           </p>
                         )}
                       </button>
                     ))}
                   </div>
-                </motion.div>
-              )}
-            </>
+                )}
+              </motion.div>
+            ))
           )}
         </div>
       </section>
 
       {/* Lightbox */}
       <AnimatePresence>
-        {active && (
+        {activePhoto && (
           <motion.div
             key="lightbox"
             initial={{ opacity: 0 }}
@@ -242,7 +207,7 @@ export function FieldWorkPage() {
               <X className="w-6 h-6" />
             </button>
 
-            {orderedPhotos.length > 1 && (
+            {allPhotos.length > 1 && (
               <>
                 <button
                   type="button"
@@ -264,7 +229,7 @@ export function FieldWorkPage() {
             )}
 
             <motion.div
-              key={active.id}
+              key={`${activePhoto.entryId}-${activePhoto.photoIndex}`}
               initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.98, opacity: 0 }}
@@ -273,24 +238,24 @@ export function FieldWorkPage() {
               onClick={(e) => e.stopPropagation()}
             >
               <img
-                src={active.data.image}
-                alt={active.data.caption || 'Field work photo'}
+                src={activePhoto.photo.image}
+                alt={activePhoto.photo.caption || 'Field work photo'}
                 className="max-w-full max-h-[78vh] object-contain rounded-lg shadow-2xl"
               />
               <div className="mt-4 max-w-3xl text-center">
-                {active.data.region && (
+                {activePhoto.region && (
                   <p className="text-white/60 text-xs uppercase tracking-wider mb-2">
-                    {active.data.region}
+                    {activePhoto.region}
                   </p>
                 )}
-                {active.data.caption && (
+                {activePhoto.photo.caption && (
                   <p className="text-white/90 text-sm md:text-base leading-relaxed">
-                    {active.data.caption}
+                    {activePhoto.photo.caption}
                   </p>
                 )}
-                {orderedPhotos.length > 1 && (
+                {allPhotos.length > 1 && (
                   <p className="text-white/50 text-xs mt-2">
-                    {(activeIndex ?? 0) + 1} / {orderedPhotos.length}
+                    {activeFlatIndex + 1} / {allPhotos.length}
                   </p>
                 )}
               </div>

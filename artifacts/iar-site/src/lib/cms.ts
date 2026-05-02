@@ -75,14 +75,13 @@ export type ListKey =
   | 'teaching_courses'
   | 'outreach_engagement'
   | 'science_writing'
-  | 'field_work_regions'
-  | 'field_work_gallery';
+  | 'field_work_entries';
 
 export interface ListRecord {
   id: string;
   list_key: ListKey;
   sort_order: number;
-  data: Record<string, string>;
+  data: Record<string, any>;
   updated_at: string;
 }
 
@@ -97,7 +96,7 @@ export async function getList(listKey: ListKey): Promise<ListRecord[]> {
   return data as ListRecord[];
 }
 
-export async function upsertListItem(listKey: ListKey, item: Partial<ListRecord> & { data: Record<string, string> }): Promise<void> {
+export async function upsertListItem(listKey: ListKey, item: Partial<ListRecord> & { data: Record<string, any> }): Promise<void> {
   await writeClient().from('cms_lists').upsert(
     { ...item, list_key: listKey, updated_at: new Date().toISOString() },
     { onConflict: 'id' }
