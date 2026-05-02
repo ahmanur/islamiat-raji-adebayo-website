@@ -15,7 +15,8 @@ export type SectionKey =
   | 'mentorship'
   | 'outreach'
   | 'opportunities'
-  | 'footer';
+  | 'footer'
+  | 'teaching';
 
 export interface ContentRecord {
   id: string;

@@ -41,6 +41,10 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     researchgate: '',
     google_scholar: '',
   },
+  teaching: {
+    bg_image: '',
+    intro: '',
+  },
   opportunities: {
     intro: 'I am always looking for motivated and curious students and collaborators to join my research group. I am particularly interested in working with people who are passionate about urban ecology, bioacoustics, and conservation biology.',
     contact_cta: 'To express interest, please email iar32@cornell.edu with your CV, a brief statement of research interests, and any relevant experience.',

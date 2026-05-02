@@ -117,6 +117,7 @@ export function TeachingPage() {
     LIST_DEFAULTS.teaching_courses.map((d, i) => ({ id: String(i), data: d as Course }))
   );
   const [intro, setIntro] = useState('');
+  const [bgImage, setBgImage] = useState('');
 
   useEffect(() => {
     getList('teaching_courses').then(rows => {
@@ -124,6 +125,7 @@ export function TeachingPage() {
     });
     getContent('teaching').then(data => {
       if (data.intro) setIntro(data.intro);
+      if (data.bg_image) setBgImage(data.bg_image);
     });
   }, []);
 
@@ -132,10 +134,15 @@ export function TeachingPage() {
 
   return (
     <div className="pt-20 min-h-screen">
-      <section className="py-20 md:py-28">
-        <div className="container mx-auto px-6 md:px-12">
+      {/* Header band — optional background image */}
+      <div
+        className="relative mb-16 md:mb-20"
+        style={bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+      >
+        {bgImage && <div className="absolute inset-0 bg-background/55 pointer-events-none" />}
+        <div className={`container mx-auto px-6 md:px-12 relative z-10 ${bgImage ? 'py-20 md:py-28' : 'pt-20 md:pt-28'}`}>
           <motion.div
-            className="max-w-3xl mb-16 md:mb-20"
+            className="max-w-3xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -150,11 +157,13 @@ export function TeachingPage() {
               </p>
             )}
           </motion.div>
-
-          <CourseGroup title="Current Courses" entries={current} />
-          <CourseGroup title="Past Courses" entries={past} />
         </div>
-      </section>
+      </div>
+
+      <div className="container mx-auto px-6 md:px-12 pb-24 md:pb-32">
+        <CourseGroup title="Current Courses" entries={current} />
+        <CourseGroup title="Past Courses" entries={past} />
+      </div>
     </div>
   );
 }

@@ -18,9 +18,15 @@ export function AdminTeaching() {
           <ContentEditor
             section="teaching"
             fields={[
+              {
+                key: 'bg_image',
+                label: 'Header Background Image',
+                type: 'image',
+                imageHint: 'Optional photo shown behind the Teaching heading.',
+              },
               { key: 'intro', label: 'Intro Paragraph', type: 'textarea', placeholder: 'Describe your teaching philosophy…' },
             ]}
-            defaults={{ intro: '' }}
+            defaults={{ bg_image: '', intro: '' }}
           />
         </div>
 
