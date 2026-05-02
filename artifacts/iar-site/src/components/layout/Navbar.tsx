@@ -9,7 +9,7 @@ const navLinks = [
   { name: 'About',        href: '/about' },
   { name: 'Research',     href: '/research' },
   { name: 'Publications', href: '/publications' },
-  { name: 'Teachings',    href: '/mentorship' },
+  { name: 'People',    href: '/mentorship' },
   { name: 'Outreach',     href: '/outreach' },
   { name: 'Field Work',   href: '/field-work' },
   { name: 'Opportunities',href: '/opportunities', accent: true },
