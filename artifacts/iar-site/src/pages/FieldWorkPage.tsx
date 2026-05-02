@@ -94,7 +94,7 @@ export function FieldWorkPage() {
     const items = photos.filter(p => p.data.region === regionTitle);
     if (items.length === 0) return null;
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
         {items.map((entry) => (
           <button
             key={entry.id}
@@ -152,7 +152,7 @@ export function FieldWorkPage() {
 
       {/* Regions */}
       <section className="pt-12 md:pt-16 pb-16 md:pb-24 bg-background">
-        <div className="container mx-auto px-6 md:px-12 max-w-5xl space-y-20 md:space-y-24">
+        <div className="container mx-auto px-6 md:px-12 max-w-7xl space-y-20 md:space-y-24">
           {regions.length === 0 && otherPhotos.length === 0 ? (
             <p className="text-foreground/50 italic text-center">No field work photos yet.</p>
           ) : (
@@ -187,7 +187,7 @@ export function FieldWorkPage() {
                   <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-8">
                     More from the Field
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                     {otherPhotos.map(entry => (
                       <button
                         key={entry.id}
