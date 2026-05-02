@@ -75,7 +75,8 @@ export type ListKey =
   | 'teaching_courses'
   | 'outreach_engagement'
   | 'science_writing'
-  | 'field_work_entries';
+  | 'field_work_entries'
+  | 'resources';
 
 export interface ListRecord {
   id: string;

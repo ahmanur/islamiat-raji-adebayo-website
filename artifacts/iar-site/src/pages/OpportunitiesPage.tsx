@@ -1,7 +1,51 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, BookOpen, Microscope, Mail, HeartHandshake } from 'lucide-react';
+import {
+  Users,
+  BookOpen,
+  Microscope,
+  Mail,
+  HeartHandshake,
+  GraduationCap,
+  Award,
+  Briefcase,
+  Coins,
+  ExternalLink,
+  Calendar,
+  Building2,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getContent, getList } from '@/lib/cms';
+import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
+
+type Resource = {
+  audience: string;
+  category: string;
+  title: string;
+  organization: string;
+  description: string;
+  deadline: string;
+  url: string;
+};
+
+const AUDIENCE_TABS = ['All', 'Undergraduate', 'Graduate', 'Postgraduate', 'Collaborators'] as const;
+type AudienceTab = (typeof AUDIENCE_TABS)[number];
+
+const audienceMeta: Record<string, { icon: React.ReactNode; label: string }> = {
+  Undergraduate: { icon: <GraduationCap className="w-4 h-4" />, label: 'Undergraduate' },
+  Graduate: { icon: <BookOpen className="w-4 h-4" />, label: 'Graduate' },
+  Postgraduate: { icon: <Microscope className="w-4 h-4" />, label: 'Postgraduate' },
+  Collaborators: { icon: <Users className="w-4 h-4" />, label: 'Collaborators' },
+};
+
+const categoryMeta: Record<string, { icon: React.ReactNode; tone: string }> = {
+  Scholarship: { icon: <Award className="w-3.5 h-3.5" />, tone: 'bg-amber-500/10 text-amber-700 border-amber-500/30' },
+  Fellowship: { icon: <Award className="w-3.5 h-3.5" />, tone: 'bg-emerald-500/10 text-emerald-700 border-emerald-500/30' },
+  Internship: { icon: <Briefcase className="w-3.5 h-3.5" />, tone: 'bg-sky-500/10 text-sky-700 border-sky-500/30' },
+  'Research Grant': { icon: <Coins className="w-3.5 h-3.5" />, tone: 'bg-violet-500/10 text-violet-700 border-violet-500/30' },
+  Recruitment: { icon: <Users className="w-3.5 h-3.5" />, tone: 'bg-rose-500/10 text-rose-700 border-rose-500/30' },
+  Other: { icon: <BookOpen className="w-3.5 h-3.5" />, tone: 'bg-slate-500/10 text-slate-700 border-slate-500/30' },
+};
 
 const opportunities = [
   {
@@ -26,6 +70,167 @@ const opportunities = [
     cta: 'Get in touch',
   },
 ];
+
+function ResourcesSection() {
+  const [resourcesContent, setResourcesContent] = useState(CONTENT_DEFAULTS.resources_section);
+  const [resources, setResources] = useState<Resource[]>(
+    () => (LIST_DEFAULTS.resources ?? []) as Resource[]
+  );
+  const [activeTab, setActiveTab] = useState<AudienceTab>('All');
+
+  useEffect(() => {
+    getContent('resources_section' as any).then(data => {
+      if (Object.keys(data).length > 0) {
+        setResourcesContent({ ...CONTENT_DEFAULTS.resources_section, ...data });
+      }
+    });
+    getList('resources').then(rows => {
+      if (rows.length > 0) {
+        setResources(rows.map(r => ({
+          audience: (r.data?.audience as string) ?? 'Other',
+          category: (r.data?.category as string) ?? 'Other',
+          title: (r.data?.title as string) ?? '',
+          organization: (r.data?.organization as string) ?? '',
+          description: (r.data?.description as string) ?? '',
+          deadline: (r.data?.deadline as string) ?? '',
+          url: (r.data?.url as string) ?? '',
+        })));
+      }
+    });
+  }, []);
+
+  const filtered = useMemo(() => {
+    if (activeTab === 'All') return resources;
+    return resources.filter(r => r.audience === activeTab);
+  }, [resources, activeTab]);
+
+  const counts = useMemo(() => {
+    const map: Record<string, number> = { All: resources.length };
+    for (const r of resources) {
+      map[r.audience] = (map[r.audience] ?? 0) + 1;
+    }
+    return map;
+  }, [resources]);
+
+  return (
+    <section id="resources" className="py-20 md:py-28 bg-secondary/30 border-t border-secondary/60">
+      <div className="container mx-auto px-6 md:px-12">
+        <motion.div
+          className="max-w-3xl mb-10 md:mb-14"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.55 }}
+        >
+          <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-5">
+            {resourcesContent.title || 'Resources'}
+          </h2>
+          <div className="w-12 h-[2px] bg-primary mb-6" />
+          {resourcesContent.intro && (
+            <p className="text-base md:text-lg text-foreground/75 leading-relaxed">
+              {resourcesContent.intro}
+            </p>
+          )}
+        </motion.div>
+
+        {/* Audience filter tabs */}
+        <div className="flex flex-wrap gap-2 mb-10">
+          {AUDIENCE_TABS.map(tab => {
+            const active = activeTab === tab;
+            const count = counts[tab] ?? 0;
+            return (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(tab)}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
+                  active
+                    ? 'bg-foreground text-background border-foreground'
+                    : 'bg-background text-foreground/70 border-secondary hover:border-foreground/30 hover:text-foreground'
+                }`}
+              >
+                {tab !== 'All' && audienceMeta[tab]?.icon}
+                <span>{tab}</span>
+                <span className={`text-xs ${active ? 'text-background/70' : 'text-foreground/40'}`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {filtered.length === 0 ? (
+          <div className="text-center py-16 text-foreground/50 italic">
+            No resources in this category yet.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((r, i) => {
+              const cat = categoryMeta[r.category] ?? categoryMeta.Other;
+              return (
+                <motion.article
+                  key={`${r.title}-${i}`}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.45, delay: Math.min(i, 4) * 0.05 }}
+                  className="flex flex-col bg-background border border-secondary rounded-2xl p-6 hover:border-foreground/30 hover:shadow-md transition-all"
+                >
+                  <div className="flex items-center gap-2 flex-wrap mb-4">
+                    <span className={`inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full border ${cat.tone}`}>
+                      {cat.icon}
+                      {r.category}
+                    </span>
+                    {r.audience && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-secondary/70 text-foreground/70 border border-secondary">
+                        {audienceMeta[r.audience]?.icon}
+                        {r.audience}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="font-serif text-xl text-foreground leading-snug mb-2">
+                    {r.title}
+                  </h3>
+                  {r.organization && (
+                    <div className="flex items-center gap-1.5 text-foreground/60 text-sm mb-3">
+                      <Building2 className="w-3.5 h-3.5 shrink-0" />
+                      <span>{r.organization}</span>
+                    </div>
+                  )}
+                  {r.description && (
+                    <p className="text-foreground/70 text-sm leading-relaxed mb-5 flex-1">
+                      {r.description}
+                    </p>
+                  )}
+                  <div className="mt-auto space-y-3">
+                    {r.deadline && (
+                      <div className="flex items-center gap-1.5 text-foreground/60 text-xs">
+                        <Calendar className="w-3.5 h-3.5 shrink-0" />
+                        <span>Deadline: {r.deadline}</span>
+                      </div>
+                    )}
+                    {r.url && (
+                      <a
+                        href={r.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                      >
+                        Visit resource
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
+                </motion.article>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
 
 export function OpportunitiesPage() {
   return (
@@ -107,6 +312,8 @@ export function OpportunitiesPage() {
           </motion.div>
         </div>
       </section>
+
+      <ResourcesSection />
     </div>
   );
 }
