@@ -64,15 +64,15 @@ export function Research() {
   const bgImage = c.bg_image;
 
   return (
-    <section id="research" className="pt-24 md:pt-32 pb-24 md:pb-32">
+    <section id="research" className="pb-24 md:pb-32">
 
       {/* Header band — optional background image */}
       <div
         className="relative mb-16 md:mb-20"
         style={bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
       >
-        {bgImage && <div className="absolute inset-0 bg-background/80 pointer-events-none" />}
-        <div className={`container mx-auto px-6 md:px-12 relative z-10 ${bgImage ? 'py-16 md:py-24' : ''}`}>
+        {bgImage && <div className="absolute inset-0 bg-background/55 pointer-events-none" />}
+        <div className={`container mx-auto px-6 md:px-12 relative z-10 ${bgImage ? 'py-20 md:py-28' : 'pt-20 md:pt-28'}`}>
           <motion.div
             className="max-w-3xl"
             initial={{ opacity: 0, y: 20 }}
