@@ -14,6 +14,7 @@ export type SectionKey =
   | 'news'
   | 'mentorship'
   | 'outreach'
+  | 'outreach_page'
   | 'opportunities'
   | 'footer'
   | 'teaching';
@@ -70,7 +71,9 @@ export type ListKey =
   | 'collaborators'
   | 'mentees'
   | 'funding'
-  | 'teaching_courses';
+  | 'teaching_courses'
+  | 'outreach_engagement'
+  | 'science_writing';
 
 export interface ListRecord {
   id: string;

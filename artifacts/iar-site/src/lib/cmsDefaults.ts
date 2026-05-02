@@ -49,6 +49,12 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     intro: 'I am always looking for motivated and curious students and collaborators to join my research group. I am particularly interested in working with people who are passionate about urban ecology, bioacoustics, and conservation biology.',
     contact_cta: 'To express interest, please email iar32@cornell.edu with your CV, a brief statement of research interests, and any relevant experience.',
   },
+  outreach_page: {
+    intro: 'Sharing science with broader audiences is central to my work. Through public engagement and writing, I aim to make ecology and conservation accessible, relevant, and inspiring to communities beyond academia.',
+    subintro: 'From classroom visits and community workshops to popular articles and podcasts, I enjoy translating research into stories that connect people with the natural world around them.',
+    engagement_text: 'A selection of talks, workshops, citizen-science initiatives, and community events I have led or contributed to.',
+    writing_text: 'Selected popular articles, blog posts, and op-eds written for general audiences.',
+  },
 };
 
 export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
@@ -228,6 +234,8 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
   funding: [
     { image: '', name: 'Funding Body', role: 'Grant / Award Title', institution: '', description: 'Brief description of the funded project or award.', email: '', links: '' },
   ],
+  outreach_engagement: [],
+  science_writing: [],
   teaching_events: [
     {
       image: '/images/teaching-field-outing.jpg',

@@ -11,6 +11,7 @@ import { ResearchPage } from '@/pages/ResearchPage';
 import { PublicationsPage } from '@/pages/PublicationsPage';
 import { MentorshipPage } from '@/pages/MentorshipPage';
 import { OutreachPage } from '@/pages/OutreachPage';
+import { OutreachEngagementPage } from '@/pages/OutreachEngagementPage';
 import { FieldWorkPage } from '@/pages/FieldWorkPage';
 import { OpportunitiesPage } from '@/pages/OpportunitiesPage';
 import { TeachingPage } from '@/pages/TeachingPage';
@@ -27,6 +28,7 @@ import { AdminPublications } from '@/pages/admin/AdminPublications';
 import { AdminNews } from '@/pages/admin/AdminNews';
 import { AdminMentorship } from '@/pages/admin/AdminMentorship';
 import { AdminOutreach } from '@/pages/admin/AdminOutreach';
+import { AdminOutreachEngagement } from '@/pages/admin/AdminOutreachEngagement';
 import { AdminFieldWork } from '@/pages/admin/AdminFieldWork';
 import { AdminOpportunities } from '@/pages/admin/AdminOpportunities';
 import { AdminTeaching } from '@/pages/admin/AdminTeaching';
@@ -73,6 +75,7 @@ function Router() {
         <Route path="/admin/mentorship" component={() => <ProtectedRoute component={AdminMentorship} />} />
         <Route path="/admin/teaching" component={() => <ProtectedRoute component={AdminTeaching} />} />
         <Route path="/admin/outreach" component={() => <ProtectedRoute component={AdminOutreach} />} />
+        <Route path="/admin/outreach-engagement" component={() => <ProtectedRoute component={AdminOutreachEngagement} />} />
         <Route path="/admin/opportunities" component={() => <ProtectedRoute component={AdminOpportunities} />} />
         <Route path="/admin/media" component={() => <ProtectedRoute component={AdminMedia} />} />
         <Route path="/admin/settings" component={() => <ProtectedRoute component={AdminSettings} />} />
@@ -90,7 +93,8 @@ function Router() {
                 <Route path="/publications" component={PublicationsPage} />
                 <Route path="/mentorship" component={MentorshipPage} />
                 <Route path="/teaching" component={TeachingPage} />
-                <Route path="/outreach" component={OutreachPage} />
+                <Route path="/news" component={OutreachPage} />
+                <Route path="/outreach" component={OutreachEngagementPage} />
                 <Route path="/field-work/:id" component={ProjectDetailPage} />
                 <Route path="/field-work" component={FieldWorkPage} />
                 <Route path="/opportunities" component={OpportunitiesPage} />

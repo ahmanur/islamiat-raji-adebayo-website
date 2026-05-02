@@ -11,7 +11,8 @@ const navLinks = [
   { name: 'Publications', href: '/publications' },
   { name: 'People',    href: '/mentorship' },
   { name: 'Teaching',  href: '/teaching' },
-  { name: 'News',         href: '/outreach' },
+  { name: 'News',         href: '/news' },
+  { name: 'Outreach',     href: '/outreach' },
   { name: 'Field Work',   href: '/field-work' },
   { name: 'Opportunities',href: '/opportunities', accent: true },
 ];
