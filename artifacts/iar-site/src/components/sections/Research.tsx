@@ -108,8 +108,8 @@ export function Research() {
                     : 'border-secondary/80 hover:border-primary/40 hover:shadow-md'
                 }`}
               >
-                {/* Top area: image background (if set) with icon always centred on top */}
-                <div className={`h-28 relative flex items-center justify-center overflow-hidden transition-colors duration-300 ${!theme.image ? (isActive ? 'bg-primary/10' : 'bg-secondary/50') : ''}`}>
+                {/* Top area: image background */}
+                <div className={`h-44 relative overflow-hidden transition-colors duration-300 ${!theme.image ? (isActive ? 'bg-primary/10' : 'bg-secondary/50') : ''}`}>
                   {theme.image && (
                     <>
                       <img
@@ -117,18 +117,9 @@ export function Research() {
                         alt={theme.title}
                         className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 ${isActive ? 'scale-105' : ''}`}
                       />
-                      <div className="absolute inset-0 bg-black/30" />
+                      <div className="absolute inset-0 bg-black/20" />
                     </>
                   )}
-                  <div className={`relative z-10 w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-all duration-300 ${
-                    theme.image
-                      ? 'bg-white/90 text-primary'
-                      : isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-background text-primary'
-                  }`}>
-                    {ICON_MAP[theme.icon] ?? <Mic className="w-6 h-6" />}
-                  </div>
                 </div>
 
                 <div className={`p-5 flex-1 flex flex-col transition-colors duration-300 ${isActive ? 'bg-primary/5' : 'bg-secondary/30'}`}>
