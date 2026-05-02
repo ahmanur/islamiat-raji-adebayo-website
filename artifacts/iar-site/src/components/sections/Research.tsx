@@ -120,7 +120,7 @@ export function Research() {
 
                 <div className={`p-5 flex-1 flex flex-col transition-colors duration-300 ${isActive ? 'bg-primary/5' : 'bg-secondary/30'}`}>
                   <h3 className="font-serif text-lg text-foreground mb-2">{theme.title}</h3>
-                  <p className="text-foreground/65 text-sm leading-relaxed line-clamp-2">{theme.description}</p>
+                  <p className="text-foreground/65 text-sm leading-relaxed">{theme.description}</p>
                   {isActive && (
                     <div className="mt-3 flex items-center gap-1 text-primary text-xs font-medium">
                       <span>View projects</span>
