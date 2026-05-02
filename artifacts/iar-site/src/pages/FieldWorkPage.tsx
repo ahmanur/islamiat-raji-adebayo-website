@@ -1,38 +1,73 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getList } from '@/lib/cms';
-import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
+import { getContent, getList } from '@/lib/cms';
+import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
+
+const DC = CONTENT_DEFAULTS.field_work_page;
 
 type GalleryItem = {
+  region: string;
   image: string;
   caption: string;
 };
 
+type RegionItem = {
+  title: string;
+  description: string;
+};
+
 type GalleryEntry = { id: string; data: GalleryItem };
+type RegionEntry = { id: string; data: RegionItem };
 
 export function FieldWorkPage() {
-  const [entries, setEntries] = useState<GalleryEntry[]>(
-    () => LIST_DEFAULTS.field_work_gallery.map((d, i) => ({ id: String(i), data: d as GalleryItem }))
+  const [c, setC] = useState(DC);
+  const [regions, setRegions] = useState<RegionEntry[]>(
+    () => LIST_DEFAULTS.field_work_regions.map((d, i) => ({ id: 'r' + i, data: d as RegionItem }))
+  );
+  const [photos, setPhotos] = useState<GalleryEntry[]>(
+    () => LIST_DEFAULTS.field_work_gallery.map((d, i) => ({ id: 'p' + i, data: d as GalleryItem }))
   );
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
+    getContent('field_work_page').then(data => {
+      if (Object.keys(data).length > 0) setC({ ...DC, ...data });
+    });
+    getList('field_work_regions').then(rows => {
+      if (rows.length > 0) setRegions(rows.map(r => ({ id: r.id, data: r.data as RegionItem })));
+    });
     getList('field_work_gallery').then(rows => {
-      if (rows.length > 0) {
-        setEntries(rows.map(r => ({ id: r.id, data: r.data as GalleryItem })));
-      }
+      if (rows.length > 0) setPhotos(rows.map(r => ({ id: r.id, data: r.data as GalleryItem })));
     });
   }, []);
 
+  // Build the flat ordered list of photos used for the lightbox (matches render order).
+  const orderedPhotos = useMemo(() => {
+    const grouped: GalleryEntry[] = [];
+    const seenRegions = new Set<string>();
+    regions.forEach(r => {
+      seenRegions.add(r.data.title);
+      photos.filter(p => p.data.region === r.data.title).forEach(p => grouped.push(p));
+    });
+    // Photos whose region doesn't match any region row — show under "Other" at the end.
+    photos.filter(p => !seenRegions.has(p.data.region)).forEach(p => grouped.push(p));
+    return grouped;
+  }, [regions, photos]);
+
+  const otherPhotos = useMemo(
+    () => photos.filter(p => !regions.some(r => r.data.title === p.data.region)),
+    [regions, photos]
+  );
+
   const closeLightbox = useCallback(() => setActiveIndex(null), []);
   const showPrev = useCallback(
-    () => setActiveIndex(i => (i === null ? null : (i - 1 + entries.length) % entries.length)),
-    [entries.length]
+    () => setActiveIndex(i => (i === null ? null : (i - 1 + orderedPhotos.length) % orderedPhotos.length)),
+    [orderedPhotos.length]
   );
   const showNext = useCallback(
-    () => setActiveIndex(i => (i === null ? null : (i + 1) % entries.length)),
-    [entries.length]
+    () => setActiveIndex(i => (i === null ? null : (i + 1) % orderedPhotos.length)),
+    [orderedPhotos.length]
   );
 
   useEffect(() => {
@@ -50,61 +85,138 @@ export function FieldWorkPage() {
     };
   }, [activeIndex, closeLightbox, showPrev, showNext]);
 
-  const active = activeIndex !== null ? entries[activeIndex] : null;
+  const active = activeIndex !== null ? orderedPhotos[activeIndex] : null;
+
+  // Helper to find index of a photo entry in orderedPhotos
+  const indexOf = (entry: GalleryEntry) => orderedPhotos.findIndex(p => p.id === entry.id);
+
+  const renderRegionPhotos = (regionTitle: string) => {
+    const items = photos.filter(p => p.data.region === regionTitle);
+    if (items.length === 0) return null;
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {items.map((entry) => (
+          <button
+            key={entry.id}
+            type="button"
+            onClick={() => setActiveIndex(indexOf(entry))}
+            className="group block w-full text-left focus:outline-none focus:ring-2 focus:ring-primary/60 rounded-lg overflow-hidden"
+            aria-label={`Open photo: ${entry.data.caption || 'field work photo'}`}
+          >
+            <div className="overflow-hidden rounded-lg bg-secondary/30 border border-secondary/60">
+              <img
+                src={entry.data.image}
+                alt={entry.data.caption || 'Field work photo'}
+                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                loading="lazy"
+              />
+            </div>
+            {entry.data.caption && (
+              <p className="mt-3 text-sm text-foreground/70 leading-relaxed">
+                {entry.data.caption}
+              </p>
+            )}
+          </button>
+        ))}
+      </div>
+    );
+  };
 
   return (
-    <div className="pt-20 min-h-screen">
-      <section className="py-20 md:py-28">
-        <div className="container mx-auto px-6 md:px-12">
-          <motion.div
-            className="max-w-3xl mb-14 md:mb-20"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Field Work</h1>
-            <div className="w-12 h-[2px] bg-primary mb-8" />
-            <p className="text-lg md:text-xl text-foreground/80 font-light leading-relaxed">
-              A visual record of fieldwork — from dawn surveys at fruiting trees to acoustic
-              monitoring across cities and forest edges. Click any photo to view it larger.
+    <div className="min-h-screen">
+      {/* Hero with background image and overlay title */}
+      <section
+        className="relative h-[55vh] min-h-[360px] md:h-[65vh] md:min-h-[460px] flex items-center justify-center overflow-hidden"
+      >
+        {c.bg_image && (
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${c.bg_image})` }}
+            aria-hidden="true"
+          />
+        )}
+        <div className="absolute inset-0 bg-black/35" aria-hidden="true" />
+        <motion.div
+          className="relative z-10 px-6 text-center"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          <h1 className="font-serif text-5xl md:text-7xl text-white drop-shadow-lg tracking-tight">
+            Field Work
+          </h1>
+          {c.intro && (
+            <p className="mt-6 max-w-2xl mx-auto text-white/90 text-base md:text-lg leading-relaxed drop-shadow">
+              {c.intro}
             </p>
-          </motion.div>
+          )}
+        </motion.div>
+      </section>
 
-          {entries.length === 0 ? (
-            <p className="text-foreground/50 italic">No field work photos yet.</p>
+      {/* Regions */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-6 md:px-12 max-w-5xl space-y-20 md:space-y-24">
+          {regions.length === 0 && otherPhotos.length === 0 ? (
+            <p className="text-foreground/50 italic text-center">No field work photos yet.</p>
           ) : (
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
-              {entries.map((entry, i) => (
-                <motion.button
-                  key={entry.id}
-                  type="button"
-                  onClick={() => setActiveIndex(i)}
+            <>
+              {regions.map((region, i) => (
+                <motion.div
+                  key={region.id}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.5, delay: (i % 6) * 0.05 }}
-                  className="group mb-6 block w-full break-inside-avoid overflow-hidden rounded-xl border border-secondary/60 bg-secondary/30 text-left shadow-sm hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-primary/60"
-                  aria-label={`Open photo: ${entry.data.caption || 'field work photo'}`}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.55, delay: i === 0 ? 0 : 0.05 }}
                 >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={entry.data.image}
-                      alt={entry.data.caption || 'Field work photo'}
-                      className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300" />
-                  </div>
-                  {entry.data.caption && (
-                    <div className="px-4 py-3">
-                      <p className="text-sm text-foreground/75 leading-relaxed line-clamp-3">
-                        {entry.data.caption}
-                      </p>
-                    </div>
+                  <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-3">
+                    {region.data.title}
+                  </h2>
+                  {region.data.description && (
+                    <p className="text-foreground/75 text-base md:text-lg leading-relaxed mb-8 max-w-3xl">
+                      {region.data.description}
+                    </p>
                   )}
-                </motion.button>
+                  {renderRegionPhotos(region.data.title)}
+                </motion.div>
               ))}
-            </div>
+
+              {otherPhotos.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.55 }}
+                >
+                  <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-8">
+                    More from the Field
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    {otherPhotos.map(entry => (
+                      <button
+                        key={entry.id}
+                        type="button"
+                        onClick={() => setActiveIndex(indexOf(entry))}
+                        className="group block w-full text-left focus:outline-none focus:ring-2 focus:ring-primary/60 rounded-lg overflow-hidden"
+                      >
+                        <div className="overflow-hidden rounded-lg bg-secondary/30 border border-secondary/60">
+                          <img
+                            src={entry.data.image}
+                            alt={entry.data.caption || 'Field work photo'}
+                            className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                            loading="lazy"
+                          />
+                        </div>
+                        {entry.data.caption && (
+                          <p className="mt-3 text-sm text-foreground/70 leading-relaxed">
+                            {entry.data.caption}
+                          </p>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </>
           )}
         </div>
       </section>
@@ -133,7 +245,7 @@ export function FieldWorkPage() {
               <X className="w-6 h-6" />
             </button>
 
-            {entries.length > 1 && (
+            {orderedPhotos.length > 1 && (
               <>
                 <button
                   type="button"
@@ -168,18 +280,23 @@ export function FieldWorkPage() {
                 alt={active.data.caption || 'Field work photo'}
                 className="max-w-full max-h-[78vh] object-contain rounded-lg shadow-2xl"
               />
-              {active.data.caption && (
-                <div className="mt-4 max-w-3xl text-center">
+              <div className="mt-4 max-w-3xl text-center">
+                {active.data.region && (
+                  <p className="text-white/60 text-xs uppercase tracking-wider mb-2">
+                    {active.data.region}
+                  </p>
+                )}
+                {active.data.caption && (
                   <p className="text-white/90 text-sm md:text-base leading-relaxed">
                     {active.data.caption}
                   </p>
-                  {entries.length > 1 && (
-                    <p className="text-white/50 text-xs mt-2">
-                      {(activeIndex ?? 0) + 1} / {entries.length}
-                    </p>
-                  )}
-                </div>
-              )}
+                )}
+                {orderedPhotos.length > 1 && (
+                  <p className="text-white/50 text-xs mt-2">
+                    {(activeIndex ?? 0) + 1} / {orderedPhotos.length}
+                  </p>
+                )}
+              </div>
             </motion.div>
           </motion.div>
         )}

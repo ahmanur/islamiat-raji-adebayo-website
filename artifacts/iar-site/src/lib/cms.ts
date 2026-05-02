@@ -17,7 +17,8 @@ export type SectionKey =
   | 'outreach_page'
   | 'opportunities'
   | 'footer'
-  | 'teaching';
+  | 'teaching'
+  | 'field_work_page';
 
 export interface ContentRecord {
   id: string;
@@ -74,6 +75,7 @@ export type ListKey =
   | 'teaching_courses'
   | 'outreach_engagement'
   | 'science_writing'
+  | 'field_work_regions'
   | 'field_work_gallery';
 
 export interface ListRecord {

@@ -56,6 +56,10 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     engagement_text: 'A selection of talks, workshops, citizen-science initiatives, and community events I have led or contributed to.',
     writing_text: 'Selected popular articles, blog posts, and op-eds written for general audiences.',
   },
+  field_work_page: {
+    bg_image: '/images/forest-bg.png',
+    intro: '',
+  },
 };
 
 export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
@@ -114,30 +118,54 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, string>>> = {
       methods: 'Field surveys, Plant-animal interaction networks, Frugivory analysis',
     },
   ],
+  field_work_regions: [
+    {
+      title: 'Southern Africa — KwaZulu-Natal',
+      description: 'Doctoral fieldwork on frugivory and seed dispersal by birds, bats and vervet monkeys in urban-mosaic landscapes around Durban, South Africa, with a focus on the ecological role of native Ficus species.',
+    },
+    {
+      title: 'West Africa — Nigeria',
+      description: 'Field training, community bird walks, and ongoing collaborations with the A.P. Leventis Ornithological Research Institute and partner institutions across Nigeria.',
+    },
+    {
+      title: 'North America — Cornell & the Northeast',
+      description: 'Active deployment of autonomous acoustic recorders across the Cornell University campus and surrounding urban areas, monitoring bird community composition and dawn-chorus soundscapes through the seasons.',
+    },
+    {
+      title: 'Multi-country Urban Transects',
+      description: 'Coordinated deployment and retrieval of passive acoustic recorders along standardised urban transects in Brazil, Canada, France, Kenya and Senegal as part of a multi-country urban bird monitoring initiative.',
+    },
+  ],
   field_work_gallery: [
     {
+      region: 'Southern Africa — KwaZulu-Natal',
       image: '/images/field-fruit.png',
       caption: 'Documenting frugivore visits to a fruiting Ficus tree during dawn focal-tree watches in KwaZulu-Natal, South Africa.',
     },
     {
-      image: '/images/teaching-field-outing.jpg',
-      caption: 'Leading a hands-on field ornithology training session at the A.P. Leventis Ornithological Research Institute, Nigeria.',
-    },
-    {
-      image: '/images/spectrogram-art.png',
-      caption: 'Spectrogram of dawn chorus recordings captured by autonomous acoustic recorders deployed across an urban transect.',
-    },
-    {
-      image: '/images/hero-bird.png',
-      caption: 'Resident urban bird observed during a community bird walk — part of ongoing campus biodiversity monitoring.',
-    },
-    {
-      image: '/images/teaching-conference.jpg',
-      caption: 'Sharing fieldwork outcomes with collaborators and students during a working session on community science protocols.',
-    },
-    {
+      region: 'Southern Africa — KwaZulu-Natal',
       image: '/images/forest-bg.png',
-      caption: 'Forest edge habitat at one of the long-term acoustic monitoring sites — a key listening station in the network.',
+      caption: 'Forest edge habitat at one of the long-term focal-tree observation sites in the urban-rural mosaic around Durban.',
+    },
+    {
+      region: 'West Africa — Nigeria',
+      image: '/images/teaching-field-outing.jpg',
+      caption: 'Leading a hands-on field ornithology training session at the A.P. Leventis Ornithological Research Institute, Amurum Forest Reserve, Nigeria.',
+    },
+    {
+      region: 'West Africa — Nigeria',
+      image: '/images/hero-bird.png',
+      caption: 'Resident bird species photographed during a community bird walk with students and local birders in northern Nigeria.',
+    },
+    {
+      region: 'North America — Cornell & the Northeast',
+      image: '/images/spectrogram-art.png',
+      caption: 'Spectrogram of dawn-chorus recordings captured by autonomous acoustic recorders deployed across a Cornell campus transect.',
+    },
+    {
+      region: 'North America — Cornell & the Northeast',
+      image: '/images/teaching-conference.jpg',
+      caption: 'Working session with collaborators and students on community-science protocols for the Campus Biodiversity Network.',
     },
   ],
   field_work_projects: [
