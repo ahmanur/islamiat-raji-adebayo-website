@@ -5,6 +5,7 @@ import { ArrowLeft, MapPin, Users, ExternalLink, Image, Globe, Building2 } from 
 import { getList } from '@/lib/cms';
 import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
 import { Lightbox } from '@/components/Lightbox';
+import { slugifyTheme } from '@/pages/ResearchThemePage';
 
 type ProjectItem = {
   status: string;
@@ -18,6 +19,7 @@ type ProjectItem = {
   map_link?: string;
   collaborators?: string;
   network?: string;
+  theme?: string;
 };
 type ProjectEntry = { id: string; data: ProjectItem };
 
@@ -62,8 +64,6 @@ export function ProjectDetailPage() {
   const [location] = useLocation();
   const isFieldWork = location.startsWith('/field-work');
   const listKey = isFieldWork ? 'field_work_projects' : 'research_projects';
-  const backHref = isFieldWork ? '/field-work' : '/research';
-  const backLabel = isFieldWork ? 'Back to Field Work' : 'Back to Research';
 
   const defaults = isFieldWork ? LIST_DEFAULTS.field_work_projects : LIST_DEFAULTS.research_projects;
 
@@ -87,6 +87,17 @@ export function ProjectDetailPage() {
   const entry = entries.find(e => e.id === id);
   const entryIndex = entries.findIndex(e => e.id === id);
   const project = entry?.data;
+
+  const backHref = isFieldWork
+    ? '/field-work'
+    : project?.theme
+      ? `/research/theme/${slugifyTheme(project.theme)}`
+      : '/research';
+  const backLabel = isFieldWork
+    ? 'Back to Field Work'
+    : project?.theme
+      ? `Back to ${project.theme}`
+      : 'Back to Research';
 
   if (!loaded) {
     return (
