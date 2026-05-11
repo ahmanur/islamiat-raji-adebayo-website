@@ -89,9 +89,9 @@ export function Research() {
 
       <div className="container mx-auto px-6 md:px-12">
 
-        {/* Theme selector cards — portrait orientation (taller than wide) */}
+        {/* Theme selector cards — each card is a horizontal row: text on the left, image on the right */}
         <p className="text-foreground/60 text-sm mb-6 italic">Please click on each of the themes below to learn more about my research.</p>
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
+        <div className="flex flex-col gap-5 mb-20">
           {themes.map((theme, i) => {
             const isActive = activeTheme === i;
             return (
@@ -102,14 +102,26 @@ export function Research() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className={`text-left rounded-2xl overflow-hidden border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer w-full flex flex-col ${
+                className={`text-left rounded-2xl overflow-hidden border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer w-full flex flex-col sm:flex-row ${
                   isActive
-                    ? 'border-primary shadow-xl shadow-primary/10 scale-[1.02]'
+                    ? 'border-primary shadow-xl shadow-primary/10'
                     : 'border-secondary/80 hover:border-primary/40 hover:shadow-md'
                 }`}
               >
-                {/* Top area: image background — portrait aspect (3:4) */}
-                <div className={`aspect-[3/4] relative overflow-hidden transition-colors duration-300 ${!theme.image ? (isActive ? 'bg-primary/10' : 'bg-secondary/50') : ''}`}>
+                {/* Text — left */}
+                <div className={`p-6 md:p-8 flex-1 flex flex-col justify-center transition-colors duration-300 ${isActive ? 'bg-primary/5' : 'bg-secondary/30'}`}>
+                  <h3 className="font-serif text-xl md:text-2xl text-foreground mb-2">{theme.title}</h3>
+                  <p className="text-foreground/65 text-sm md:text-base leading-relaxed">{theme.description}</p>
+                  {isActive && (
+                    <div className="mt-3 flex items-center gap-1 text-primary text-xs font-medium">
+                      <span>View projects</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Image — right */}
+                <div className={`relative overflow-hidden shrink-0 w-full sm:w-64 md:w-80 h-48 sm:h-auto transition-colors duration-300 ${!theme.image ? (isActive ? 'bg-primary/10' : 'bg-secondary/50') : ''}`}>
                   {theme.image && (
                     <>
                       <img
@@ -117,19 +129,8 @@ export function Research() {
                         alt={theme.title}
                         className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 ${isActive ? 'scale-105' : ''}`}
                       />
-                      <div className="absolute inset-0 bg-black/20" />
+                      <div className="absolute inset-0 bg-black/10" />
                     </>
-                  )}
-                </div>
-
-                <div className={`p-5 flex-1 flex flex-col transition-colors duration-300 ${isActive ? 'bg-primary/5' : 'bg-secondary/30'}`}>
-                  <h3 className="font-serif text-lg text-foreground mb-2">{theme.title}</h3>
-                  <p className="text-foreground/65 text-sm leading-relaxed">{theme.description}</p>
-                  {isActive && (
-                    <div className="mt-3 flex items-center gap-1 text-primary text-xs font-medium">
-                      <span>View projects</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </div>
                   )}
                 </div>
               </motion.button>
