@@ -275,13 +275,6 @@ export function ResearchThemePage() {
                               </div>
                             </div>
                           )}
-                          {network.network_url && (
-                            <a href={network.network_url} target="_blank" rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 text-sm text-primary hover:underline font-medium">
-                              <ExternalLink className="w-3.5 h-3.5" />
-                              View all institutions in the network
-                            </a>
-                          )}
                         </div>
                       )}
 
