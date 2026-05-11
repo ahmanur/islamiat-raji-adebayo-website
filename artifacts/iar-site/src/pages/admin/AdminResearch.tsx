@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ContentEditor } from '@/components/admin/ContentEditor';
 import { ListEditor } from '@/components/admin/ListEditor';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
+import { getList } from '@/lib/cms';
 
 export function AdminResearch() {
+  const [themeOptions, setThemeOptions] = useState<string[]>(
+    LIST_DEFAULTS.research_themes.map(t => t.title as string)
+  );
+
+  useEffect(() => {
+    getList('research_themes').then(rows => {
+      if (rows.length > 0) {
+        const titles = rows.map(r => (r.data.title as string)).filter(Boolean);
+        if (titles.length > 0) setThemeOptions(titles);
+      }
+    });
+  }, []);
+
   return (
     <AdminLayout>
       <div className="max-w-2xl space-y-8">
@@ -75,7 +89,7 @@ export function AdminResearch() {
                 imageFallback: '/images/spectrogram-art.png',
                 imageHint: 'Photo representing this research project.',
               },
-              { key: 'theme', label: 'Research Theme', type: 'select', options: ['Urban Ecology', 'Bioacoustics', 'Plant and Animal Interactions', 'Human Nature Interaction'] },
+              { key: 'theme', label: 'Research Theme', type: 'select', options: themeOptions },
               { key: 'status', label: 'Status', placeholder: 'Current Project / Past Project / Doctoral Research' },
               { key: 'title', label: 'Project Title', placeholder: 'Urban Campus Soundscape Project' },
               { key: 'location', label: 'Location / Institution', placeholder: 'Cornell University, Ithaca NY' },
