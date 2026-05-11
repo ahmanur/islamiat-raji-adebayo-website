@@ -112,10 +112,7 @@ export function About() {
             >
               <p className="text-xs font-semibold text-primary tracking-[0.2em] uppercase mb-3">Gallery</p>
               <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">In the Field & Beyond</h2>
-              <div className="w-12 h-[2px] bg-primary mb-6" />
-              <p className="text-foreground/70 leading-relaxed">
-                A glimpse into the moments — research, teaching, fieldwork, and conferences — that shape the work.
-              </p>
+              <div className="w-12 h-[2px] bg-primary" />
             </motion.div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
