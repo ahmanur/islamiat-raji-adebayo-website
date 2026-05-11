@@ -27,7 +27,6 @@ export function Research() {
 
   return (
     <section id="research" className="pb-24 md:pb-32">
-
       {/* Header band — optional background image */}
       <div
         className="relative mb-16 md:mb-20"
@@ -48,11 +47,10 @@ export function Research() {
           </motion.div>
         </div>
       </div>
-
       <div className="container mx-auto px-6 md:px-12">
 
         {/* Theme selector cards — each card links to its dedicated theme page */}
-        <p className="text-foreground/60 text-sm mb-6 italic">Click any theme below to view all the research projects under it.</p>
+        <p className="text-foreground/60 mb-6 italic text-[17px] font-medium border-t-[0px] border-r-[0px] border-b-[0px] border-l-[0px]">I currently approach these questions through three connected areas:</p>
         <div className="flex flex-col gap-5">
           {themes.map((theme, i) => (
             <motion.div
