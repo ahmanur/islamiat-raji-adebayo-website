@@ -89,9 +89,9 @@ export function Research() {
 
       <div className="container mx-auto px-6 md:px-12">
 
-        {/* Theme selector cards */}
+        {/* Theme selector cards — portrait orientation (taller than wide) */}
         <p className="text-foreground/60 text-sm mb-6 italic">Please click on each of the themes below to learn more about my research.</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
           {themes.map((theme, i) => {
             const isActive = activeTheme === i;
             return (
@@ -108,8 +108,8 @@ export function Research() {
                     : 'border-secondary/80 hover:border-primary/40 hover:shadow-md'
                 }`}
               >
-                {/* Top area: image background */}
-                <div className={`h-44 relative overflow-hidden transition-colors duration-300 ${!theme.image ? (isActive ? 'bg-primary/10' : 'bg-secondary/50') : ''}`}>
+                {/* Top area: image background — portrait aspect (3:4) */}
+                <div className={`aspect-[3/4] relative overflow-hidden transition-colors duration-300 ${!theme.image ? (isActive ? 'bg-primary/10' : 'bg-secondary/50') : ''}`}>
                   {theme.image && (
                     <>
                       <img
@@ -166,29 +166,12 @@ export function Research() {
                   return (
                     <motion.div
                       key={entry.id}
-                      className={`flex flex-col gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}
+                      className="flex flex-col gap-12 items-center lg:flex-row"
                       initial={{ opacity: 0, y: 40 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: i * 0.1 }}
                     >
-                      <Link href={`/research/${entry.id}`} className="w-full lg:w-1/2 block group cursor-pointer">
-                        <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg relative">
-                          <img
-                            src={imgSrc}
-                            alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-2xl" />
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="bg-white/90 text-foreground text-sm font-medium px-5 py-2 rounded-full flex items-center gap-2">
-                              View Details <ArrowRight className="w-4 h-4" />
-                            </span>
-                          </div>
-                          <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl pointer-events-none" />
-                        </div>
-                      </Link>
-
-                      <div className="w-full lg:w-1/2 flex flex-col justify-center">
+                      <div className="w-full lg:w-1/2 flex flex-col justify-center order-2 lg:order-1">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium tracking-wide mb-6 uppercase w-fit">
                           {project.status}
                         </div>
@@ -212,6 +195,23 @@ export function Research() {
                           Read more <ArrowRight className="w-4 h-4" />
                         </Link>
                       </div>
+
+                      <Link href={`/research/${entry.id}`} className="w-full lg:w-1/2 block group cursor-pointer order-1 lg:order-2">
+                        <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg relative">
+                          <img
+                            src={imgSrc}
+                            alt={project.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-2xl" />
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <span className="bg-white/90 text-foreground text-sm font-medium px-5 py-2 rounded-full flex items-center gap-2">
+                              View Details <ArrowRight className="w-4 h-4" />
+                            </span>
+                          </div>
+                          <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl pointer-events-none" />
+                        </div>
+                      </Link>
                     </motion.div>
                   );
                 })}
