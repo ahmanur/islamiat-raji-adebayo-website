@@ -246,6 +246,18 @@ export function ResearchThemePage() {
                               </div>
                             ))}
                           </div>
+                          {network.previous_countries.length > 0 && (
+                            <div className="mb-5">
+                              <p className="text-xs font-semibold uppercase tracking-widest text-foreground/40 mb-3">List of Institutions in the Network</p>
+                              <div className="flex flex-wrap gap-2">
+                                {network.previous_countries.map(c => (
+                                  <span key={c} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary border border-secondary/70 text-foreground/60 text-sm">
+                                    <MapPin className="w-3 h-3 text-primary/60" /> {c}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                           {network.current_countries.length > 0 && (
                             <div className="mb-5">
                               <p className="text-xs font-semibold uppercase tracking-widest text-foreground/40 mb-3">Current Network Countries</p>
