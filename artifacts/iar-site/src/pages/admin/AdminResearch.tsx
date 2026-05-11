@@ -64,7 +64,8 @@ export function AdminResearch() {
               },
               { key: 'icon', label: 'Icon Name', placeholder: 'mic / trees / globe / leaf / heart / mountain' },
               { key: 'title', label: 'Theme Title', placeholder: 'Bioacoustics' },
-              { key: 'description', label: 'Description', type: 'textarea' },
+              { key: 'description', label: 'Short Description (shown on Research page card)', type: 'textarea' },
+              { key: 'intro', label: 'Theme Introduction (shown at top of theme page, before projects)', type: 'textarea' },
             ]}
             defaultItems={LIST_DEFAULTS.research_themes}
           />

@@ -97,10 +97,10 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
     { name: 'Stable Planet Alliance' },
   ],
   research_themes: [
-    { icon: 'trees', title: 'Urban Ecology', description: 'Investigating how rapid urbanization shapes bird communities and alters the ecological processes that sustain biodiversity in cities.', image: '' },
-    { icon: 'mic', title: 'Bioacoustics', description: 'Using sound as a non-invasive lens to monitor biodiversity, revealing hidden ecological patterns in urban environments.', image: '' },
-    { icon: 'leaf', title: 'Plant-Animal Interactions', description: 'Studying the mutualistic relationships between plants and animals — particularly frugivory and seed dispersal — and how land-use change disrupts these critical ecological networks.', image: '' },
-    { icon: 'globe', title: 'Human-Nature Dynamics', description: 'Exploring the relationship between people and nature, emphasizing community engagement for sustainable cities.', image: '' },
+    { icon: 'trees', title: 'Urban Ecology', description: 'Investigating how rapid urbanization shapes bird communities and alters the ecological processes that sustain biodiversity in cities.', intro: '', image: '' },
+    { icon: 'mic', title: 'Bioacoustics', description: 'Using sound as a non-invasive lens to monitor biodiversity, revealing hidden ecological patterns in urban environments.', intro: 'Bioacoustics offers a powerful way to study life and environments through sound. Advances in acoustics, ecology, physics, mathematics, computer science, and artificial intelligence now allow researchers to monitor ecosystems continuously across space and time using passive acoustic technologies. Within this broader field, conservation bioacoustics provides scalable approaches for studying biodiversity, animal behavior, soundscapes, and environmental change across diverse landscapes. I combine these interdisciplinary tools with community-engaged research to understand how wildlife and human communities respond to urbanization and other global environmental challenges. Below are some of my ongoing and past projects across different regions and ecological contexts.', image: '' },
+    { icon: 'leaf', title: 'Plant-Animal Interactions', description: 'Studying the mutualistic relationships between plants and animals — particularly frugivory and seed dispersal — and how land-use change disrupts these critical ecological networks.', intro: '', image: '' },
+    { icon: 'globe', title: 'Human-Nature Dynamics', description: 'Exploring the relationship between people and nature, emphasizing community engagement for sustainable cities.', intro: '', image: '' },
   ],
   research_projects: [
     {

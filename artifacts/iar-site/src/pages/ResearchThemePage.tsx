@@ -15,7 +15,7 @@ type ProjectItem = {
   theme?: string;
 };
 type ProjectEntry = { id: string; data: ProjectItem };
-type ThemeItem = { icon: string; title: string; description: string; image?: string };
+type ThemeItem = { icon: string; title: string; description: string; intro?: string; image?: string };
 
 const DEFAULT_IMAGES = [
   '/images/spectrogram-art.png',
@@ -106,7 +106,13 @@ export function ResearchThemePage() {
           Back to Research
         </Link>
 
-        <p className="max-w-3xl text-lg text-foreground/80 leading-relaxed mb-16">{theme.description}</p>
+        <p className="max-w-3xl text-lg text-foreground/70 leading-relaxed mb-10">{theme.description}</p>
+
+        {theme.intro && (
+          <div className="max-w-3xl mb-16 pl-5 border-l-2 border-primary/40">
+            <p className="text-base md:text-lg text-foreground/80 leading-relaxed">{theme.intro}</p>
+          </div>
+        )}
 
         {filteredProjects.length === 0 ? (
           <div className="text-center py-20 border-2 border-dashed border-secondary rounded-2xl">
