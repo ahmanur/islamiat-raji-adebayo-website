@@ -234,11 +234,10 @@ export function ResearchThemePage() {
                               {network.network_name ?? 'Partner Network'}
                             </h3>
                           </div>
-                          <div className="grid grid-cols-3 gap-4 mb-6">
+                          <div className="grid grid-cols-2 gap-4 mb-6">
                             {[
                               { value: network.stats.institutions, label: 'Institutions', icon: <Building2 className="w-4 h-4" /> },
                               { value: network.stats.countries, label: 'Countries', icon: <Globe className="w-4 h-4" /> },
-                              { value: network.previous_countries.length, label: 'Previous Phase', icon: <MapPin className="w-4 h-4" /> },
                             ].map(stat => (
                               <div key={stat.label} className="rounded-xl bg-secondary/40 border border-secondary/60 p-4 text-center">
                                 <div className="flex items-center justify-center gap-1.5 text-primary mb-1">{stat.icon}</div>
@@ -247,17 +246,6 @@ export function ResearchThemePage() {
                               </div>
                             ))}
                           </div>
-                          {network.previous_countries.length > 0 && (
-                            <div className="mb-5">
-                              <div className="flex flex-wrap gap-2">
-                                {network.previous_countries.map(c => (
-                                  <span key={c} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary border border-secondary/70 text-foreground/60 text-sm">
-                                    <MapPin className="w-3 h-3 text-primary/60" /> {c}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          )}
                           {network.current_countries.length > 0 && (
                             <div className="mb-5">
                               <p className="text-xs font-semibold uppercase tracking-widest text-foreground/40 mb-3">Current Network Countries</p>
