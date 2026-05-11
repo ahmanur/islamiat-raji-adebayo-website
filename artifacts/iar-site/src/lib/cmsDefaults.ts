@@ -89,6 +89,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
     { name: 'Field Work', href: '/field-work', accent: false },
     { name: 'Opportunities', href: '/opportunities', accent: true },
   ],
+  about_gallery: [],
   affiliations: [
     { name: 'American Scientific Affiliation' },
     { name: 'Society for Conservation Biology (Global & Nigeria)' },

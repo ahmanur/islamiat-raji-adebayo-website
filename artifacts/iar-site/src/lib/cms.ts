@@ -76,6 +76,7 @@ export type ListKey =
   | 'outreach_engagement'
   | 'science_writing'
   | 'field_work_entries'
+  | 'about_gallery'
   | 'resources';
 
 export interface ListRecord {

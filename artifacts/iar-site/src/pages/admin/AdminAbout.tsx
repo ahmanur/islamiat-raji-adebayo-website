@@ -55,6 +55,26 @@ export function AdminAbout() {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <h2 className="text-white font-medium text-sm mb-1">Photo Gallery</h2>
+          <p className="text-slate-500 text-xs mb-4">Photos shown as a grid below the About text. Click a photo to open it full-screen on the public site. Add as many as you like.</p>
+          <ListEditor
+            listKey="about_gallery"
+            itemLabel="Photo"
+            fields={[
+              {
+                key: 'image',
+                label: 'Photo',
+                type: 'image' as const,
+                imageFallback: '',
+                imageHint: 'Upload a square or rectangular photo. Square works best.',
+              },
+              { key: 'caption', label: 'Caption (optional)', placeholder: 'Field work in Ithaca, NY' },
+            ]}
+            defaultItems={LIST_DEFAULTS.about_gallery}
+          />
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
           <h2 className="text-white font-medium text-sm mb-4">Affiliations & Memberships</h2>
           <ListEditor
             listKey="affiliations"
