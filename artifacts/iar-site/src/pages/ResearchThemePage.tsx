@@ -249,7 +249,6 @@ export function ResearchThemePage() {
                           </div>
                           {network.previous_countries.length > 0 && (
                             <div className="mb-5">
-                              <p className="text-xs font-semibold uppercase tracking-widest text-foreground/40 mb-3">Previous Phase Countries</p>
                               <div className="flex flex-wrap gap-2">
                                 {network.previous_countries.map(c => (
                                   <span key={c} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary border border-secondary/70 text-foreground/60 text-sm">
