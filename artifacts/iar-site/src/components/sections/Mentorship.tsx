@@ -162,14 +162,16 @@ export function Mentorship() {
               </div>
 
               {roles.length > 0 && (
-                <div className="grid sm:grid-cols-2 gap-6">
+                <div className="flex flex-col gap-4">
                   {roles.map((role, i) => {
                     const Icon = ROLE_ICONS[i % ROLE_ICONS.length];
                     return (
-                      <div key={i} className="p-6 rounded-xl bg-background/5 border border-background/10">
-                        <Icon className="w-6 h-6 text-primary mb-4" />
-                        <h3 className="text-lg font-medium mb-2">{role.title}</h3>
-                        <p className="text-background/60 text-sm">{role.description}</p>
+                      <div key={i} className="flex items-start gap-5 p-6 rounded-xl bg-background/5 border border-background/10">
+                        <Icon className="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
+                        <div>
+                          <h3 className="text-lg font-medium mb-1">{role.title}</h3>
+                          <p className="text-background/60 text-sm">{role.description}</p>
+                        </div>
                       </div>
                     );
                   })}
