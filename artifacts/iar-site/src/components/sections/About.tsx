@@ -37,7 +37,7 @@ export function About() {
 
   return (
     <>
-      <section id="about" className="py-24 md:py-32 bg-secondary/30 relative">
+      <section id="about" className="pt-24 md:pt-32 pb-12 md:pb-16 bg-secondary/30 relative">
         <div className="container mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
             <div className="lg:col-span-4">
@@ -101,7 +101,7 @@ export function About() {
       </section>
 
       {gallery.length > 0 && (
-        <section id="about-gallery" className="py-20 md:py-28 bg-background">
+        <section id="about-gallery" className="pt-12 md:pt-16 pb-20 md:pb-28 bg-background">
           <div className="container mx-auto px-6 md:px-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
