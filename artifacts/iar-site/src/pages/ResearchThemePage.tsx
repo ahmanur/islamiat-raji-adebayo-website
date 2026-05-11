@@ -106,8 +106,6 @@ export function ResearchThemePage() {
           Back to Research
         </Link>
 
-        <p className="max-w-3xl text-lg text-foreground/70 leading-relaxed mb-10">{theme.description}</p>
-
         {theme.intro && (
           <div className="max-w-3xl mb-16 pl-5 border-l-2 border-primary/40">
             <p className="text-base md:text-lg text-foreground/80 leading-relaxed">{theme.intro}</p>
