@@ -19,6 +19,7 @@ type ProjectItem = {
   collaborators?: string;
   network?: string;
   theme?: string;
+  theme_order?: number;
 };
 type ProjectEntry = { id: string; data: ProjectItem };
 type ThemeItem = { icon: string; title: string; description: string; intro?: string; image?: string };
@@ -99,9 +100,9 @@ export function ResearchThemePage() {
     );
   }
 
-  const filteredProjects = entries.filter(
-    e => e.data.theme?.trim().toLowerCase() === theme.title.trim().toLowerCase()
-  );
+  const filteredProjects = entries
+    .filter(e => e.data.theme?.trim().toLowerCase() === theme.title.trim().toLowerCase())
+    .sort((a, b) => (Number(a.data.theme_order ?? 999)) - (Number(b.data.theme_order ?? 999)));
 
   return (
     <>

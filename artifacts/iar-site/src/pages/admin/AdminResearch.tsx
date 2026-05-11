@@ -1,9 +1,144 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ContentEditor } from '@/components/admin/ContentEditor';
 import { ListEditor } from '@/components/admin/ListEditor';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
-import { getList } from '@/lib/cms';
+import { getList, upsertListItem, type ListRecord } from '@/lib/cms';
+import { ChevronUp, ChevronDown, Check } from 'lucide-react';
+
+type ProjectRecord = ListRecord & { data: { title?: string; theme?: string; theme_order?: number; [key: string]: any } };
+
+function ThemeProjectReorder() {
+  const [themes, setThemes] = useState<string[]>([]);
+  const [projects, setProjects] = useState<ProjectRecord[]>([]);
+  const [activeTheme, setActiveTheme] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  const load = useCallback(() => {
+    Promise.all([
+      getList('research_themes'),
+      getList('research_projects'),
+    ]).then(([themeRows, projectRows]) => {
+      const titles = themeRows.map(r => r.data.title as string).filter(Boolean);
+      setThemes(titles);
+      if (titles.length > 0 && !activeTheme) setActiveTheme(titles[0]);
+      const ps = projectRows.map(r => ({
+        ...r,
+        data: { ...r.data, theme_order: Number(r.data.theme_order ?? 999) },
+      })) as ProjectRecord[];
+      setProjects(ps);
+      setLoaded(true);
+    });
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const projectsForTheme = (theme: string) =>
+    [...projects.filter(p => p.data.theme?.trim().toLowerCase() === theme.trim().toLowerCase())]
+      .sort((a, b) => (a.data.theme_order ?? 999) - (b.data.theme_order ?? 999));
+
+  const move = (theme: string, index: number, dir: -1 | 1) => {
+    const group = projectsForTheme(theme);
+    const newIndex = index + dir;
+    if (newIndex < 0 || newIndex >= group.length) return;
+    const a = group[index];
+    const b = group[newIndex];
+    setProjects(prev =>
+      prev.map(p => {
+        if (p.id === a.id) return { ...p, data: { ...p.data, theme_order: newIndex } };
+        if (p.id === b.id) return { ...p, data: { ...p.data, theme_order: index } };
+        return p;
+      })
+    );
+    setSaved(false);
+  };
+
+  const save = async (theme: string) => {
+    const group = projectsForTheme(theme);
+    setSaving(true);
+    await Promise.all(
+      group.map((p, i) =>
+        upsertListItem('research_projects', { ...p, data: { ...p.data, theme_order: i } })
+      )
+    );
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  if (!loaded) return <p className="text-slate-500 text-xs py-4">Loading projects…</p>;
+  if (themes.length === 0) return <p className="text-slate-500 text-xs py-4">No themes found. Add themes above first.</p>;
+
+  return (
+    <div>
+      {/* Theme tabs */}
+      <div className="flex flex-wrap gap-2 mb-5">
+        {themes.map(t => (
+          <button
+            key={t}
+            onClick={() => { setActiveTheme(t); setSaved(false); }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              activeTheme === t
+                ? 'bg-primary text-white'
+                : 'bg-slate-800 text-slate-400 hover:text-white'
+            }`}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {activeTheme && (() => {
+        const group = projectsForTheme(activeTheme);
+        if (group.length === 0) return (
+          <p className="text-slate-500 text-xs py-3">
+            No projects assigned to <span className="text-slate-300">{activeTheme}</span> yet.
+          </p>
+        );
+        return (
+          <div className="space-y-2">
+            {group.map((p, i) => (
+              <div
+                key={p.id}
+                className="flex items-center gap-3 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3"
+              >
+                <span className="text-primary text-xs font-bold w-5 text-center flex-shrink-0">{i + 1}</span>
+                <span className="text-white text-sm flex-1 truncate">{p.data.title || '(untitled)'}</span>
+                <div className="flex flex-col gap-0.5 flex-shrink-0">
+                  <button
+                    onClick={() => move(activeTheme, i, -1)}
+                    disabled={i === 0}
+                    className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-700 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronUp className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => move(activeTheme, i, 1)}
+                    disabled={i === group.length - 1}
+                    className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-700 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+            <div className="pt-3">
+              <button
+                onClick={() => save(activeTheme)}
+                disabled={saving}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
+              >
+                {saved ? <><Check className="w-3.5 h-3.5" /> Saved</> : saving ? 'Saving…' : 'Save Order'}
+              </button>
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
 
 export function AdminResearch() {
   const [themeOptions, setThemeOptions] = useState<string[]>(
@@ -114,6 +249,14 @@ export function AdminResearch() {
             ]}
             defaultItems={LIST_DEFAULTS.research_projects}
           />
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <h2 className="text-white font-medium text-sm mb-1">Project Order Within Themes</h2>
+          <p className="text-slate-500 text-xs mb-5">
+            Use the arrows to set the display order of projects within each theme. Select a theme tab, rearrange, then click Save Order.
+          </p>
+          <ThemeProjectReorder />
         </div>
       </div>
     </AdminLayout>
