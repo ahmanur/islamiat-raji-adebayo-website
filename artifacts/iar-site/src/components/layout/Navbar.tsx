@@ -54,32 +54,34 @@ export function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="container mx-auto px-6 md:px-10 flex items-center justify-between gap-6">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 xl:px-10 flex flex-nowrap items-center justify-between gap-3 xl:gap-6 min-w-0">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 group shrink-0"
+          className="flex items-center gap-2 xl:gap-2.5 group shrink min-w-0"
           aria-label="Dr. Islamiat Raji-Adebayo — home"
         >
           <img
             src="/images/portrait.jpg"
             alt="Dr. Islamiat Raji-Adebayo"
-            className="hidden sm:block w-8 h-8 rounded-full object-cover object-top border-2 border-primary/20 group-hover:border-primary/50 transition-colors"
+            className="hidden sm:block w-8 h-8 shrink-0 rounded-full object-cover object-top border-2 border-primary/20 group-hover:border-primary/50 transition-colors"
           />
-          <span className="hidden sm:block font-serif font-semibold text-base tracking-tight text-foreground group-hover:text-primary transition-colors whitespace-nowrap">Islamiat Abidemi Raji. Ph.D.</span>
+          <span className="hidden sm:block font-serif font-semibold text-sm xl:text-base tracking-tight text-foreground group-hover:text-primary transition-colors whitespace-nowrap truncate">
+            Islamiat Abidemi Raji. Ph.D.
+          </span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center" aria-label="Site navigation">
-          <ul className="flex items-center gap-0.5">
+        {/* Desktop nav — shows from xl (1280px) so 125% zoom on 1280-wide laptops still fits */}
+        <nav className="hidden xl:flex items-center shrink-0" aria-label="Site navigation">
+          <ul className="flex flex-nowrap items-center gap-0">
             {navLinks.map((link) => {
               const active = isActive(link.href, location);
               return (
-                <li key={link.name}>
+                <li key={link.name} className="shrink-0">
                   <Link
                     href={link.href}
                     className={`
-                      relative px-3.5 py-1.5 text-sm font-medium rounded-sm
+                      relative px-2.5 2xl:px-3.5 py-1.5 text-sm font-medium rounded-sm whitespace-nowrap
                       transition-colors duration-200
                       ${link.accent
                         ? active
@@ -93,7 +95,7 @@ export function Navbar() {
                   >
                     {link.name}
                     {active && !link.accent && (
-                      <span className="absolute bottom-0 left-3.5 right-3.5 h-[2px] rounded-full bg-primary" />
+                      <span className="absolute bottom-0 left-2.5 2xl:left-3.5 right-2.5 2xl:right-3.5 h-[2px] rounded-full bg-primary" />
                     )}
                   </Link>
                 </li>
@@ -102,9 +104,9 @@ export function Navbar() {
           </ul>
         </nav>
 
-        {/* Mobile hamburger */}
+        {/* Mobile / tablet hamburger — visible below xl */}
         <button
-          className="lg:hidden p-2 text-foreground/70 hover:text-foreground transition-colors"
+          className="xl:hidden p-2 text-foreground/70 hover:text-foreground transition-colors shrink-0"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
@@ -112,10 +114,10 @@ export function Navbar() {
           {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
-      {/* Mobile menu */}
+      {/* Mobile / tablet menu */}
       {menuOpen && (
         <motion.div
-          className="lg:hidden bg-background/98 border-t border-border/40 px-6 pb-5 pt-3"
+          className="xl:hidden bg-background/98 border-t border-border/40 px-6 pb-5 pt-3"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
