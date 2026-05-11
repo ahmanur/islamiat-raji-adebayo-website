@@ -151,7 +151,7 @@ export function ResearchThemePage() {
               <p className="text-foreground/30 text-sm mt-1">Assign a project to this theme in the admin panel.</p>
             </div>
           ) : (
-            <div className="space-y-24">
+            <div className="space-y-0">
               {filteredProjects.map((entry, i) => {
                 const project = entry.data;
                 const imgSrc = project.image || DEFAULT_IMAGES[i % DEFAULT_IMAGES.length];
@@ -167,41 +167,49 @@ export function ResearchThemePage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-60px' }}
                     transition={{ duration: 0.6 }}
-                    className={i > 0 ? 'pt-24 border-t border-secondary/60' : ''}
+                    className="rounded-2xl border border-secondary/70 bg-secondary/10 overflow-hidden mb-10"
                   >
-                    {/* Project image banner */}
-                    <div className="relative w-full h-56 md:h-80 rounded-2xl overflow-hidden mb-8 shadow-md">
-                      <img
-                        src={imgSrc}
-                        alt={project.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                      <div className="absolute bottom-0 left-0 p-6 md:p-8">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/80 text-white text-xs font-medium tracking-wide uppercase mb-3">
-                          {project.status}
-                        </div>
-                        <h2 className="font-serif text-2xl md:text-4xl text-white leading-tight max-w-2xl">
-                          {project.title}
-                        </h2>
+                    {/* Project separator header */}
+                    <div className="flex items-center gap-4 px-6 py-4 border-b border-secondary/60 bg-secondary/30">
+                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 text-primary text-xs font-bold flex-shrink-0">
+                        {i + 1}
+                      </span>
+                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium tracking-wide uppercase">
+                        {project.status}
                       </div>
                     </div>
 
-                    <div className="max-w-3xl space-y-10">
-                      {/* Location */}
-                      {project.location && (
-                        <div className="flex items-center gap-2 text-foreground/50 text-sm uppercase tracking-wider font-medium">
-                          <MapPin className="w-4 h-4 text-primary" />
-                          {project.location}
+                    {/* Image LEFT + title/location/description RIGHT */}
+                    <div className="flex flex-col md:flex-row gap-0">
+                      <div className="md:w-2/5 flex-shrink-0">
+                        <div className="h-64 md:h-full min-h-[280px] overflow-hidden">
+                          <img
+                            src={imgSrc}
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
-                      )}
-
-                      {/* Description */}
-                      <div className="prose prose-lg prose-headings:font-serif prose-p:text-foreground/80 prose-p:leading-relaxed max-w-none">
-                        {project.description.split('\n').filter(Boolean).map((para, pi) => (
-                          <p key={pi}>{para}</p>
-                        ))}
                       </div>
+                      <div className="md:w-3/5 p-6 md:p-8 flex flex-col justify-center space-y-5">
+                        <h2 className="font-serif text-2xl md:text-3xl text-foreground leading-tight">
+                          {project.title}
+                        </h2>
+                        {project.location && (
+                          <div className="flex items-center gap-2 text-foreground/50 text-sm uppercase tracking-wider font-medium">
+                            <MapPin className="w-4 h-4 text-primary" />
+                            {project.location}
+                          </div>
+                        )}
+                        <div className="prose prose-base prose-p:text-foreground/80 prose-p:leading-relaxed max-w-none">
+                          {project.description.split('\n').filter(Boolean).map((para, pi) => (
+                            <p key={pi}>{para}</p>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Remaining details below */}
+                    <div className="px-6 md:px-8 pb-8 pt-6 border-t border-secondary/50 space-y-10">
 
                       {/* Methods */}
                       {project.methods && (
