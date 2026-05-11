@@ -16,6 +16,7 @@ import { FieldWorkPage } from '@/pages/FieldWorkPage';
 import { OpportunitiesPage } from '@/pages/OpportunitiesPage';
 import { TeachingPage } from '@/pages/TeachingPage';
 import { ProjectDetailPage } from '@/pages/ProjectDetailPage';
+import { ResearchThemePage } from '@/pages/ResearchThemePage';
 import NotFound from '@/pages/not-found';
 
 import { AdminAuthProvider, useAdminAuth } from '@/lib/adminAuth';
@@ -90,6 +91,7 @@ function Router() {
               <Switch>
                 <Route path="/" component={HomePage} />
                 <Route path="/about" component={AboutPage} />
+                <Route path="/research/theme/:slug" component={ResearchThemePage} />
                 <Route path="/research/:id" component={ProjectDetailPage} />
                 <Route path="/research" component={ResearchPage} />
                 <Route path="/publications" component={PublicationsPage} />
