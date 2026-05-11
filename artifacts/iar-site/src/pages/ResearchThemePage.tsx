@@ -172,9 +172,6 @@ export function ResearchThemePage() {
                   >
                     {/* Project separator header */}
                     <div className="flex items-center gap-4 px-6 py-4 border-b border-secondary/60 bg-secondary/30">
-                      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 text-primary text-xs font-bold flex-shrink-0">
-                        {i + 1}
-                      </span>
                       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium tracking-wide uppercase">
                         {project.status}
                       </div>
