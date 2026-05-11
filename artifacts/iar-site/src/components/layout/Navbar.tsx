@@ -54,7 +54,7 @@ export function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 xl:px-10 flex flex-nowrap items-center justify-between gap-3 xl:gap-6 min-w-0">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-4 xl:px-8 2xl:px-10 flex flex-nowrap items-center justify-between gap-2 lg:gap-3 xl:gap-6 min-w-0">
         {/* Logo */}
         <Link
           href="/"
@@ -64,15 +64,16 @@ export function Navbar() {
           <img
             src="/images/portrait.jpg"
             alt="Dr. Islamiat Raji-Adebayo"
-            className="hidden sm:block w-8 h-8 shrink-0 rounded-full object-cover object-top border-2 border-primary/20 group-hover:border-primary/50 transition-colors"
+            className="hidden sm:block w-7 h-7 xl:w-8 xl:h-8 shrink-0 rounded-full object-cover object-top border-2 border-primary/20 group-hover:border-primary/50 transition-colors"
           />
-          <span className="hidden sm:block font-serif font-semibold text-sm xl:text-base tracking-tight text-foreground group-hover:text-primary transition-colors whitespace-nowrap truncate">
+          {/* Title hidden between lg and xl to free room for the full nav at the new lower breakpoint */}
+          <span className="hidden sm:block lg:hidden xl:block font-serif font-semibold text-sm xl:text-base tracking-tight text-foreground group-hover:text-primary transition-colors whitespace-nowrap truncate">
             Islamiat Abidemi Raji. Ph.D.
           </span>
         </Link>
 
-        {/* Desktop nav — shows from xl (1280px) so 125% zoom on 1280-wide laptops still fits */}
-        <nav className="hidden xl:flex items-center shrink-0" aria-label="Site navigation">
+        {/* Desktop nav — shows from lg (1024px); compact spacing/typography at lg, expands at xl/2xl */}
+        <nav className="hidden lg:flex items-center shrink-0" aria-label="Site navigation">
           <ul className="flex flex-nowrap items-center gap-0">
             {navLinks.map((link) => {
               const active = isActive(link.href, location);
@@ -81,7 +82,7 @@ export function Navbar() {
                   <Link
                     href={link.href}
                     className={`
-                      relative px-2.5 2xl:px-3.5 py-1.5 text-sm font-medium rounded-sm whitespace-nowrap
+                      relative px-1.5 xl:px-2.5 2xl:px-3.5 py-1.5 text-[13px] xl:text-sm font-medium rounded-sm whitespace-nowrap
                       transition-colors duration-200
                       ${link.accent
                         ? active
@@ -95,7 +96,7 @@ export function Navbar() {
                   >
                     {link.name}
                     {active && !link.accent && (
-                      <span className="absolute bottom-0 left-2.5 2xl:left-3.5 right-2.5 2xl:right-3.5 h-[2px] rounded-full bg-primary" />
+                      <span className="absolute bottom-0 left-1.5 xl:left-2.5 2xl:left-3.5 right-1.5 xl:right-2.5 2xl:right-3.5 h-[2px] rounded-full bg-primary" />
                     )}
                   </Link>
                 </li>
@@ -104,9 +105,9 @@ export function Navbar() {
           </ul>
         </nav>
 
-        {/* Mobile / tablet hamburger — visible below xl */}
+        {/* Mobile / tablet hamburger — visible below lg */}
         <button
-          className="xl:hidden p-2 text-foreground/70 hover:text-foreground transition-colors shrink-0"
+          className="lg:hidden p-2 text-foreground/70 hover:text-foreground transition-colors shrink-0"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
@@ -117,7 +118,7 @@ export function Navbar() {
       {/* Mobile / tablet menu */}
       {menuOpen && (
         <motion.div
-          className="xl:hidden bg-background/98 border-t border-border/40 px-6 pb-5 pt-3"
+          className="lg:hidden bg-background/98 border-t border-border/40 px-6 pb-5 pt-3"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
