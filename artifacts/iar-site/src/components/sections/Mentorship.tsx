@@ -107,7 +107,7 @@ function CollaboratorList({ items }: { items: PersonItem[] }) {
         <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-3">Collaborators</h3>
         <div className="w-8 h-[2px] bg-primary" />
       </motion.div>
-      <ul className="space-y-1">
+      <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-1">
         {items.map((person, i) => {
           const links = parseLinks(person.links);
           const profileUrl = links.length > 0 ? links[0].url : null;
@@ -115,11 +115,11 @@ function CollaboratorList({ items }: { items: PersonItem[] }) {
           return (
             <motion.li
               key={person.name + i}
-              initial={{ opacity: 0, x: -12 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.35, delay: i * 0.05 }}
-              className="flex items-baseline gap-2 py-2 border-b border-secondary/40 last:border-0"
+              transition={{ duration: 0.3, delay: i * 0.04 }}
+              className="py-2 border-b border-secondary/40"
             >
               {profileUrl ? (
                 <a
@@ -134,7 +134,7 @@ function CollaboratorList({ items }: { items: PersonItem[] }) {
               ) : (
                 <span className="font-medium text-foreground">{person.name}</span>
               )}
-              {meta && <span className="text-foreground/50 text-sm">{meta}</span>}
+              {meta && <p className="text-foreground/50 text-xs mt-0.5 truncate">{meta}</p>}
             </motion.li>
           );
         })}
