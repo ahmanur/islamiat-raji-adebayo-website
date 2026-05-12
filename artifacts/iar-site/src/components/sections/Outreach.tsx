@@ -112,18 +112,27 @@ export function Outreach() {
   const [writing, setWriting] = useState<WritingItem[]>(
     LIST_DEFAULTS.science_writing as WritingItem[]
   );
+  const [dbLoaded, setDbLoaded] = useState(false);
 
   useEffect(() => {
     getContent('outreach_page').then(data => {
       if (Object.keys(data).length > 0) setC({ ...DC, ...data });
     });
-    getList('outreach_engagement').then(rows => {
-      if (rows.length > 0) setEngagement(rows.map(r => r.data as EngagementItem));
-    });
-    getList('science_writing').then(rows => {
-      if (rows.length > 0) setWriting(rows.map(r => r.data as WritingItem));
+    Promise.all([
+      getList('outreach_engagement'),
+      getList('science_writing'),
+    ]).then(([engRows, writRows]) => {
+      // Always trust the DB once it responds — even an empty result means
+      // the user cleared all items intentionally.
+      setEngagement(engRows.map(r => r.data as EngagementItem));
+      setWriting(writRows.map(r => r.data as WritingItem));
+      setDbLoaded(true);
     });
   }, []);
+
+  // Before DB responds, show defaults. After DB responds, show whatever it returned.
+  const displayEngagement = dbLoaded ? engagement : LIST_DEFAULTS.outreach_engagement as EngagementItem[];
+  const displayWriting = dbLoaded ? writing : LIST_DEFAULTS.science_writing as WritingItem[];
 
   return (
     <>
@@ -171,11 +180,11 @@ export function Outreach() {
               <p className="text-foreground/70 leading-relaxed max-w-2xl">{c.engagement_text}</p>
             )}
           </motion.div>
-          {engagement.length === 0 ? (
+          {displayEngagement.length === 0 ? (
             <p className="text-foreground/50 italic">No public engagement entries yet.</p>
           ) : (
             <div className="flex flex-col">
-              {engagement.map((item, i) => (
+              {displayEngagement.map((item, i) => (
                 <EngagementCard key={item.title + i} item={item} index={i} />
               ))}
             </div>
@@ -202,11 +211,11 @@ export function Outreach() {
               <p className="text-foreground/70 leading-relaxed max-w-2xl">{c.writing_text}</p>
             )}
           </motion.div>
-          {writing.length === 0 ? (
+          {displayWriting.length === 0 ? (
             <p className="text-foreground/50 italic">No science writing entries yet.</p>
           ) : (
             <div className="flex flex-col">
-              {writing.map((item, i) => (
+              {displayWriting.map((item, i) => (
                 <WritingCard key={item.title + i} item={item} index={i} />
               ))}
             </div>
