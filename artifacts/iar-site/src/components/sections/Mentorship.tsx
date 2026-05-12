@@ -93,6 +93,56 @@ function PersonCard({ person, index, imageContain }: { person: PersonItem; index
   );
 }
 
+function CollaboratorList({ items }: { items: PersonItem[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="mb-20">
+      <motion.div
+        className="mb-6"
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.5 }}
+      >
+        <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-3">Collaborators</h3>
+        <div className="w-8 h-[2px] bg-primary" />
+      </motion.div>
+      <ul className="space-y-1">
+        {items.map((person, i) => {
+          const links = parseLinks(person.links);
+          const profileUrl = links.length > 0 ? links[0].url : null;
+          const meta = [person.role, person.institution].filter(Boolean).join(' · ');
+          return (
+            <motion.li
+              key={person.name + i}
+              initial={{ opacity: 0, x: -12 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.35, delay: i * 0.05 }}
+              className="flex items-baseline gap-2 py-2 border-b border-secondary/40 last:border-0"
+            >
+              {profileUrl ? (
+                <a
+                  href={profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1 group"
+                >
+                  {person.name}
+                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-60 transition-opacity flex-shrink-0" />
+                </a>
+              ) : (
+                <span className="font-medium text-foreground">{person.name}</span>
+              )}
+              {meta && <span className="text-foreground/50 text-sm">{meta}</span>}
+            </motion.li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 function SubSection({ title, items, imageContain }: { title: string; items: PersonItem[]; imageContain?: boolean }) {
   if (items.length === 0) return null;
   return (
@@ -208,7 +258,7 @@ export function Mentorship() {
       {(collaborators.length > 0 || mentees.length > 0 || funding.length > 0) && (
         <section className="py-24 md:py-32 bg-background">
           <div className="container mx-auto px-6 md:px-12 max-w-4xl">
-            <SubSection title="Collaborators" items={collaborators} />
+            <CollaboratorList items={collaborators} />
             <SubSection title="Mentees" items={mentees} />
             <SubSection title="Funding" items={funding} imageContain />
           </div>
