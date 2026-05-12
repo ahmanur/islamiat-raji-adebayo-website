@@ -32,7 +32,7 @@ function parseLinks(raw: string): { label: string; url: string }[] {
     .filter(Boolean) as { label: string; url: string }[];
 }
 
-function PersonCard({ person, index }: { person: PersonItem; index: number }) {
+function PersonCard({ person, index, imageContain }: { person: PersonItem; index: number; imageContain?: boolean }) {
   const links = parseLinks(person.links);
   return (
     <motion.div
@@ -43,9 +43,9 @@ function PersonCard({ person, index }: { person: PersonItem; index: number }) {
       className="flex gap-7 items-start py-8 border-b border-secondary/60 last:border-0"
     >
       {/* Photo */}
-      <div className="w-52 h-52 flex-shrink-0 overflow-hidden rounded-lg border border-secondary/60 bg-secondary/30 shadow-sm">
+      <div className={`w-52 h-52 flex-shrink-0 overflow-hidden rounded-lg border border-secondary/60 shadow-sm ${imageContain ? 'bg-white p-3' : 'bg-secondary/30'}`}>
         {person.image ? (
-          <img src={person.image} alt={person.name} className="w-full h-full object-cover" />
+          <img src={person.image} alt={person.name} className={`w-full h-full ${imageContain ? 'object-contain' : 'object-cover'}`} />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary/30">
             <Users className="w-10 h-10" />
@@ -93,7 +93,7 @@ function PersonCard({ person, index }: { person: PersonItem; index: number }) {
   );
 }
 
-function SubSection({ title, items }: { title: string; items: PersonItem[] }) {
+function SubSection({ title, items, imageContain }: { title: string; items: PersonItem[]; imageContain?: boolean }) {
   if (items.length === 0) return null;
   return (
     <div className="mb-20">
@@ -109,7 +109,7 @@ function SubSection({ title, items }: { title: string; items: PersonItem[] }) {
       </motion.div>
       <div className="flex flex-col">
         {items.map((person, i) => (
-          <PersonCard key={person.name + i} person={person} index={i} />
+          <PersonCard key={person.name + i} person={person} index={i} imageContain={imageContain} />
         ))}
       </div>
     </div>
@@ -213,7 +213,7 @@ export function Mentorship() {
           <div className="container mx-auto px-6 md:px-12 max-w-4xl">
             <SubSection title="Collaborators" items={collaborators} />
             <SubSection title="Mentees" items={mentees} />
-            <SubSection title="Funding" items={funding} />
+            <SubSection title="Funding" items={funding} imageContain />
           </div>
         </section>
       )}
