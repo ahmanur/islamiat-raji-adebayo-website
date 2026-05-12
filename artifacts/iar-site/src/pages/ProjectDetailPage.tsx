@@ -17,11 +17,19 @@ type ProjectItem = {
   gallery?: string;
   map_image?: string;
   map_link?: string;
+  map_embed?: string;
   collaborators?: string;
   network?: string;
   theme?: string;
 };
 type ProjectEntry = { id: string; data: ProjectItem };
+
+function extractMapEmbedSrc(embed: string): string | null {
+  const trimmed = embed.trim();
+  if (trimmed.startsWith('http')) return trimmed;
+  const match = trimmed.match(/src=["']([^"']+)["']/);
+  return match ? match[1] : null;
+}
 
 const DEFAULT_IMAGES = [
   '/images/spectrogram-art.png',
@@ -291,46 +299,47 @@ export function ProjectDetailPage() {
                 </div>
               )}
 
-              {project.map_image && (
-                <div>
-                  <div className="flex items-center gap-2 mb-5">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground/40">Study Site</h3>
-                  </div>
-                  <div className="rounded-2xl overflow-hidden border border-secondary/80 shadow-sm">
-                    {project.map_link ? (
-                      <a href={project.map_link} target="_blank" rel="noopener noreferrer" className="block group relative">
-                        <img
-                          src={project.map_image}
-                          alt="Study site map"
-                          className="w-full max-h-80 object-cover"
+              {(project.map_embed || project.map_image) && (() => {
+                const embedSrc = project.map_embed ? extractMapEmbedSrc(project.map_embed) : null;
+                return (
+                  <div>
+                    <div className="flex items-center gap-2 mb-5">
+                      <MapPin className="w-4 h-4 text-primary" />
+                      <h3 className="text-xs font-semibold uppercase tracking-widest text-foreground/40">Study Site</h3>
+                    </div>
+                    <div className="rounded-2xl overflow-hidden border border-secondary/80 shadow-sm">
+                      {embedSrc ? (
+                        <iframe
+                          src={embedSrc}
+                          className="w-full h-72"
+                          style={{ border: 0 }}
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          title="Study site map"
                         />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                          <span className="opacity-0 group-hover:opacity-100 bg-white/90 text-foreground text-xs font-medium px-4 py-2 rounded-full flex items-center gap-2 transition-opacity">
-                            <ExternalLink className="w-3.5 h-3.5" /> Open in Maps
-                          </span>
-                        </div>
+                      ) : project.map_link ? (
+                        <a href={project.map_link} target="_blank" rel="noopener noreferrer" className="block group relative">
+                          <img src={project.map_image} alt="Study site map" className="w-full max-h-80 object-cover" />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                            <span className="opacity-0 group-hover:opacity-100 bg-white/90 text-foreground text-xs font-medium px-4 py-2 rounded-full flex items-center gap-2 transition-opacity">
+                              <ExternalLink className="w-3.5 h-3.5" /> Open in Maps
+                            </span>
+                          </div>
+                        </a>
+                      ) : (
+                        <img src={project.map_image} alt="Study site map" className="w-full max-h-80 object-cover" />
+                      )}
+                    </div>
+                    {project.map_link && !embedSrc && (
+                      <a href={project.map_link} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs text-foreground/50 hover:text-primary mt-2 transition-colors">
+                        <ExternalLink className="w-3 h-3" /> View on Google Maps
                       </a>
-                    ) : (
-                      <img
-                        src={project.map_image}
-                        alt="Study site map"
-                        className="w-full max-h-80 object-cover"
-                      />
                     )}
                   </div>
-                  {project.map_link && (
-                    <a
-                      href={project.map_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs text-foreground/50 hover:text-primary mt-2 transition-colors"
-                    >
-                      <ExternalLink className="w-3 h-3" /> View on Google Maps
-                    </a>
-                  )}
-                </div>
-              )}
+                );
+              })()}
 
               {collaborators.length > 0 && (
                 <div>

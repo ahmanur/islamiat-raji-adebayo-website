@@ -243,7 +243,8 @@ export function AdminResearch() {
                 type: 'image',
                 imageHint: 'A map, satellite image, or site overview photo.',
               },
-              { key: 'map_link', label: 'Google Maps Link (optional)', type: 'url', placeholder: 'https://maps.google.com/…' },
+              { key: 'map_embed', label: 'Map Embed Code (paste Google Maps iframe or embed URL)', type: 'textarea', placeholder: '<iframe src="https://www.google.com/maps/embed?pb=..." ...></iframe>' },
+              { key: 'map_link', label: 'Google Maps Link (optional, for "Open in Maps" button)', type: 'url', placeholder: 'https://maps.google.com/…' },
               { key: 'collaborators', label: 'Collaborators (one per line)', type: 'textarea', placeholder: 'Dr. Jane Smith — Cornell University\nProf. Kwame Osei — University of Ghana' },
               { key: 'network', label: 'Partner Network', type: 'network' },
             ]}
