@@ -144,6 +144,48 @@ function CollaboratorList({ items }: { items: PersonItem[] }) {
   );
 }
 
+function FundingGrid({ items }: { items: PersonItem[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="mb-20">
+      <motion.div
+        className="mb-6"
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.5 }}
+      >
+        <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-3">Funding</h3>
+        <div className="w-8 h-[2px] bg-primary" />
+      </motion.div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {items.map((item, i) => (
+          <motion.div
+            key={item.name + i}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.35, delay: i * 0.05 }}
+            className="flex flex-col items-center text-center gap-3"
+          >
+            <div className="w-full aspect-square rounded-lg border border-secondary/60 bg-white p-3 flex items-center justify-center overflow-hidden">
+              {item.image ? (
+                <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-primary/5 text-primary/30">
+                  <HeartHandshake className="w-8 h-8" />
+                </div>
+              )}
+            </div>
+            <p className="text-sm font-medium text-foreground leading-snug">{item.name}</p>
+            {item.role && <p className="text-xs text-foreground/50 -mt-2 leading-snug">{item.role}</p>}
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function SubSection({ title, items, imageContain }: { title: string; items: PersonItem[]; imageContain?: boolean }) {
   if (items.length === 0) return null;
   return (
@@ -261,7 +303,7 @@ export function Mentorship() {
           <div className="container mx-auto px-6 md:px-12 max-w-4xl">
             <CollaboratorList items={collaborators} />
             <SubSection title="Mentees" items={mentees} />
-            <SubSection title="Funding" items={funding} imageContain />
+            <FundingGrid items={funding} />
           </div>
         </section>
       )}
