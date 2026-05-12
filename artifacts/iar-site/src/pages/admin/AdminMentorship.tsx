@@ -4,6 +4,13 @@ import { ContentEditor } from '@/components/admin/ContentEditor';
 import { ListEditor } from '@/components/admin/ListEditor';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
+const COLLABORATOR_FIELDS = [
+  { key: 'name', label: 'Name', placeholder: 'Full Name' },
+  { key: 'profile_url', label: 'Profile URL (name will link here)', placeholder: 'https://university.edu/people/name' },
+  { key: 'role', label: 'Role / Position', placeholder: 'Associate Professor' },
+  { key: 'institution', label: 'Institution', placeholder: 'Cornell University' },
+];
+
 const PERSON_FIELDS = [
   {
     key: 'image',
@@ -63,11 +70,11 @@ export function AdminMentorship() {
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
           <h2 className="text-white font-medium text-sm mb-1">Collaborators</h2>
-          <p className="text-slate-500 text-xs mb-4">Each entry appears as a photo card in the Collaborators section.</p>
+          <p className="text-slate-500 text-xs mb-4">Each entry appears as a clickable name in the Collaborators list. The name links to the Profile URL.</p>
           <ListEditor
             listKey="collaborators"
             itemLabel="Collaborator"
-            fields={PERSON_FIELDS}
+            fields={COLLABORATOR_FIELDS}
             defaultItems={LIST_DEFAULTS.collaborators}
           />
         </div>

@@ -14,6 +14,7 @@ type PersonItem = {
   description: string;
   email: string;
   links: string; // "Label|URL, Label|URL, ..."
+  profile_url?: string;
 };
 
 const ROLE_ICONS = [Users, BookOpen];
@@ -110,7 +111,7 @@ function CollaboratorList({ items }: { items: PersonItem[] }) {
       <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-1">
         {items.map((person, i) => {
           const links = parseLinks(person.links);
-          const profileUrl = links.length > 0 ? links[0].url : null;
+          const profileUrl = person.profile_url?.trim() || (links.length > 0 ? links[0].url : null);
           const meta = [person.role, person.institution].filter(Boolean).join(' · ');
           return (
             <motion.li
