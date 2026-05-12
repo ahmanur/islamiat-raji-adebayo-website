@@ -11,27 +11,26 @@ type GalleryItem = { image: string; caption?: string };
 
 export function About() {
   const [c, setC] = useState(DC);
-  const [education, setEducation] = useState<EducationItem[]>(LIST_DEFAULTS.education as EducationItem[]);
-  const [awards, setAwards] = useState<AwardItem[]>(LIST_DEFAULTS.awards as AwardItem[]);
-  const [gallery, setGallery] = useState<GalleryItem[]>(LIST_DEFAULTS.about_gallery as GalleryItem[]);
+  const [education, setEducation] = useState<EducationItem[]>([]);
+  const [awards, setAwards] = useState<AwardItem[]>([]);
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    getContent('about').then(data => {
-      if (Object.keys(data).length > 0) setC({ ...DC, ...data });
-    });
-    getList('education').then(rows => {
-      if (rows.length > 0) setEducation(rows.map(r => r.data as EducationItem));
-    });
-    getList('awards').then(rows => {
-      if (rows.length > 0) setAwards(rows.map(r => r.data as AwardItem));
-    });
-    getList('about_gallery').then(rows => {
-      if (rows.length > 0) {
+    Promise.all([
+      getContent('about').then(data => {
+        if (Object.keys(data).length > 0) setC({ ...DC, ...data });
+      }),
+      getList('education').then(rows => { setEducation(rows.map(r => r.data as EducationItem)); }),
+      getList('awards').then(rows => { setAwards(rows.map(r => r.data as AwardItem)); }),
+      getList('about_gallery').then(rows => {
         setGallery(rows.map(r => r.data as GalleryItem).filter(g => g.image));
-      }
-    });
+      }),
+    ]).finally(() => setLoading(false));
   }, []);
+
+  if (loading) return null;
 
   const lightboxImages = gallery.map(g => ({ url: g.image, caption: g.caption ?? '' }));
 

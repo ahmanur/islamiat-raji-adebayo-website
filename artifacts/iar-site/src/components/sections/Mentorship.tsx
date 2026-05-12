@@ -118,28 +118,25 @@ function SubSection({ title, items, imageContain }: { title: string; items: Pers
 
 export function Mentorship() {
   const [c, setC] = useState(DC);
-  const [roles, setRoles] = useState<RoleItem[]>(LIST_DEFAULTS.mentorship_roles as RoleItem[]);
-  const [collaborators, setCollaborators] = useState<PersonItem[]>(LIST_DEFAULTS.collaborators as PersonItem[]);
-  const [mentees, setMentees] = useState<PersonItem[]>(LIST_DEFAULTS.mentees as PersonItem[]);
-  const [funding, setFunding] = useState<PersonItem[]>(LIST_DEFAULTS.funding as PersonItem[]);
+  const [roles, setRoles] = useState<RoleItem[]>([]);
+  const [collaborators, setCollaborators] = useState<PersonItem[]>([]);
+  const [mentees, setMentees] = useState<PersonItem[]>([]);
+  const [funding, setFunding] = useState<PersonItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getContent('mentorship').then(data => {
-      if (Object.keys(data).length > 0) setC({ ...DC, ...data });
-    });
-    getList('mentorship_roles').then(rows => {
-      if (rows.length > 0) setRoles(rows.map(r => r.data as RoleItem));
-    });
-    getList('collaborators').then(rows => {
-      if (rows.length > 0) setCollaborators(rows.map(r => r.data as PersonItem));
-    });
-    getList('mentees').then(rows => {
-      if (rows.length > 0) setMentees(rows.map(r => r.data as PersonItem));
-    });
-    getList('funding').then(rows => {
-      if (rows.length > 0) setFunding(rows.map(r => r.data as PersonItem));
-    });
+    Promise.all([
+      getContent('mentorship').then(data => {
+        if (Object.keys(data).length > 0) setC({ ...DC, ...data });
+      }),
+      getList('mentorship_roles').then(rows => { setRoles(rows.map(r => r.data as RoleItem)); }),
+      getList('collaborators').then(rows => { setCollaborators(rows.map(r => r.data as PersonItem)); }),
+      getList('mentees').then(rows => { setMentees(rows.map(r => r.data as PersonItem)); }),
+      getList('funding').then(rows => { setFunding(rows.map(r => r.data as PersonItem)); }),
+    ]).finally(() => setLoading(false));
   }, []);
+
+  if (loading) return null;
 
   return (
     <>

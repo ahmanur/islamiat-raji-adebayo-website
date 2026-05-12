@@ -130,9 +130,9 @@ export function Outreach() {
     });
   }, []);
 
-  // Before DB responds, show defaults. After DB responds, show whatever it returned.
-  const displayEngagement = dbLoaded ? engagement : LIST_DEFAULTS.outreach_engagement as EngagementItem[];
-  const displayWriting = dbLoaded ? writing : LIST_DEFAULTS.science_writing as WritingItem[];
+  // Always show DB result once loaded; show nothing while loading to avoid flashing defaults.
+  const displayEngagement = dbLoaded ? engagement : [];
+  const displayWriting = dbLoaded ? writing : [];
 
   return (
     <>

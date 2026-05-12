@@ -71,21 +71,15 @@ export function slugifyTheme(title: string): string {
 
 export function ResearchThemePage() {
   const { slug } = useParams<{ slug: string }>();
-  const [themes, setThemes] = useState<ThemeItem[]>(LIST_DEFAULTS.research_themes as ThemeItem[]);
-  const [entries, setEntries] = useState<ProjectEntry[]>(
-    () => LIST_DEFAULTS.research_projects.map((d, i) => ({ id: String(i), data: d as ProjectItem }))
-  );
+  const [themes, setThemes] = useState<ThemeItem[]>([]);
+  const [entries, setEntries] = useState<ProjectEntry[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [lightbox, setLightbox] = useState<{ images: GalleryEntry[]; index: number } | null>(null);
 
   useEffect(() => {
     Promise.all([
-      getList('research_themes').then(rows => {
-        if (rows.length > 0) setThemes(rows.map(r => r.data as ThemeItem));
-      }),
-      getList('research_projects').then(rows => {
-        if (rows.length > 0) setEntries(rows.map(r => ({ id: r.id, data: r.data as ProjectItem })));
-      }),
+      getList('research_themes').then(rows => { setThemes(rows.map(r => r.data as ThemeItem)); }),
+      getList('research_projects').then(rows => { setEntries(rows.map(r => ({ id: r.id, data: r.data as ProjectItem }))); }),
     ]).finally(() => setLoaded(true));
   }, []);
 

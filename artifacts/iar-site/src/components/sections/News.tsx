@@ -6,13 +6,17 @@ import { LIST_DEFAULTS } from '@/lib/cmsDefaults';
 type NewsItem = { date: string; title: string; description: string; image?: string };
 
 export function News() {
-  const [news, setNews] = useState<NewsItem[]>(LIST_DEFAULTS.news_items as NewsItem[]);
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getList('news_items').then(rows => {
-      if (rows.length > 0) setNews(rows.map(r => r.data as NewsItem));
+      setNews(rows.map(r => r.data as NewsItem));
+      setLoading(false);
     });
   }, []);
+
+  if (loading) return null;
 
   return (
     <section id="news" className="py-24 md:py-32 bg-secondary/30">

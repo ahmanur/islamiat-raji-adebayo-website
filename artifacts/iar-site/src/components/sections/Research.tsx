@@ -12,16 +12,21 @@ type ThemeItem = { icon: string; title: string; description: string; image?: str
 
 export function Research() {
   const [c, setC] = useState(DC);
-  const [themes, setThemes] = useState<ThemeItem[]>(LIST_DEFAULTS.research_themes as ThemeItem[]);
+  const [themes, setThemes] = useState<ThemeItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getContent('research').then(data => {
-      if (Object.keys(data).length > 0) setC({ ...DC, ...data });
-    });
-    getList('research_themes').then(rows => {
-      if (rows.length > 0) setThemes(rows.map(r => r.data as ThemeItem));
-    });
+    Promise.all([
+      getContent('research').then(data => {
+        if (Object.keys(data).length > 0) setC({ ...DC, ...data });
+      }),
+      getList('research_themes').then(rows => {
+        setThemes(rows.map(r => r.data as ThemeItem));
+      }),
+    ]).finally(() => setLoading(false));
   }, []);
+
+  if (loading) return null;
 
   const bgImage = c.bg_image;
 

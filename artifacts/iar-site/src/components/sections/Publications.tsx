@@ -8,20 +8,17 @@ import { LIST_DEFAULTS, CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
 type PubItem = { title: string; authors: string; journal: string; year: string; category: string; url: string };
 
 export function Publications() {
-  const [pubs, setPubs] = useState<PubItem[]>(LIST_DEFAULTS.publications as PubItem[]);
+  const [pubs, setPubs] = useState<PubItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [scholarUrl, setScholarUrl] = useState(CONTENT_DEFAULTS.outreach.google_scholar || '');
   const [bannerImage, setBannerImage] = useState('');
 
   useEffect(() => {
-    getList('publications').then(rows => {
-      if (rows.length > 0) setPubs(rows.map(r => r.data as PubItem));
-    });
-    getContent('outreach').then(data => {
-      if (data.google_scholar) setScholarUrl(data.google_scholar);
-    });
-    getContent('publications').then(data => {
-      if (data.banner_image) setBannerImage(data.banner_image);
-    });
+    Promise.all([
+      getList('publications').then(rows => { setPubs(rows.map(r => r.data as PubItem)); }),
+      getContent('outreach').then(data => { if (data.google_scholar) setScholarUrl(data.google_scholar); }),
+      getContent('publications').then(data => { if (data.banner_image) setBannerImage(data.banner_image); }),
+    ]).finally(() => setLoading(false));
   }, []);
 
   const byCategory = pubs.reduce<Record<string, PubItem[]>>((acc, p) => {
@@ -30,6 +27,8 @@ export function Publications() {
     acc[cat].push(p);
     return acc;
   }, {});
+
+  if (loading) return null;
 
   const categories = Object.keys(byCategory);
 
