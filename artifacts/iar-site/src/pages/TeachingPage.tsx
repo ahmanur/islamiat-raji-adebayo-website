@@ -139,7 +139,7 @@ export function TeachingPage() {
         className="relative mb-16 md:mb-20"
         style={bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
       >
-        {bgImage && <div className="absolute inset-0 bg-background/55 pointer-events-none" />}
+        {bgImage && <div className="absolute inset-0 bg-background/75 pointer-events-none" />}
         <div className={`container mx-auto px-6 md:px-12 relative z-10 ${bgImage ? 'py-20 md:py-28' : 'pt-20 md:pt-28'}`}>
           <motion.div
             className="max-w-3xl"
