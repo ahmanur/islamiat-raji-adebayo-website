@@ -32,7 +32,7 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     application: 'Please reach out if you are interested in urban bioacoustics, plant-animal interactions, or community science. I welcome prospective graduate students, postdocs, and collaborators. Send me an email at iar32@cornell.edu with a brief description of your interests.',
   },
   outreach: {
-    email: 'abiraj4success@gmail.com',
+    email: 'iar32@cornell.edu',
     institution: 'K. Lisa Yang Center for Conservation Bioacoustics, Cornell Lab of Ornithology',
     location: 'Ithaca, NY, USA',
     intro: 'Whether you\'re a prospective student, a potential collaborator, or just interested in urban ecology and bioacoustics, I\'d love to hear from you.',
