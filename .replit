@@ -53,6 +53,7 @@ externalPort = 3003
 [userenv.shared]
 VITE_SUPABASE_URL = "https://gwylwhtlcwwvvynnmxfu.supabase.co"
 SUPABASE_URL = "https://gwylwhtlcwwvvynnmxfu.supabase.co"
+GMAIL_USER = "abiraj4success@gmail.com"
 
 [nix]
 channel = "stable-25_05"
