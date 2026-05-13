@@ -2,40 +2,60 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 interface SpectrogramWaveProps {
-  /** When true bars animate, when false bars rest at a low height */
   active?: boolean;
-  /** Number of bars to render */
   bars?: number;
-  /** Extra className on the container */
   className?: string;
 }
 
-export function SpectrogramWave({ active = true, bars = 32, className = '' }: SpectrogramWaveProps) {
+// Deterministic "random" peak heights so bars look organic but are stable across renders
+function peakFor(i: number, total: number) {
+  // Mix of sine waves to create a natural-looking envelope
+  const t = i / total;
+  const base = Math.sin(t * Math.PI) * 55; // bell shape across full width
+  const wobble = Math.sin(t * Math.PI * 5 + i * 1.3) * 20;
+  return Math.max(15, Math.min(95, 30 + base + wobble));
+}
+
+export function SpectrogramWave({ active = true, bars = 36, className = '' }: SpectrogramWaveProps) {
   return (
-    <div className={`flex items-end gap-[3px] w-full h-full ${className}`} aria-hidden="true">
-      {[...Array(bars)].map((_, i) => {
-        // Give each bar a different random-ish peak height so it looks organic
-        const peak = 30 + ((i * 7 + i * i * 3) % 60); // 30–90% range, deterministic
+    <div
+      className={`flex items-end gap-[2px] w-full h-full ${className}`}
+      aria-hidden="true"
+      style={{ alignItems: 'flex-end' }}
+    >
+      {Array.from({ length: bars }).map((_, i) => {
+        const peak = peakFor(i, bars);
+        const mid = peakFor(i, bars) * 0.55;
+        const low = peakFor(i, bars) * 0.2;
+
         return (
           <motion.div
             key={i}
-            className="flex-1 rounded-t-sm bg-primary/40"
-            style={{ transformOrigin: 'bottom', minWidth: 2 }}
+            className="flex-1 rounded-t bg-primary"
+            style={{ minWidth: 3, opacity: active ? 0.7 : 0.25 }}
             animate={
               active
-                ? { scaleY: [0.15, peak / 100, 0.2, (peak * 0.7) / 100, 0.15] }
-                : { scaleY: 0.08 }
+                ? {
+                    height: [
+                      `${low}%`,
+                      `${peak}%`,
+                      `${mid}%`,
+                      `${peak * 0.8}%`,
+                      `${low}%`,
+                    ],
+                  }
+                : { height: '6%' }
             }
             transition={
               active
                 ? {
-                    duration: 1.2 + (i % 5) * 0.18,
+                    duration: 1.0 + (i % 6) * 0.15,
                     repeat: Infinity,
-                    repeatType: 'mirror',
+                    repeatType: 'loop',
                     ease: 'easeInOut',
-                    delay: (i % 8) * 0.09,
+                    delay: (i % 9) * 0.08,
                   }
-                : { duration: 0.4, ease: 'easeOut' }
+                : { duration: 0.5, ease: 'easeOut' }
             }
           />
         );

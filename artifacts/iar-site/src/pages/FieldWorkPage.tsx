@@ -40,20 +40,24 @@ function AudioCard({ url, label }: { url: string; label: string }) {
         <Music className="w-3.5 h-3.5" />
         <span>{label || 'Bird Sound Recording'}</span>
       </div>
-      <div className="relative w-full aspect-[4/3] rounded-lg border border-secondary/60 bg-secondary/20 overflow-hidden flex flex-col">
-        {/* Wave fills the upper portion */}
-        <div className="flex-1 flex items-end px-4 pt-6 pb-2">
+      {/* Card — position:relative so absolute children resolve against it */}
+      <div className="relative w-full aspect-[4/3] rounded-lg border border-secondary/60 bg-secondary/20 overflow-hidden">
+
+        {/* Wave — absolutely fills everything above the controls strip */}
+        <div className="absolute inset-x-0 top-0 bottom-16 flex items-end px-4 pb-3">
           <SpectrogramWave active={playing} bars={40} />
         </div>
-        {/* Music icon fades out when playing */}
+
+        {/* Music icon — centred, fades out when playing */}
         <div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-500"
+          className="absolute inset-x-0 top-0 bottom-16 flex items-center justify-center pointer-events-none transition-opacity duration-500"
           style={{ opacity: playing ? 0 : 1 }}
         >
-          <Music className="w-10 h-10 text-primary/20" />
+          <Music className="w-12 h-12 text-primary/20" />
         </div>
-        {/* Controls pinned to bottom */}
-        <div className="shrink-0 px-4 pb-4">
+
+        {/* Controls strip pinned to bottom */}
+        <div className="absolute inset-x-0 bottom-0 h-16 flex items-center px-4">
           <audio
             ref={audioRef}
             src={url}
