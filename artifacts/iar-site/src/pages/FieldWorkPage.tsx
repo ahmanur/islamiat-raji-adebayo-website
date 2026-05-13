@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Video, Music } from 'lucide-react';
+import { SpectrogramWave } from '@/components/ui/SpectrogramWave';
 import { getContent, getList } from '@/lib/cms';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
@@ -27,6 +28,46 @@ function getVideoEmbed(url: string): string | null {
   const vi = url.match(/vimeo\.com\/(\d+)/);
   if (vi) return `https://player.vimeo.com/video/${vi[1]}`;
   return null;
+}
+
+function AudioCard({ url, label }: { url: string; label: string }) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  return (
+    <div>
+      <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-3">
+        <Music className="w-3.5 h-3.5" />
+        <span>{label || 'Bird Sound Recording'}</span>
+      </div>
+      <div className="relative w-full aspect-[4/3] rounded-lg border border-secondary/60 bg-secondary/20 overflow-hidden flex flex-col">
+        {/* Wave fills the upper portion */}
+        <div className="flex-1 flex items-end px-4 pt-6 pb-2">
+          <SpectrogramWave active={playing} bars={40} />
+        </div>
+        {/* Music icon fades out when playing */}
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-500"
+          style={{ opacity: playing ? 0 : 1 }}
+        >
+          <Music className="w-10 h-10 text-primary/20" />
+        </div>
+        {/* Controls pinned to bottom */}
+        <div className="shrink-0 px-4 pb-4">
+          <audio
+            ref={audioRef}
+            src={url}
+            controls
+            preload="metadata"
+            onPlay={() => setPlaying(true)}
+            onPause={() => setPlaying(false)}
+            onEnded={() => setPlaying(false)}
+            className="w-full"
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 type EntryRecord = { id: string; data: FieldworkEntry };
@@ -238,16 +279,7 @@ export function FieldWorkPage() {
                     })}
 
                     {entry.data.audios?.filter(a => a.url?.trim()).map((a, ai) => (
-                      <div key={ai}>
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-3">
-                          <Music className="w-3.5 h-3.5" />
-                          <span>{a.label || 'Bird Sound Recording'}</span>
-                        </div>
-                        <div className="relative w-full aspect-[4/3] rounded-lg border border-secondary/60 bg-secondary/30 flex flex-col items-center justify-center gap-4 p-6">
-                          <Music className="w-12 h-12 text-primary/30" />
-                          <audio controls src={a.url} className="w-full" preload="metadata" />
-                        </div>
-                      </div>
+                      <AudioCard key={ai} url={a.url} label={a.label} />
                     ))}
                   </div>
                 )}
