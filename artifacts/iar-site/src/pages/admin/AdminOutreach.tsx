@@ -17,6 +17,7 @@ export function AdminOutreach() {
             section="outreach"
             fields={[
               { key: 'email', label: 'Email Address', placeholder: 'iar32@cornell.edu' },
+              { key: 'email2', label: 'Second Email Address', placeholder: 'abiraj4success@gmail.com' },
               { key: 'phone', label: 'Phone Number', placeholder: '+1 (607) 379-4688' },
               { key: 'institution', label: 'Institution', placeholder: 'K. Lisa Yang Center…' },
               { key: 'location', label: 'Location', placeholder: 'Ithaca, NY, USA' },

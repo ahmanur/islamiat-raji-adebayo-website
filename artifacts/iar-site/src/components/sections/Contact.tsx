@@ -10,7 +10,7 @@ import { CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
 const DC = CONTENT_DEFAULTS.outreach;
 
 export function Contact() {
-  const [c, setC] = useState({ ...DC, phone: DC.phone ?? '' });
+  const [c, setC] = useState({ ...DC, email2: DC.email2 ?? '', phone: DC.phone ?? '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
@@ -69,16 +69,23 @@ export function Contact() {
             )}
 
             <div className="space-y-6">
-              {c.email && (
+              {(c.email || c.email2) && (
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-secondary/50 rounded-full text-primary shrink-0">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
                     <h3 className="font-medium text-foreground mb-1">Email</h3>
-                    <a href={`mailto:${c.email}`} className="text-foreground/70 hover:text-primary transition-colors">
-                      {c.email}
-                    </a>
+                    {c.email && (
+                      <a href={`mailto:${c.email}`} className="block text-foreground/70 hover:text-primary transition-colors">
+                        {c.email}
+                      </a>
+                    )}
+                    {c.email2 && (
+                      <a href={`mailto:${c.email2}`} className="block text-foreground/70 hover:text-primary transition-colors mt-1">
+                        {c.email2}
+                      </a>
+                    )}
                   </div>
                 </div>
               )}

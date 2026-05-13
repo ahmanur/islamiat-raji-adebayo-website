@@ -33,6 +33,7 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
   },
   outreach: {
     email: 'iar32@cornell.edu',
+    email2: 'abiraj4success@gmail.com',
     phone: '+1 (607) 379-4688',
     institution: 'K. Lisa Yang Center for Conservation Bioacoustics, Cornell Lab of Ornithology',
     location: 'Ithaca, NY, USA',
