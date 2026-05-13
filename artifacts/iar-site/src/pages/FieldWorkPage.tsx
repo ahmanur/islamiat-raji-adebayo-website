@@ -8,10 +8,14 @@ const DC = CONTENT_DEFAULTS.field_work_page;
 
 type Photo = { image: string; caption: string };
 
+type MediaItem = { url: string; label: string };
 type FieldworkEntry = {
   region: string;
   caption: string;
   photos: Photo[];
+  videos?: MediaItem[];
+  audios?: MediaItem[];
+  // legacy single-URL fields (migrated on load)
   video_url?: string;
   audio_url?: string;
 };
@@ -42,16 +46,26 @@ export function FieldWorkPage() {
     });
     getList('field_work_entries').then(rows => {
       if (rows.length > 0) {
-        setEntries(rows.map(r => ({
-          id: r.id,
-          data: {
-            region: (r.data?.region as string) ?? '',
-            caption: (r.data?.caption as string) ?? '',
-            photos: Array.isArray(r.data?.photos) ? (r.data.photos as Photo[]) : [],
-            video_url: (r.data?.video_url as string) ?? '',
-            audio_url: (r.data?.audio_url as string) ?? '',
-          },
-        })));
+        setEntries(rows.map(r => {
+          const d = r.data ?? {};
+          // migrate legacy single-URL fields to arrays
+          const videos: MediaItem[] = Array.isArray(d.videos)
+            ? (d.videos as MediaItem[])
+            : (d.video_url as string) ? [{ url: d.video_url as string, label: '' }] : [];
+          const audios: MediaItem[] = Array.isArray(d.audios)
+            ? (d.audios as MediaItem[])
+            : (d.audio_url as string) ? [{ url: d.audio_url as string, label: '' }] : [];
+          return {
+            id: r.id,
+            data: {
+              region: (d.region as string) ?? '',
+              caption: (d.caption as string) ?? '',
+              photos: Array.isArray(d.photos) ? (d.photos as Photo[]) : [],
+              videos,
+              audios,
+            },
+          };
+        }));
       }
     });
   }, []);
@@ -192,54 +206,49 @@ export function FieldWorkPage() {
                   </div>
                 )}
 
-                {/* Video + Audio — same 2-col grid, same aspect ratio as photos */}
-                {(entry.data.video_url?.trim() || entry.data.audio_url?.trim()) && (
+                {/* Videos + Audios — same 2-col grid, same aspect ratio as photos */}
+                {((entry.data.videos?.length ?? 0) > 0 || (entry.data.audios?.length ?? 0) > 0) && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 mt-8 md:mt-10">
-                    {entry.data.video_url?.trim() && (() => {
-                      const embedUrl = getVideoEmbed(entry.data.video_url!);
+                    {entry.data.videos?.filter(v => v.url?.trim()).map((v, vi) => {
+                      const embedUrl = getVideoEmbed(v.url);
                       return (
-                        <div>
+                        <div key={vi}>
                           <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-3">
                             <Video className="w-3.5 h-3.5" />
-                            <span>Video</span>
+                            <span>{v.label || 'Video'}</span>
                           </div>
                           {embedUrl ? (
                             <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border border-secondary/60 bg-secondary/30">
                               <iframe
                                 src={embedUrl}
-                                title="Fieldwork video"
+                                title={v.label || 'Fieldwork video'}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                                 className="absolute inset-0 w-full h-full"
                               />
                             </div>
                           ) : (
-                            <a href={entry.data.video_url} target="_blank" rel="noopener noreferrer"
+                            <a href={v.url} target="_blank" rel="noopener noreferrer"
                               className="flex items-center gap-2 text-primary hover:text-primary/80 text-sm font-medium transition-colors">
                               <Video className="w-4 h-4" /> Watch video
                             </a>
                           )}
                         </div>
                       );
-                    })()}
+                    })}
 
-                    {entry.data.audio_url?.trim() && (
-                      <div>
+                    {entry.data.audios?.filter(a => a.url?.trim()).map((a, ai) => (
+                      <div key={ai}>
                         <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-3">
                           <Music className="w-3.5 h-3.5" />
-                          <span>Bird Sound Recording</span>
+                          <span>{a.label || 'Bird Sound Recording'}</span>
                         </div>
                         <div className="relative w-full aspect-[4/3] rounded-lg border border-secondary/60 bg-secondary/30 flex flex-col items-center justify-center gap-4 p-6">
                           <Music className="w-12 h-12 text-primary/30" />
-                          <audio
-                            controls
-                            src={entry.data.audio_url}
-                            className="w-full"
-                            preload="metadata"
-                          />
+                          <audio controls src={a.url} className="w-full" preload="metadata" />
                         </div>
                       </div>
-                    )}
+                    ))}
                   </div>
                 )}
               </motion.div>

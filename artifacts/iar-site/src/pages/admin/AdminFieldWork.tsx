@@ -11,20 +11,28 @@ import {
 } from '@/lib/cms';
 
 type Photo = { image: string; caption: string };
-type FieldworkEntry = { region: string; caption: string; photos: Photo[]; video_url: string; audio_url: string };
+type MediaItem = { url: string; label: string };
+type FieldworkEntry = { region: string; caption: string; photos: Photo[]; videos: MediaItem[]; audios: MediaItem[] };
 
 const LIST_KEY = 'field_work_entries' as const;
 
-const EMPTY_ENTRY: FieldworkEntry = { region: '', caption: '', photos: [], video_url: '', audio_url: '' };
+const EMPTY_ENTRY: FieldworkEntry = { region: '', caption: '', photos: [], videos: [], audios: [] };
 
 function normalize(record: ListRecord): FieldworkEntry {
   const data = record.data ?? {};
+  // Migrate legacy single video_url / audio_url fields to arrays
+  const videos: MediaItem[] = Array.isArray(data.videos)
+    ? (data.videos as MediaItem[])
+    : (data.video_url as string) ? [{ url: data.video_url as string, label: '' }] : [];
+  const audios: MediaItem[] = Array.isArray(data.audios)
+    ? (data.audios as MediaItem[])
+    : (data.audio_url as string) ? [{ url: data.audio_url as string, label: '' }] : [];
   return {
     region: (data.region as string) ?? '',
     caption: (data.caption as string) ?? '',
     photos: Array.isArray(data.photos) ? (data.photos as Photo[]) : [],
-    video_url: (data.video_url as string) ?? '',
-    audio_url: (data.audio_url as string) ?? '',
+    videos,
+    audios,
   };
 }
 
@@ -40,14 +48,9 @@ function EntryForm({ initial, saving, onSave, onCancel, saveLabel }: EntryFormPr
   const [data, setData] = useState<FieldworkEntry>(initial);
 
   const updatePhoto = (i: number, patch: Partial<Photo>) => {
-    setData(d => ({
-      ...d,
-      photos: d.photos.map((p, idx) => (idx === i ? { ...p, ...patch } : p)),
-    }));
+    setData(d => ({ ...d, photos: d.photos.map((p, idx) => (idx === i ? { ...p, ...patch } : p)) }));
   };
-  const addPhoto = () => {
-    setData(d => ({ ...d, photos: [...d.photos, { image: '', caption: '' }] }));
-  };
+  const addPhoto = () => setData(d => ({ ...d, photos: [...d.photos, { image: '', caption: '' }] }));
   const removePhoto = (i: number) => {
     if (!confirm('Remove this photo?')) return;
     setData(d => ({ ...d, photos: d.photos.filter((_, idx) => idx !== i) }));
@@ -61,6 +64,16 @@ function EntryForm({ initial, saving, onSave, onCancel, saveLabel }: EntryFormPr
       return { ...d, photos: next };
     });
   };
+
+  const updateVideo = (i: number, patch: Partial<MediaItem>) =>
+    setData(d => ({ ...d, videos: d.videos.map((v, idx) => (idx === i ? { ...v, ...patch } : v)) }));
+  const addVideo = () => setData(d => ({ ...d, videos: [...d.videos, { url: '', label: '' }] }));
+  const removeVideo = (i: number) => setData(d => ({ ...d, videos: d.videos.filter((_, idx) => idx !== i) }));
+
+  const updateAudio = (i: number, patch: Partial<MediaItem>) =>
+    setData(d => ({ ...d, audios: d.audios.map((a, idx) => (idx === i ? { ...a, ...patch } : a)) }));
+  const addAudio = () => setData(d => ({ ...d, audios: [...d.audios, { url: '', label: '' }] }));
+  const removeAudio = (i: number) => setData(d => ({ ...d, audios: d.audios.filter((_, idx) => idx !== i) }));
 
   return (
     <div className="space-y-5">
@@ -89,38 +102,68 @@ function EntryForm({ initial, saving, onSave, onCancel, saveLabel }: EntryFormPr
         />
       </div>
 
+      {/* Videos */}
       <div>
-        <label className="block text-xs font-medium text-slate-400 mb-1">Video URL (optional)</label>
-        <p className="text-xs text-slate-500 mb-2">Paste a YouTube or Vimeo link — it will be embedded as a player on the page.</p>
-        <input
-          type="url"
-          value={data.video_url}
-          onChange={e => setData(d => ({ ...d, video_url: e.target.value }))}
-          placeholder="https://www.youtube.com/watch?v=… or https://vimeo.com/…"
-          className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-        />
+        <div className="text-xs font-medium text-slate-300 mb-1">Videos</div>
+        <p className="text-xs text-slate-500 mb-2">Paste YouTube or Vimeo links — each embeds as a player. Add as many as you like.</p>
+        <div className="space-y-2">
+          {data.videos.length === 0 && <div className="text-xs text-slate-500 italic px-1">No videos yet.</div>}
+          {data.videos.map((v, i) => (
+            <div key={i} className="bg-slate-900/70 border border-slate-700 rounded-lg p-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="text-xs text-slate-400 font-medium">Video {i + 1}</div>
+                <button type="button" onClick={() => removeVideo(i)}
+                  className="text-xs text-red-400 hover:text-red-300 bg-slate-800 hover:bg-red-900/30 px-2 py-1 rounded">Remove</button>
+              </div>
+              <input type="url" value={v.url} onChange={e => updateVideo(i, { url: e.target.value })}
+                placeholder="https://www.youtube.com/watch?v=… or https://vimeo.com/…"
+                className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              <input type="text" value={v.label} onChange={e => updateVideo(i, { label: e.target.value })}
+                placeholder="Label (optional, e.g. 'Dawn chorus recording')"
+                className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+            </div>
+          ))}
+          <button type="button" onClick={addVideo}
+            className="w-full border-2 border-dashed border-slate-700 hover:border-slate-600 rounded-lg py-2 text-slate-500 hover:text-slate-300 text-xs transition-colors">
+            + Add Video
+          </button>
+        </div>
       </div>
 
+      {/* Audios */}
       <div>
-        <label className="block text-xs font-medium text-slate-400 mb-1">Audio URL (optional)</label>
+        <div className="text-xs font-medium text-slate-300 mb-1">Audio Recordings</div>
         <p className="text-xs text-slate-500 mb-2">
-          Paste a <strong className="text-slate-400">direct link to an audio file</strong> (MP3, WAV, OGG) — for example from <a href="https://xeno-canto.org" target="_blank" rel="noopener noreferrer" className="text-primary underline">xeno-canto.org</a>. YouTube links do not work here — use the Video URL field above for those.
+          Paste direct links to audio files (MP3, WAV, OGG) — e.g. from <a href="https://xeno-canto.org" target="_blank" rel="noopener noreferrer" className="text-primary underline">xeno-canto.org</a>. YouTube links don't work here — add those above as videos.
         </p>
-        <input
-          type="url"
-          value={data.audio_url}
-          onChange={e => setData(d => ({ ...d, audio_url: e.target.value }))}
-          placeholder="https://xeno-canto.org/sounds/…/XC12345.mp3"
-          className={`w-full bg-slate-900 border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 ${/youtube\.com|youtu\.be|vimeo\.com/i.test(data.audio_url) ? 'border-amber-500' : 'border-slate-600'}`}
-        />
-        {/youtube\.com|youtu\.be|vimeo\.com/i.test(data.audio_url) && (
-          <div className="mt-2 flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2">
-            <span className="text-amber-400 text-lg leading-none mt-0.5">⚠</span>
-            <p className="text-amber-300 text-xs leading-relaxed">
-              This looks like a YouTube/Vimeo link — it can't be used as an audio file. Move it to the <strong>Video URL</strong> field above to embed it as a video player instead.
-            </p>
-          </div>
-        )}
+        <div className="space-y-2">
+          {data.audios.length === 0 && <div className="text-xs text-slate-500 italic px-1">No audio recordings yet.</div>}
+          {data.audios.map((a, i) => (
+            <div key={i} className="bg-slate-900/70 border border-slate-700 rounded-lg p-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="text-xs text-slate-400 font-medium">Recording {i + 1}</div>
+                <button type="button" onClick={() => removeAudio(i)}
+                  className="text-xs text-red-400 hover:text-red-300 bg-slate-800 hover:bg-red-900/30 px-2 py-1 rounded">Remove</button>
+              </div>
+              <input type="url" value={a.url} onChange={e => updateAudio(i, { url: e.target.value })}
+                placeholder="https://xeno-canto.org/sounds/…/XC12345.mp3"
+                className={`w-full bg-slate-900 border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 ${/youtube\.com|youtu\.be|vimeo\.com/i.test(a.url) ? 'border-amber-500' : 'border-slate-600'}`} />
+              {/youtube\.com|youtu\.be|vimeo\.com/i.test(a.url) && (
+                <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2">
+                  <span className="text-amber-400 text-base leading-none mt-0.5">⚠</span>
+                  <p className="text-amber-300 text-xs">YouTube/Vimeo links can't be used as audio — add them to Videos above.</p>
+                </div>
+              )}
+              <input type="text" value={a.label} onChange={e => updateAudio(i, { label: e.target.value })}
+                placeholder="Label (optional, e.g. 'Common Bulbul — Durban')"
+                className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+            </div>
+          ))}
+          <button type="button" onClick={addAudio}
+            className="w-full border-2 border-dashed border-slate-700 hover:border-slate-600 rounded-lg py-2 text-slate-500 hover:text-slate-300 text-xs transition-colors">
+            + Add Audio Recording
+          </button>
+        </div>
       </div>
 
       <div>
