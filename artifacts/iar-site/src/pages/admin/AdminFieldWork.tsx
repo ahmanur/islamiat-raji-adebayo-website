@@ -11,11 +11,11 @@ import {
 } from '@/lib/cms';
 
 type Photo = { image: string; caption: string };
-type FieldworkEntry = { region: string; caption: string; photos: Photo[] };
+type FieldworkEntry = { region: string; caption: string; photos: Photo[]; video_url: string; audio_url: string };
 
 const LIST_KEY = 'field_work_entries' as const;
 
-const EMPTY_ENTRY: FieldworkEntry = { region: '', caption: '', photos: [] };
+const EMPTY_ENTRY: FieldworkEntry = { region: '', caption: '', photos: [], video_url: '', audio_url: '' };
 
 function normalize(record: ListRecord): FieldworkEntry {
   const data = record.data ?? {};
@@ -23,6 +23,8 @@ function normalize(record: ListRecord): FieldworkEntry {
     region: (data.region as string) ?? '',
     caption: (data.caption as string) ?? '',
     photos: Array.isArray(data.photos) ? (data.photos as Photo[]) : [],
+    video_url: (data.video_url as string) ?? '',
+    audio_url: (data.audio_url as string) ?? '',
   };
 }
 
@@ -84,6 +86,30 @@ function EntryForm({ initial, saving, onSave, onCancel, saveLabel }: EntryFormPr
           onChange={e => setData(d => ({ ...d, caption: e.target.value }))}
           placeholder="What you were doing, where, and why."
           className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 resize-y"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-slate-400 mb-1">Video URL (optional)</label>
+        <p className="text-xs text-slate-500 mb-2">Paste a YouTube or Vimeo link — it will be embedded as a player on the page.</p>
+        <input
+          type="url"
+          value={data.video_url}
+          onChange={e => setData(d => ({ ...d, video_url: e.target.value }))}
+          placeholder="https://www.youtube.com/watch?v=… or https://vimeo.com/…"
+          className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-slate-400 mb-1">Audio URL (optional)</label>
+        <p className="text-xs text-slate-500 mb-2">Paste a direct link to an MP3 or WAV file — it will appear as an audio player on the page.</p>
+        <input
+          type="url"
+          value={data.audio_url}
+          onChange={e => setData(d => ({ ...d, audio_url: e.target.value }))}
+          placeholder="https://example.com/bird-recording.mp3"
+          className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
         />
       </div>
 

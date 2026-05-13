@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Video, Music } from 'lucide-react';
 import { getContent, getList } from '@/lib/cms';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
@@ -12,7 +12,18 @@ type FieldworkEntry = {
   region: string;
   caption: string;
   photos: Photo[];
+  video_url?: string;
+  audio_url?: string;
 };
+
+function getVideoEmbed(url: string): string | null {
+  if (!url?.trim()) return null;
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+  const vi = url.match(/vimeo\.com\/(\d+)/);
+  if (vi) return `https://player.vimeo.com/video/${vi[1]}`;
+  return null;
+}
 
 type EntryRecord = { id: string; data: FieldworkEntry };
 
@@ -37,6 +48,8 @@ export function FieldWorkPage() {
             region: (r.data?.region as string) ?? '',
             caption: (r.data?.caption as string) ?? '',
             photos: Array.isArray(r.data?.photos) ? (r.data.photos as Photo[]) : [],
+            video_url: (r.data?.video_url as string) ?? '',
+            audio_url: (r.data?.audio_url as string) ?? '',
           },
         })));
       }
@@ -150,6 +163,53 @@ export function FieldWorkPage() {
                     {entry.data.caption}
                   </p>
                 )}
+
+                {/* Video embed */}
+                {entry.data.video_url?.trim() && (() => {
+                  const embedUrl = getVideoEmbed(entry.data.video_url!);
+                  return embedUrl ? (
+                    <div className="mb-8 max-w-3xl">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-3">
+                        <Video className="w-3.5 h-3.5" />
+                        <span>Video</span>
+                      </div>
+                      <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-secondary/60 shadow-sm">
+                        <iframe
+                          src={embedUrl}
+                          title="Fieldwork video"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="absolute inset-0 w-full h-full"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mb-8">
+                      <a href={entry.data.video_url} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-primary hover:text-primary/80 text-sm font-medium transition-colors">
+                        <Video className="w-4 h-4" />
+                        Watch video
+                      </a>
+                    </div>
+                  );
+                })()}
+
+                {/* Audio player */}
+                {entry.data.audio_url?.trim() && (
+                  <div className="mb-8 max-w-2xl">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-3">
+                      <Music className="w-3.5 h-3.5" />
+                      <span>Bird Sound Recording</span>
+                    </div>
+                    <audio
+                      controls
+                      src={entry.data.audio_url}
+                      className="w-full rounded-lg"
+                      preload="metadata"
+                    />
+                  </div>
+                )}
+
                 {entry.data.photos.length > 0 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                     {entry.data.photos.map((photo, pi) => (
