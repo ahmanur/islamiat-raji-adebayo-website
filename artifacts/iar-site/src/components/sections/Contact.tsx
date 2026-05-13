@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, MapPin, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Mail, MapPin, Phone, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,7 +10,7 @@ import { CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
 const DC = CONTENT_DEFAULTS.outreach;
 
 export function Contact() {
-  const [c, setC] = useState(DC);
+  const [c, setC] = useState({ ...DC, phone: DC.phone ?? '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
@@ -78,6 +78,20 @@ export function Contact() {
                     <h3 className="font-medium text-foreground mb-1">Email</h3>
                     <a href={`mailto:${c.email}`} className="text-foreground/70 hover:text-primary transition-colors">
                       {c.email}
+                    </a>
+                  </div>
+                </div>
+              )}
+
+              {c.phone && (
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-secondary/50 rounded-full text-primary shrink-0">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-foreground mb-1">Phone</h3>
+                    <a href={`tel:${c.phone.replace(/\s/g, '')}`} className="text-foreground/70 hover:text-primary transition-colors">
+                      {c.phone}
                     </a>
                   </div>
                 </div>

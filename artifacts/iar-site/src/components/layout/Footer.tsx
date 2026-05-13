@@ -11,6 +11,7 @@ export function Footer() {
   );
   const [contact, setContact] = useState({
     email: CONTENT_DEFAULTS.outreach.email,
+    phone: CONTENT_DEFAULTS.outreach.phone ?? '',
     location: CONTENT_DEFAULTS.outreach.location,
     linkedin: CONTENT_DEFAULTS.outreach.linkedin,
     researchgate: CONTENT_DEFAULTS.outreach.researchgate ?? '',
@@ -31,6 +32,7 @@ export function Footer() {
       if (Object.keys(data).length > 0) {
         setContact(prev => ({
           email: data.email ?? prev.email,
+          phone: data.phone ?? prev.phone,
           location: data.location ?? prev.location,
           linkedin: data.linkedin ?? prev.linkedin,
           researchgate: data.researchgate ?? prev.researchgate,
@@ -97,6 +99,13 @@ export function Footer() {
                 <li>
                   <a href={`mailto:${contact.email}`} className="hover:text-primary transition-colors">
                     {contact.email}
+                  </a>
+                </li>
+              )}
+              {contact.phone && (
+                <li>
+                  <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="hover:text-primary transition-colors">
+                    {contact.phone}
                   </a>
                 </li>
               )}
