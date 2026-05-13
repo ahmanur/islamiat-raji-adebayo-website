@@ -96,6 +96,21 @@ export function AdminHero() {
             defaults={CONTENT_DEFAULTS.hero}
           />
         </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <h2 className="text-white font-medium text-sm mb-1">Footer</h2>
+          <p className="text-slate-500 text-xs mb-5">Edit the name, bio blurb, copyright line, and credit shown in the site footer.</p>
+          <ContentEditor
+            section="footer"
+            fields={[
+              { key: 'name', label: 'Name / Title' },
+              { key: 'bio', label: 'Bio Blurb', type: 'textarea' },
+              { key: 'copyright', label: 'Copyright Text', placeholder: 'Your Name. All rights reserved.' },
+              { key: 'credit', label: 'Credit Line (leave blank to hide)', placeholder: 'Designed by …' },
+            ]}
+            defaults={CONTENT_DEFAULTS.footer}
+          />
+        </div>
       </div>
     </AdminLayout>
   );

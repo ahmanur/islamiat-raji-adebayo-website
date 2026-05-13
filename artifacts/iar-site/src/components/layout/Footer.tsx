@@ -3,6 +3,8 @@ import { FaLinkedin, FaResearchgate, FaGoogle } from 'react-icons/fa';
 import { getList, getContent } from '@/lib/cms';
 import { LIST_DEFAULTS, CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
 
+const DF = CONTENT_DEFAULTS.footer;
+
 export function Footer() {
   const [affiliations, setAffiliations] = useState(
     LIST_DEFAULTS.affiliations.map(a => a.name)
@@ -13,6 +15,12 @@ export function Footer() {
     linkedin: CONTENT_DEFAULTS.outreach.linkedin,
     researchgate: CONTENT_DEFAULTS.outreach.researchgate ?? '',
     google_scholar: CONTENT_DEFAULTS.outreach.google_scholar ?? '',
+  });
+  const [footer, setFooter] = useState({
+    name: DF.name,
+    bio: DF.bio,
+    copyright: DF.copyright,
+    credit: DF.credit,
   });
 
   useEffect(() => {
@@ -30,6 +38,16 @@ export function Footer() {
         }));
       }
     });
+    getContent('footer').then(data => {
+      if (Object.keys(data).length > 0) {
+        setFooter(prev => ({
+          name: data.name ?? prev.name,
+          bio: data.bio ?? prev.bio,
+          copyright: data.copyright ?? prev.copyright,
+          credit: data.credit ?? prev.credit,
+        }));
+      }
+    });
   }, []);
 
   return (
@@ -37,9 +55,9 @@ export function Footer() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
           <div className="lg:col-span-2">
-            <h3 className="font-serif text-2xl mb-4">Islamiat Abidemi Raji. Ph.D.</h3>
+            <h3 className="font-serif text-2xl mb-4">{footer.name}</h3>
             <p className="text-background/70 max-w-md text-sm leading-relaxed mb-8">
-              Advancing conservation through bioacoustics, urban ecology, and community engagement. Exploring the intersections of sound, biodiversity, and human well-being.
+              {footer.bio}
             </p>
             <div className="flex gap-4">
               {contact.linkedin && (
@@ -88,8 +106,8 @@ export function Footer() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-background/50">
-          <p>© {new Date().getFullYear()} Islamiat Abidemi Raji. All rights reserved.</p>
-          <p>Designed by IBK Technologies</p>
+          <p>© {new Date().getFullYear()} {footer.copyright}</p>
+          {footer.credit && <p>{footer.credit}</p>}
         </div>
       </div>
     </footer>

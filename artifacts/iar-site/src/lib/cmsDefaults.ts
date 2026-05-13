@@ -41,6 +41,12 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     researchgate: '',
     google_scholar: '',
   },
+  footer: {
+    name: 'Islamiat Abidemi Raji. Ph.D.',
+    bio: 'Advancing conservation through bioacoustics, urban ecology, and community engagement. Exploring the intersections of sound, biodiversity, and human well-being.',
+    copyright: 'Islamiat Abidemi Raji. All rights reserved.',
+    credit: 'Designed by IBK Technologies',
+  },
   teaching: {
     bg_image: '',
     intro: '',
