@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ContentEditor } from '@/components/admin/ContentEditor';
+import { ListEditor } from '@/components/admin/ListEditor';
 import { ImagePicker } from '@/components/admin/ImagePicker';
-import { CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
+import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 import { getContent, setContentBulk } from '@/lib/cms';
 
 export function AdminHero() {
@@ -97,19 +98,50 @@ export function AdminHero() {
           />
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <h2 className="text-white font-medium text-sm mb-1">Footer</h2>
-          <p className="text-slate-500 text-xs mb-5">Edit the name, bio blurb, copyright line, and credit shown in the site footer.</p>
-          <ContentEditor
-            section="footer"
-            fields={[
-              { key: 'name', label: 'Name / Title' },
-              { key: 'bio', label: 'Bio Blurb', type: 'textarea' },
-              { key: 'copyright', label: 'Copyright Text', placeholder: 'Your Name. All rights reserved.' },
-              { key: 'credit', label: 'Credit Line (leave blank to hide)', placeholder: 'Designed by …' },
-            ]}
-            defaults={CONTENT_DEFAULTS.footer}
-          />
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-8">
+          <div>
+            <h2 className="text-white font-medium text-sm mb-1">Footer — Text</h2>
+            <p className="text-slate-500 text-xs mb-5">Edit the name, bio blurb, copyright line, and credit shown in the site footer.</p>
+            <ContentEditor
+              section="footer"
+              fields={[
+                { key: 'name', label: 'Name / Title' },
+                { key: 'bio', label: 'Bio Blurb', type: 'textarea' },
+                { key: 'copyright', label: 'Copyright Text', placeholder: 'Your Name. All rights reserved.' },
+                { key: 'credit', label: 'Credit Line (leave blank to hide)', placeholder: 'Designed by …' },
+              ]}
+              defaults={CONTENT_DEFAULTS.footer}
+            />
+          </div>
+
+          <div className="border-t border-slate-800 pt-8">
+            <h2 className="text-white font-medium text-sm mb-1">Footer — Affiliations</h2>
+            <p className="text-slate-500 text-xs mb-4">List of organisations shown in the footer Affiliations column.</p>
+            <ListEditor
+              listKey="affiliations"
+              itemLabel="Affiliation"
+              fields={[
+                { key: 'name', label: 'Organisation Name', placeholder: 'British Ecological Society' },
+              ]}
+              defaultItems={LIST_DEFAULTS.affiliations}
+            />
+          </div>
+
+          <div className="border-t border-slate-800 pt-8">
+            <h2 className="text-white font-medium text-sm mb-1">Footer — Contact</h2>
+            <p className="text-slate-500 text-xs mb-5">Email, location, and social links shown in the footer Contact column.</p>
+            <ContentEditor
+              section="outreach"
+              fields={[
+                { key: 'email', label: 'Email Address', placeholder: 'you@university.edu' },
+                { key: 'location', label: 'Location', placeholder: 'Ithaca, NY, USA' },
+                { key: 'linkedin', label: 'LinkedIn URL', type: 'url', placeholder: 'https://www.linkedin.com/in/…' },
+                { key: 'researchgate', label: 'ResearchGate URL', type: 'url', placeholder: 'https://www.researchgate.net/…' },
+                { key: 'google_scholar', label: 'Google Scholar URL', type: 'url', placeholder: 'https://scholar.google.com/…' },
+              ]}
+              defaults={CONTENT_DEFAULTS.outreach}
+            />
+          </div>
         </div>
       </div>
     </AdminLayout>
