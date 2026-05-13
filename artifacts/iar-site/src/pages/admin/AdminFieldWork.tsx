@@ -103,14 +103,24 @@ function EntryForm({ initial, saving, onSave, onCancel, saveLabel }: EntryFormPr
 
       <div>
         <label className="block text-xs font-medium text-slate-400 mb-1">Audio URL (optional)</label>
-        <p className="text-xs text-slate-500 mb-2">Paste a direct link to an MP3 or WAV file — it will appear as an audio player on the page.</p>
+        <p className="text-xs text-slate-500 mb-2">
+          Paste a <strong className="text-slate-400">direct link to an audio file</strong> (MP3, WAV, OGG) — for example from <a href="https://xeno-canto.org" target="_blank" rel="noopener noreferrer" className="text-primary underline">xeno-canto.org</a>. YouTube links do not work here — use the Video URL field above for those.
+        </p>
         <input
           type="url"
           value={data.audio_url}
           onChange={e => setData(d => ({ ...d, audio_url: e.target.value }))}
-          placeholder="https://example.com/bird-recording.mp3"
-          className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          placeholder="https://xeno-canto.org/sounds/…/XC12345.mp3"
+          className={`w-full bg-slate-900 border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 ${/youtube\.com|youtu\.be|vimeo\.com/i.test(data.audio_url) ? 'border-amber-500' : 'border-slate-600'}`}
         />
+        {/youtube\.com|youtu\.be|vimeo\.com/i.test(data.audio_url) && (
+          <div className="mt-2 flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2">
+            <span className="text-amber-400 text-lg leading-none mt-0.5">⚠</span>
+            <p className="text-amber-300 text-xs leading-relaxed">
+              This looks like a YouTube/Vimeo link — it can't be used as an audio file. Move it to the <strong>Video URL</strong> field above to embed it as a video player instead.
+            </p>
+          </div>
+        )}
       </div>
 
       <div>
