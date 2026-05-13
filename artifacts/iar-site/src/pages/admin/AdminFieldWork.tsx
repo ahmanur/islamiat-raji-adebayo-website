@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ContentEditor } from '@/components/admin/ContentEditor';
 import { ImagePicker } from '@/components/admin/ImagePicker';
+import { MediaPicker } from '@/components/admin/MediaPicker';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 import {
   getList,
@@ -115,9 +116,7 @@ function EntryForm({ initial, saving, onSave, onCancel, saveLabel }: EntryFormPr
                 <button type="button" onClick={() => removeVideo(i)}
                   className="text-xs text-red-400 hover:text-red-300 bg-slate-800 hover:bg-red-900/30 px-2 py-1 rounded">Remove</button>
               </div>
-              <input type="url" value={v.url} onChange={e => updateVideo(i, { url: e.target.value })}
-                placeholder="https://www.youtube.com/watch?v=… or https://vimeo.com/…"
-                className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              <MediaPicker type="video" value={v.url} onChange={url => updateVideo(i, { url })} />
               <input type="text" value={v.label} onChange={e => updateVideo(i, { label: e.target.value })}
                 placeholder="Label (optional, e.g. 'Dawn chorus recording')"
                 className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
@@ -145,15 +144,7 @@ function EntryForm({ initial, saving, onSave, onCancel, saveLabel }: EntryFormPr
                 <button type="button" onClick={() => removeAudio(i)}
                   className="text-xs text-red-400 hover:text-red-300 bg-slate-800 hover:bg-red-900/30 px-2 py-1 rounded">Remove</button>
               </div>
-              <input type="url" value={a.url} onChange={e => updateAudio(i, { url: e.target.value })}
-                placeholder="https://xeno-canto.org/sounds/…/XC12345.mp3"
-                className={`w-full bg-slate-900 border rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 ${/youtube\.com|youtu\.be|vimeo\.com/i.test(a.url) ? 'border-amber-500' : 'border-slate-600'}`} />
-              {/youtube\.com|youtu\.be|vimeo\.com/i.test(a.url) && (
-                <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2">
-                  <span className="text-amber-400 text-base leading-none mt-0.5">⚠</span>
-                  <p className="text-amber-300 text-xs">YouTube/Vimeo links can't be used as audio — add them to Videos above.</p>
-                </div>
-              )}
+              <MediaPicker type="audio" value={a.url} onChange={url => updateAudio(i, { url })} />
               <input type="text" value={a.label} onChange={e => updateAudio(i, { label: e.target.value })}
                 placeholder="Label (optional, e.g. 'Common Bulbul — Durban')"
                 className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
