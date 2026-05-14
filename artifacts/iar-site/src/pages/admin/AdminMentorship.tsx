@@ -20,6 +20,12 @@ const PERSON_FIELDS = [
     imageHint: 'Headshot or profile photo.',
   },
   { key: 'name', label: 'Name', placeholder: 'Full Name' },
+  {
+    key: 'status',
+    label: 'Status',
+    type: 'select' as const,
+    options: ['current', 'past'],
+  },
   { key: 'role', label: 'Role / Position', placeholder: 'PhD Student' },
   { key: 'institution', label: 'Institution', placeholder: 'Cornell University' },
   { key: 'description', label: 'Bio / Description', type: 'textarea' as const },

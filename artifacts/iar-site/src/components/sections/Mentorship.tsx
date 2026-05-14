@@ -9,6 +9,7 @@ type RoleItem = { title: string; description: string };
 type PersonItem = {
   image: string;
   name: string;
+  status?: 'current' | 'past' | string;
   role: string;
   institution: string;
   description: string;
@@ -302,7 +303,8 @@ export function Mentorship() {
         <section className="py-24 md:py-32 bg-background">
           <div className="container mx-auto px-6 md:px-12 max-w-4xl">
             <CollaboratorList items={collaborators} />
-            <SubSection title="Mentees" items={mentees} />
+            <SubSection title="Current Mentees" items={mentees.filter(m => !m.status || m.status === 'current')} />
+            <SubSection title="Past Mentees" items={mentees.filter(m => m.status === 'past')} />
             <FundingGrid items={funding} />
           </div>
         </section>
