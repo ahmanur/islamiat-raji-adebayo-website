@@ -29,6 +29,19 @@ export function AdminAbout() {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <h2 className="text-white font-medium text-sm mb-1">Additional Paragraphs</h2>
+          <p className="text-slate-500 text-xs mb-4">Add extra biography paragraphs that appear after the four main ones. Drag to reorder.</p>
+          <ListEditor
+            listKey="about_extra_paragraphs"
+            itemLabel="Paragraph"
+            fields={[
+              { key: 'text', label: 'Paragraph text', type: 'textarea' },
+            ]}
+            defaultItems={[]}
+          />
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
           <h2 className="text-white font-medium text-sm mb-4">Education</h2>
           <ListEditor
             listKey="education"

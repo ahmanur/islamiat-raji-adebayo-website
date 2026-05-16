@@ -77,7 +77,8 @@ export type ListKey =
   | 'science_writing'
   | 'field_work_entries'
   | 'about_gallery'
-  | 'resources';
+  | 'resources'
+  | 'about_extra_paragraphs';
 
 export interface ListRecord {
   id: string;

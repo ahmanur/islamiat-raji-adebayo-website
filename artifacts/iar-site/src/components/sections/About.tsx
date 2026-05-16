@@ -8,12 +8,14 @@ const DC = CONTENT_DEFAULTS.about;
 type EducationItem = { degree: string; institution: string };
 type AwardItem = { title: string; year: string };
 type GalleryItem = { image: string; caption?: string };
+type ExtraParagraph = { text: string };
 
 export function About() {
   const [c, setC] = useState(DC);
   const [education, setEducation] = useState<EducationItem[]>([]);
   const [awards, setAwards] = useState<AwardItem[]>([]);
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [extraParas, setExtraParas] = useState<ExtraParagraph[]>([]);
   const [loading, setLoading] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -26,6 +28,9 @@ export function About() {
       getList('awards').then(rows => { setAwards(rows.map(r => r.data as AwardItem)); }),
       getList('about_gallery').then(rows => {
         setGallery(rows.map(r => r.data as GalleryItem).filter(g => g.image));
+      }),
+      getList('about_extra_paragraphs').then(rows => {
+        setExtraParas(rows.map(r => r.data as ExtraParagraph).filter(p => p.text?.trim()));
       }),
     ]).finally(() => setLoading(false));
   }, []);
@@ -93,6 +98,9 @@ export function About() {
                 <p>{c.para2}</p>
                 <p dangerouslySetInnerHTML={{ __html: c.para3.replace(/Ficus/g, '<em>Ficus</em>') }} />
                 <p>{c.para4}</p>
+                {extraParas.map((p, i) => (
+                  <p key={i}>{p.text}</p>
+                ))}
               </motion.div>
             </div>
           </div>
