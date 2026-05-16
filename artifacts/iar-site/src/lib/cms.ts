@@ -100,10 +100,11 @@ export async function getList(listKey: ListKey): Promise<ListRecord[]> {
 }
 
 export async function upsertListItem(listKey: ListKey, item: Partial<ListRecord> & { data: Record<string, any> }): Promise<void> {
-  await writeClient().from('cms_lists').upsert(
+  const { error } = await writeClient().from('cms_lists').upsert(
     { ...item, list_key: listKey, updated_at: new Date().toISOString() },
     { onConflict: 'id' }
   );
+  if (error) console.error('[CMS] upsertListItem failed:', error.message, error);
 }
 
 export async function deleteListItem(id: string): Promise<void> {

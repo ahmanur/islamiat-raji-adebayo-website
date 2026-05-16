@@ -55,8 +55,13 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     intro: '',
   },
   opportunities: {
-    intro: 'I am always looking for motivated and curious students and collaborators to join my research group. I am particularly interested in working with people who are passionate about urban ecology, bioacoustics, and conservation biology.',
+    bg_image: '',
+    intro: 'Science thrives on diverse perspectives. I actively seek to train and collaborate with scholars from all backgrounds who are passionate about understanding how cities can better support biodiversity and human well-being.',
     contact_cta: 'To express interest, please email iar32@cornell.edu with your CV, a brief statement of research interests, and any relevant experience.',
+    mentorship_bg: '/images/spectrogram-art.png',
+    mentorship_title: 'Mentorship Philosophy',
+    mentorship_text: 'I believe the best science happens when everyone has a seat at the table. My approach to mentorship is grounded in patience, honest feedback, and a commitment to equity. I strive to create an environment where emerging scientists feel seen, supported, and challenged to do their best work.',
+    mentorship_cta: 'Reach out at iar32@cornell.edu',
   },
   outreach_page: {
     bg_image: '',
@@ -258,7 +263,29 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
       description: 'Please reach out if you are interested in urban bioacoustics or plant-animal interactions. I welcome MSc and PhD applicants with a passion for field ecology.',
     },
   ],
-  opportunities_list: [],
+  opportunities_list: [
+    {
+      title: 'Undergraduate Researchers',
+      description: 'Undergraduate students looking for hands-on research experience in ecology or acoustic monitoring are encouraged to reach out. Opportunities may include field data collection, acoustic annotation, and data analysis.',
+      cta: 'Email to enquire',
+      icon: 'microscope',
+      image: '',
+    },
+    {
+      title: 'Graduate Students',
+      description: 'I welcome inquiries from motivated MSc and PhD applicants with interests in bioacoustics, urban ecology, plant–animal interactions, or conservation science. Strong candidates are curious, collaborative, and committed to rigorous fieldwork.',
+      cta: 'Email to express interest',
+      icon: 'book',
+      image: '',
+    },
+    {
+      title: 'Collaborators',
+      description: 'I am always open to interdisciplinary collaborations — particularly with urban planners, social scientists, Indigenous community organizations, and NGOs working at the intersection of urban development and biodiversity.',
+      cta: 'Get in touch',
+      icon: 'users',
+      image: '',
+    },
+  ],
   teaching_courses: [
     {
       status: 'Current',
@@ -351,6 +378,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
       date: '2025',
       description: 'A piece introducing general readers to the ways autonomous recording units and machine learning are letting researchers eavesdrop on urban bird communities at scale, and what those soundscapes reveal about the health of our cities.',
       url: 'https://www.allaboutbirds.org/news/',
+      image: '',
     },
     {
       title: 'Why community science is essential for urban conservation in the Global South',
@@ -358,6 +386,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
       date: '2024',
       description: 'An op-ed arguing that locally led, community-driven monitoring programs are critical for filling biodiversity data gaps in African and Latin American cities, drawing on lessons from a five-country urban bird survey.',
       url: 'https://theconversation.com/africa',
+      image: '',
     },
     {
       title: 'Fig trees, fruit bats and the hidden architecture of African cities',
@@ -365,6 +394,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
       date: '2023',
       description: 'A long-form feature on how native Ficus species act as keystone resources for birds, bats and monkeys in fragmented urban landscapes, and what their loss would mean for forest regeneration in sub-Saharan Africa.',
       url: 'https://news.mongabay.com/',
+      image: '',
     },
     {
       title: 'Birds as barometers: what urban soundscapes tell us about climate and land-use change',
@@ -372,6 +402,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
       date: '2023',
       description: 'A short essay for BES members on using passive acoustic monitoring as an early-warning system for shifts in urban bird communities driven by warming, noise pollution and habitat loss.',
       url: 'https://www.britishecologicalsociety.org/membership-community/niche/',
+      image: '',
     },
     {
       title: 'From Ilorin to Ithaca: a Nigerian ecologist’s journey through urban bird research',
@@ -379,6 +410,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
       date: '2024',
       description: 'A first-person career feature reflecting on training across Nigeria, South Africa, Canada and the United States, and on building inclusive international research collaborations in conservation bioacoustics.',
       url: 'https://www.nature.com/nature-careers',
+      image: '',
     },
     {
       title: 'How to start a campus bird monitoring program (a practical guide)',
@@ -386,6 +418,7 @@ export const LIST_DEFAULTS: Record<string, Array<Record<string, any>>> = {
       date: '2024',
       description: 'A step-by-step practitioner guide for students and faculty interested in deploying acoustic recorders on their campuses, including site selection, ethics, data sharing and how to engage local communities.',
       url: 'https://www.biodivcampus.org/en/',
+      image: '',
     },
   ],
   teaching_events: [

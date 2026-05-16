@@ -29,11 +29,13 @@ export function Navbar() {
   useEffect(() => {
     getList('nav_items').then(rows => {
       if (rows.length > 0) {
-        setNavLinks(rows.map(r => ({
+        const fetched: NavLink[] = rows.map(r => ({
           name: (r.data?.name as string) ?? '',
           href: (r.data?.href as string) ?? '/',
           accent: r.data?.accent === true || r.data?.accent === 'true',
-        })).filter(n => n.name && n.href));
+        })).filter(n => n.name && n.href);
+
+        setNavLinks(fetched);
       }
     });
   }, []);

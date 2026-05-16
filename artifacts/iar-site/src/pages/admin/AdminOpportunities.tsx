@@ -18,6 +18,7 @@ export function AdminOpportunities() {
           <ContentEditor
             section="opportunities"
             fields={[
+              { key: 'bg_image', label: 'Background Image', type: 'image', imageHint: 'Optional background image for the top section' },
               { key: 'intro', label: 'Introduction', type: 'textarea' },
               { key: 'contact_cta', label: 'Contact Call-to-Action', type: 'textarea' },
             ]}
@@ -26,17 +27,32 @@ export function AdminOpportunities() {
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <h2 className="text-white font-medium text-sm mb-4">Open Positions / Listings</h2>
+          <h2 className="text-white font-medium text-sm mb-4">Mentorship Philosophy</h2>
+          <ContentEditor
+            section="opportunities"
+            fields={[
+              { key: 'mentorship_title', label: 'Title', placeholder: 'Mentorship Philosophy' },
+              { key: 'mentorship_text', label: 'Philosophy Text', type: 'textarea' },
+              { key: 'mentorship_cta', label: 'Call-to-Action', placeholder: 'Reach out at iar32@cornell.edu' },
+              { key: 'mentorship_bg', label: 'Background Image', type: 'image' },
+            ]}
+            defaults={CONTENT_DEFAULTS.opportunities}
+          />
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+          <h2 className="text-white font-medium text-sm mb-4">Opportunity Cards</h2>
           <ListEditor
             listKey="opportunities_list"
-            itemLabel="Opportunity"
+            itemLabel="Card"
             fields={[
-              { key: 'title', label: 'Position Title', placeholder: 'MSc / PhD Opportunity' },
-              { key: 'type', label: 'Type', placeholder: 'Graduate / Postdoc / Volunteer' },
+              { key: 'image', label: 'Background Image', type: 'image', imageHint: 'Optional background image for the card' },
+              { key: 'icon', label: 'Icon Name (Optional)', placeholder: 'microscope / book / users' },
+              { key: 'title', label: 'Card Title', placeholder: 'Undergraduate Researchers' },
               { key: 'description', label: 'Description', type: 'textarea' },
-              { key: 'deadline', label: 'Deadline', placeholder: 'Rolling / December 2025' },
-              { key: 'url', label: 'Application URL (optional)', type: 'url' },
+              { key: 'cta', label: 'Button Text', placeholder: 'Email to enquire' },
             ]}
+            defaultItems={LIST_DEFAULTS.opportunities_list}
           />
         </div>
 

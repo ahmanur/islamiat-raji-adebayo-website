@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "artifacts/iar-site/dist",
+    "public": "artifacts/iar-site/dist/public",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       { "source": "**", "destination": "/index.html" }
