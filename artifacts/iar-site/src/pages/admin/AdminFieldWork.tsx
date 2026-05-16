@@ -4,10 +4,12 @@ import { ContentEditor } from '@/components/admin/ContentEditor';
 import { ImagePicker } from '@/components/admin/ImagePicker';
 import { MediaPicker } from '@/components/admin/MediaPicker';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 import {
   getList,
   upsertListItem,
   deleteListItem,
+  reorderList,
   type ListRecord,
 } from '@/lib/cms';
 
@@ -278,6 +280,15 @@ function FieldworkEntriesEditor() {
     await load();
   };
 
+  const moveItem = async (index: number, direction: 'up' | 'down') => {
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= items.length) return;
+    const newItems = [...items];
+    [newItems[index], newItems[swapIndex]] = [newItems[swapIndex], newItems[index]];
+    setItems(newItems);
+    await reorderList(LIST_KEY, newItems.map(i => i.id));
+  };
+
   const handleSeedDefaults = async () => {
     const defaults = LIST_DEFAULTS.field_work_entries ?? [];
     if (defaults.length === 0) return;
@@ -311,7 +322,7 @@ function FieldworkEntriesEditor() {
         </div>
       )}
 
-      {items.map(item => {
+      {items.map((item, index) => {
         const data = normalize(item);
         const isEditing = editingId === item.id;
         return (
@@ -326,6 +337,26 @@ function FieldworkEntriesEditor() {
               />
             ) : (
               <div className="flex items-start justify-between gap-4">
+                {/* Up / Down reorder arrows */}
+                <div className="flex flex-col gap-0.5 flex-shrink-0 self-center">
+                  <button
+                    onClick={() => moveItem(index, 'up')}
+                    disabled={index === 0}
+                    className="p-0.5 rounded text-slate-500 hover:text-white hover:bg-slate-600 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                    title="Move up"
+                  >
+                    <ChevronUp className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => moveItem(index, 'down')}
+                    disabled={index === items.length - 1}
+                    className="p-0.5 rounded text-slate-500 hover:text-white hover:bg-slate-600 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                    title="Move down"
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                </div>
+
                 <div className="flex gap-3 min-w-0 flex-1">
                   {data.photos[0]?.image && (
                     <img
