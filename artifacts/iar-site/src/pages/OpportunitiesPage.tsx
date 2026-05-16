@@ -14,6 +14,8 @@ import {
   Calendar,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Helmet } from 'react-helmet-async';
 import { getContent, getList } from '@/lib/cms';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
@@ -220,25 +222,34 @@ export function OpportunitiesPage() {
   const [opportunitiesContent, setOpportunitiesContent] = useState(CONTENT_DEFAULTS.opportunities);
   const [opportunityCards, setOpportunityCards] = useState(() => LIST_DEFAULTS.opportunities_list);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    getContent('opportunities' as any).then(data => {
+    Promise.all([
+      getContent('opportunities' as any),
+      getList('opportunities_list')
+    ]).then(([data, rows]) => {
       if (Object.keys(data).length > 0) {
         setOpportunitiesContent({ ...CONTENT_DEFAULTS.opportunities, ...data });
       }
-    });
-    getList('opportunities_list').then(rows => {
       if (rows.length > 0) {
         setOpportunityCards(rows.map(r => r.data as any));
       }
+    }).finally(() => {
+      setIsLoading(false);
     });
   }, []);
 
   return (
     <div className="pt-20 min-h-screen">
+      <Helmet>
+        <title>Opportunities - Dr. Islamiat Raji-Adebayo</title>
+        <meta name="description" content="Discover mentorship, research grants, and collaboration opportunities." />
+      </Helmet>
       <section className="pt-24 md:pt-32 pb-12 md:pb-16 relative">
         {opportunitiesContent.bg_image && (
           <div className="absolute inset-0 z-0 opacity-20">
-            <img src={opportunitiesContent.bg_image} alt="" className="w-full h-full object-cover" />
+            <img src={opportunitiesContent.bg_image} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
           </div>
         )}
         <div className="container mx-auto px-6 md:px-12 relative z-10">
@@ -256,35 +267,47 @@ export function OpportunitiesPage() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-            {opportunityCards.map((opp, i) => (
-              <motion.div
-                key={opp.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="flex flex-col p-8 rounded-2xl bg-secondary/50 border border-secondary/80 hover:bg-secondary transition-colors relative overflow-hidden group"
-              >
-                {opp.image && (
-                  <div className="absolute inset-0 z-0 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <img src={opp.image} alt="" className="w-full h-full object-cover" />
-                  </div>
-                )}
-                <div className="relative z-10 flex flex-col h-full">
-                  <div className="w-12 h-12 rounded-full bg-background flex items-center justify-center text-primary mb-6 shadow-sm">
-                    {iconMap[opp.icon] || <Microscope className="w-6 h-6" />}
-                  </div>
-                  <h2 className="font-serif text-2xl text-foreground mb-4">{opp.title}</h2>
-                  <p className="text-foreground/70 leading-relaxed flex-1 mb-8">{opp.description}</p>
-                  <Button variant="outline" className="rounded-full gap-2 w-fit bg-background" asChild>
-                    <a href={`mailto:${opportunitiesContent.contact_cta?.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi)?.[0] || 'iar32@cornell.edu'}`} aria-label={opp.cta}>
-                      <Mail className="w-4 h-4" />
-                      {opp.cta}
-                    </a>
-                  </Button>
+            {isLoading ? (
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="flex flex-col p-8 rounded-2xl bg-secondary/50 border border-secondary/80 h-[320px]">
+                  <Skeleton className="w-12 h-12 rounded-full mb-6" />
+                  <Skeleton className="h-8 w-3/4 mb-4" />
+                  <Skeleton className="h-4 w-full mb-2" />
+                  <Skeleton className="h-4 w-5/6 mb-8" />
+                  <Skeleton className="h-10 w-32 rounded-full mt-auto" />
                 </div>
-              </motion.div>
-            ))}
+              ))
+            ) : (
+              opportunityCards.map((opp, i) => (
+                <motion.div
+                  key={opp.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-100px' }}
+                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  className="flex flex-col p-8 rounded-2xl bg-secondary/50 border border-secondary/80 hover:bg-secondary transition-colors relative overflow-hidden group"
+                >
+                  {opp.image && (
+                    <div className="absolute inset-0 z-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <img src={opp.image} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="w-12 h-12 rounded-full bg-background flex items-center justify-center text-primary mb-6 shadow-sm">
+                      {iconMap[opp.icon] || <Microscope className="w-6 h-6" />}
+                    </div>
+                    <h2 className="font-serif text-2xl text-foreground mb-4">{opp.title}</h2>
+                    <p className="text-foreground/70 leading-relaxed flex-1 mb-8">{opp.description}</p>
+                    <Button variant="outline" className="rounded-full gap-2 w-fit bg-background" asChild>
+                      <a href={`mailto:${opportunitiesContent.contact_cta?.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z0-9_-]+)/gi)?.[0] || 'iar32@cornell.edu'}`} aria-label={opp.cta}>
+                        <Mail className="w-4 h-4" />
+                        {opp.cta}
+                      </a>
+                    </Button>
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
 
           {opportunitiesContent.mentorship_title && (
@@ -298,7 +321,7 @@ export function OpportunitiesPage() {
               <div className="p-10 md:p-14 rounded-2xl bg-foreground text-background relative overflow-hidden">
                 {opportunitiesContent.mentorship_bg && (
                   <div className="absolute inset-0 opacity-10">
-                    <img src={opportunitiesContent.mentorship_bg} alt="" className="w-full h-full object-cover mix-blend-screen" />
+                    <img src={opportunitiesContent.mentorship_bg} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover mix-blend-screen" />
                   </div>
                 )}
                 <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-8">

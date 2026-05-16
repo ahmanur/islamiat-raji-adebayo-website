@@ -1,9 +1,18 @@
 import { Router, type IRouter } from "express";
 import nodemailer from "nodemailer";
+import rateLimit from "express-rate-limit";
+
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per window
+  message: { error: "Too many contact requests from this IP, please try again after 15 minutes" },
+  standardHeaders: true, 
+  legacyHeaders: false,
+});
 
 const router: IRouter = Router();
 
-router.post("/contact", async (req, res) => {
+router.post("/contact", contactLimiter, async (req, res) => {
   const { name, email, subject, message } = req.body as {
     name?: string;
     email?: string;

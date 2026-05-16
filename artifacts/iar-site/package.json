@@ -79,6 +79,7 @@
     "zod": "catalog:"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.105.0"
+    "@supabase/supabase-js": "^2.105.0",
+    "react-helmet-async": "^2.0.5"
   }
 }
