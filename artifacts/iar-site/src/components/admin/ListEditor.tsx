@@ -1,5 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { GripVertical } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { getList, upsertListItem, deleteListItem, reorderList, type ListKey, type ListRecord } from '@/lib/cms';
 import { ImagePicker } from './ImagePicker';
 import { GalleryPicker } from './GalleryPicker';
@@ -91,6 +106,125 @@ function FieldInput({ field, value, onChange }: { field: FieldDef; value: string
   );
 }
 
+interface SortableItemProps {
+  item: ListRecord;
+  fields: FieldDef[];
+  editingId: string | null;
+  editValues: Record<string, string>;
+  saving: boolean;
+  onStartEdit: (item: ListRecord) => void;
+  onSaveEdit: (item: ListRecord) => void;
+  onCancelEdit: () => void;
+  onDelete: (id: string) => void;
+  onEditValueChange: (key: string, value: string) => void;
+}
+
+function SortableItem({
+  item,
+  fields,
+  editingId,
+  editValues,
+  saving,
+  onStartEdit,
+  onSaveEdit,
+  onCancelEdit,
+  onDelete,
+  onEditValueChange,
+}: SortableItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 10 : undefined,
+    position: 'relative',
+  };
+
+  const isEditing = editingId === item.id;
+
+  return (
+    <div ref={setNodeRef} style={style} className="bg-slate-800 border border-slate-700 rounded-xl p-4">
+      {isEditing ? (
+        <div className="space-y-4">
+          {fields.map(f => (
+            <div key={f.key}>
+              {f.type !== 'image' && f.type !== 'gallery' && f.type !== 'network' && (
+                <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
+              )}
+              <FieldInput
+                field={f}
+                value={editValues[f.key] ?? ''}
+                onChange={v => onEditValueChange(f.key, v)}
+              />
+            </div>
+          ))}
+          <div className="flex gap-2 pt-1">
+            <button onClick={() => onSaveEdit(item)} disabled={saving}
+              className="bg-primary hover:bg-primary/90 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50">
+              {saving ? 'Saving…' : 'Save'}
+            </button>
+            <button onClick={onCancelEdit}
+              className="bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-colors">
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-start justify-between gap-4">
+          {/* Drag handle */}
+          <div
+            {...attributes}
+            {...listeners}
+            className="flex-shrink-0 self-center p-1 rounded text-slate-500 hover:text-slate-300 cursor-grab active:cursor-grabbing touch-none"
+            title="Drag to reorder"
+          >
+            <GripVertical className="w-4 h-4" />
+          </div>
+
+          <div className="flex gap-3 min-w-0 flex-1">
+            {(() => {
+              const imgField = fields.find(f => f.type === 'image');
+              const imgSrc = imgField ? (item.data[imgField.key] || imgField.imageFallback) : null;
+              return imgSrc ? (
+                <img src={imgSrc} alt="" className="w-14 h-10 rounded-lg object-cover flex-shrink-0 border border-slate-700" />
+              ) : null;
+            })()}
+            <div className="min-w-0">
+              <div className="text-white text-sm font-medium truncate">
+                {item.data[fields.find(f => f.type !== 'image')?.key ?? fields[0].key] || '(empty)'}
+              </div>
+              {(() => {
+                const second = fields.filter(f => f.type !== 'image')[1];
+                return second ? (
+                  <div className="text-slate-400 text-xs mt-0.5 line-clamp-1">{item.data[second.key]}</div>
+                ) : null;
+              })()}
+            </div>
+          </div>
+          <div className="flex gap-2 flex-shrink-0">
+            <button onClick={() => onStartEdit(item)}
+              className="text-xs text-slate-400 hover:text-white bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg transition-colors">
+              Edit
+            </button>
+            <button onClick={() => onDelete(item.id)}
+              className="text-xs text-red-400 hover:text-red-300 bg-slate-700 hover:bg-red-900/30 px-3 py-1 rounded-lg transition-colors">
+              Delete
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defaultItems, addAtTop = false }: ListEditorProps) {
   const [items, setItems] = useState<ListRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -100,6 +234,12 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
   const [adding, setAdding] = useState(false);
   const [newValues, setNewValues] = useState<Record<string, string>>(defaultItem);
   const [seeding, setSeeding] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    })
+  );
 
   const load = async () => {
     const data = await getList(listKey);
@@ -156,13 +296,17 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
     setSeeding(false);
   };
 
-  const moveItem = async (index: number, direction: 'up' | 'down') => {
-    const newItems = [...items];
-    const swapIndex = direction === 'up' ? index - 1 : index + 1;
-    if (swapIndex < 0 || swapIndex >= newItems.length) return;
-    [newItems[index], newItems[swapIndex]] = [newItems[swapIndex], newItems[index]];
-    setItems(newItems);
-    await reorderList(listKey, newItems.map(i => i.id));
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = items.findIndex(i => i.id === active.id);
+    const newIndex = items.findIndex(i => i.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const reordered = arrayMove(items, oldIndex, newIndex);
+    setItems(reordered);
+    await reorderList(listKey, reordered.map(i => i.id));
   };
 
   const cancelAdd = () => { setAdding(false); setNewValues(defaultItem); };
@@ -225,89 +369,31 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
           )
       )}
 
-      {items.map((item, index) => (
-        <div key={item.id} className="bg-slate-800 border border-slate-700 rounded-xl p-4">
-          {editingId === item.id ? (
-            <div className="space-y-4">
-              {fields.map(f => (
-                <div key={f.key}>
-                  {f.type !== 'image' && f.type !== 'gallery' && f.type !== 'network' && (
-                    <label className="block text-xs font-medium text-slate-400 mb-1">{f.label}</label>
-                  )}
-                  <FieldInput
-                    field={f}
-                    value={editValues[f.key] ?? ''}
-                    onChange={v => setEditValues(prev => ({ ...prev, [f.key]: v }))}
-                  />
-                </div>
-              ))}
-              <div className="flex gap-2 pt-1">
-                <button onClick={() => saveEdit(item)} disabled={saving}
-                  className="bg-primary hover:bg-primary/90 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50">
-                  {saving ? 'Saving…' : 'Save'}
-                </button>
-                <button onClick={() => setEditingId(null)}
-                  className="bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-colors">
-                  Cancel
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-start justify-between gap-4">
-              {/* Reorder arrows */}
-              <div className="flex flex-col gap-0.5 flex-shrink-0 self-center">
-                <button
-                  onClick={() => moveItem(index, 'up')}
-                  disabled={index === 0}
-                  className="p-0.5 rounded text-slate-500 hover:text-white hover:bg-slate-600 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-                  title="Move up"
-                >
-                  <ChevronUp className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => moveItem(index, 'down')}
-                  disabled={index === items.length - 1}
-                  className="p-0.5 rounded text-slate-500 hover:text-white hover:bg-slate-600 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-                  title="Move down"
-                >
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="flex gap-3 min-w-0 flex-1">
-                {(() => {
-                  const imgField = fields.find(f => f.type === 'image');
-                  const imgSrc = imgField ? (item.data[imgField.key] || imgField.imageFallback) : null;
-                  return imgSrc ? (
-                    <img src={imgSrc} alt="" className="w-14 h-10 rounded-lg object-cover flex-shrink-0 border border-slate-700" />
-                  ) : null;
-                })()}
-                <div className="min-w-0">
-                  <div className="text-white text-sm font-medium truncate">
-                    {item.data[fields.find(f => f.type !== 'image')?.key ?? fields[0].key] || '(empty)'}
-                  </div>
-                  {(() => {
-                    const second = fields.filter(f => f.type !== 'image')[1];
-                    return second ? (
-                      <div className="text-slate-400 text-xs mt-0.5 line-clamp-1">{item.data[second.key]}</div>
-                    ) : null;
-                  })()}
-                </div>
-              </div>
-              <div className="flex gap-2 flex-shrink-0">
-                <button onClick={() => startEdit(item)}
-                  className="text-xs text-slate-400 hover:text-white bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg transition-colors">
-                  Edit
-                </button>
-                <button onClick={() => handleDelete(item.id)}
-                  className="text-xs text-red-400 hover:text-red-300 bg-slate-700 hover:bg-red-900/30 px-3 py-1 rounded-lg transition-colors">
-                  Delete
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={items.map(i => i.id)} strategy={verticalListSortingStrategy}>
+          <div className="space-y-4">
+            {items.map((item) => (
+              <SortableItem
+                key={item.id}
+                item={item}
+                fields={fields}
+                editingId={editingId}
+                editValues={editValues}
+                saving={saving}
+                onStartEdit={startEdit}
+                onSaveEdit={saveEdit}
+                onCancelEdit={() => setEditingId(null)}
+                onDelete={handleDelete}
+                onEditValueChange={(key, value) => setEditValues(prev => ({ ...prev, [key]: value }))}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       {!addAtTop && (
         adding
