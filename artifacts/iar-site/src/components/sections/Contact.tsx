@@ -9,15 +9,17 @@ import { CONTENT_DEFAULTS } from '@/lib/cmsDefaults';
 
 const DC = CONTENT_DEFAULTS.outreach;
 
+type OutreachState = typeof DC & { email2: string; phone: string };
+
 export function Contact() {
-  const [c, setC] = useState({ ...DC, email2: DC.email2 ?? '', phone: DC.phone ?? '' });
+  const [c, setC] = useState<OutreachState>({ ...DC, email2: DC.email2 ?? '', phone: DC.phone ?? '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     getContent('outreach').then(data => {
-      if (Object.keys(data).length > 0) setC({ ...DC, ...data });
+      if (Object.keys(data).length > 0) setC(prev => ({ ...prev, ...data }));
     });
   }, []);
 

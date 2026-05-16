@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getList, upsertListItem, deleteListItem, type ListKey, type ListRecord } from '@/lib/cms';
+import { ChevronUp, ChevronDown } from 'lucide-react';
+import { getList, upsertListItem, deleteListItem, reorderList, type ListKey, type ListRecord } from '@/lib/cms';
 import { ImagePicker } from './ImagePicker';
 import { GalleryPicker } from './GalleryPicker';
 import { NetworkEditor } from './NetworkEditor';
@@ -155,6 +156,15 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
     setSeeding(false);
   };
 
+  const moveItem = async (index: number, direction: 'up' | 'down') => {
+    const newItems = [...items];
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= newItems.length) return;
+    [newItems[index], newItems[swapIndex]] = [newItems[swapIndex], newItems[index]];
+    setItems(newItems);
+    await reorderList(listKey, newItems.map(i => i.id));
+  };
+
   const cancelAdd = () => { setAdding(false); setNewValues(defaultItem); };
 
   const AddForm = (
@@ -215,7 +225,7 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
           )
       )}
 
-      {items.map(item => (
+      {items.map((item, index) => (
         <div key={item.id} className="bg-slate-800 border border-slate-700 rounded-xl p-4">
           {editingId === item.id ? (
             <div className="space-y-4">
@@ -244,6 +254,26 @@ export function ListEditor({ listKey, fields, itemLabel, defaultItem = {}, defau
             </div>
           ) : (
             <div className="flex items-start justify-between gap-4">
+              {/* Reorder arrows */}
+              <div className="flex flex-col gap-0.5 flex-shrink-0 self-center">
+                <button
+                  onClick={() => moveItem(index, 'up')}
+                  disabled={index === 0}
+                  className="p-0.5 rounded text-slate-500 hover:text-white hover:bg-slate-600 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                  title="Move up"
+                >
+                  <ChevronUp className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => moveItem(index, 'down')}
+                  disabled={index === items.length - 1}
+                  className="p-0.5 rounded text-slate-500 hover:text-white hover:bg-slate-600 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                  title="Move down"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </div>
+
               <div className="flex gap-3 min-w-0 flex-1">
                 {(() => {
                   const imgField = fields.find(f => f.type === 'image');
