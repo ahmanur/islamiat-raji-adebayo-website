@@ -26,6 +26,7 @@ export const CONTENT_DEFAULTS: Record<string, Record<string, string>> = {
     theme3_desc: 'Exploring the relationship between people and nature, emphasizing community engagement for sustainable cities.',
   },
   mentorship: {
+    bg_image: '',
     intro: 'Science is deeply collaborative. My mentorship philosophy is rooted in creating inclusive spaces where diverse voices can shape ecological research.',
     para2: 'I actively seek to support emerging scholars, particularly from underrepresented backgrounds in ecology. Whether through formal supervision, field training, or collaborative analysis, I believe in empowering the next generation of conservation scientists to lead with rigor and empathy.',
     quote: 'Ecology needs diverse perspectives to solve complex environmental challenges. The best science happens when everyone has a seat at the table.',

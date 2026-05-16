@@ -51,6 +51,12 @@ export function AdminMentorship() {
           <ContentEditor
             section="mentorship"
             fields={[
+              {
+                key: 'bg_image',
+                label: 'Section Image (shown on the right side of the People header)',
+                type: 'image',
+                imageHint: 'Landscape or square photo. Displayed with a subtle colour overlay.',
+              },
               { key: 'intro', label: 'Introduction (displayed as pull quote)', type: 'textarea' },
               { key: 'para2', label: 'Second Paragraph', type: 'textarea' },
               { key: 'quote', label: 'Featured Quote (shown on image card)', type: 'textarea' },

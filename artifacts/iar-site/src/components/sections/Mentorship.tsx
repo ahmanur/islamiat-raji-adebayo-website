@@ -279,7 +279,7 @@ export function Mentorship() {
             >
               <div className="aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl relative z-10">
                 <img
-                  src="/images/spectrogram-art.png"
+                  src={c.bg_image || '/images/spectrogram-art.png'}
                   alt="Abstract spectrogram art representing diverse voices in science"
                   className="w-full h-full object-cover opacity-80 mix-blend-screen"
                 />
