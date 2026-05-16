@@ -5,6 +5,13 @@ import { ListEditor } from '@/components/admin/ListEditor';
 import { CONTENT_DEFAULTS, LIST_DEFAULTS } from '@/lib/cmsDefaults';
 
 const COLLABORATOR_FIELDS = [
+  {
+    key: 'image',
+    label: 'Photo',
+    type: 'image' as const,
+    imageFallback: '',
+    imageHint: 'Headshot or profile photo.',
+  },
   { key: 'name', label: 'Name', placeholder: 'Full Name' },
   { key: 'profile_url', label: 'Profile URL (name will link here)', placeholder: 'https://university.edu/people/name' },
   { key: 'role', label: 'Role / Position', placeholder: 'Associate Professor' },
